@@ -1,0 +1,56 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150,
+      "pattern": "$noBadCharacters"
+    },
+    "documentType": {
+      "type": "enum",
+      "required": true,
+      "default": "Passport",
+      "options": [
+        "Passport",
+        "DNI",
+        "IdentityCard",
+        "Other"
+      ]
+    },
+    "documentNumber": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 50,
+      "pattern": "$noBadCharacters"
+    },
+    "documentExpiration": {
+      "type": "date"
+    },
+    "birthDate": {
+      "type": "date"
+    },
+    "nationality": {
+      "type": "varchar",
+      "maxLength": 80
+    },
+    "dietaryRestrictions": {
+      "type": "varchar",
+      "maxLength": 150
+    },
+    "notes": {
+      "type": "text"
+    }
+  },
+  "links": {
+    "itinerario": {
+      "type": "belongsTo",
+      "entity": "Itinerario",
+      "foreign": "passengers"
+    },
+    "contact": {
+      "type": "belongsTo",
+      "entity": "Contact",
+      "foreign": "passengers"
+    }
+  }
+}

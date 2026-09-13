@@ -1,0 +1,50 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 100
+    },
+    "dueDate": {
+      "type": "date",
+      "required": true
+    },
+    "amount": {
+      "type": "currency",
+      "required": true
+    },
+    "status": {
+      "type": "enum",
+      "required": true,
+      "default": "Pendiente",
+      "options": [
+        "Pendiente",
+        "Pagado",
+        "Vencido",
+        "Cancelado"
+      ],
+      "audited": true
+    },
+    "paymentMethod": {
+      "type": "enum",
+      "options": [
+        "Transferencia",
+        "Tarjeta",
+        "Efectivo",
+        "LinkDePago",
+        "Otro"
+      ]
+    },
+    "transactionId": {
+      "type": "varchar",
+      "maxLength": 100
+    }
+  },
+  "links": {
+    "itinerario": {
+      "type": "belongsTo",
+      "entity": "Itinerario",
+      "foreign": "paymentSchedules"
+    }
+  }
+}

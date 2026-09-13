@@ -4,15 +4,12 @@
     "link": true
   },
   {
-    "name": "serviceType"
+    "name": "dueDate"
   },
   {
-    "name": "serviceDate"
+    "name": "amount"
   },
   {
     "name": "status"
-  },
-  {
-    "name": "confirmationCode"
   }
 ]

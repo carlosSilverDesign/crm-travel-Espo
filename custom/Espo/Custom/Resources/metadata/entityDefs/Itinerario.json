@@ -33,6 +33,21 @@
       "type": "date",
       "required": true
     },
+    "quoteValidUntil": {
+      "type": "datetime"
+    },
+    "whatsappStatus": {
+      "type": "enum",
+      "default": "NotSent",
+      "options": [
+        "NotSent",
+        "Queued",
+        "Sent",
+        "Delivered",
+        "Read",
+        "Failed"
+      ]
+    },
     "notes": {
       "type": "text"
     }
@@ -51,6 +66,16 @@
     "budgetLines": {
       "type": "hasMany",
       "entity": "BudgetLine",
+      "foreign": "itinerario"
+    },
+    "passengers": {
+      "type": "hasMany",
+      "entity": "Passenger",
+      "foreign": "itinerario"
+    },
+    "paymentSchedules": {
+      "type": "hasMany",
+      "entity": "PaymentSchedule",
       "foreign": "itinerario"
     }
   }

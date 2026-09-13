@@ -4,5 +4,11 @@
   },
   {
     "name": "budgetLines"
+  },
+  {
+    "name": "passengers"
+  },
+  {
+    "name": "paymentSchedules"
   }
 ]

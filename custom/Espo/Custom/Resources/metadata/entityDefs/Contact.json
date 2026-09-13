@@ -1,0 +1,9 @@
+{
+  "links": {
+    "passengers": {
+      "type": "hasMany",
+      "entity": "Passenger",
+      "foreign": "contact"
+    }
+  }
+}

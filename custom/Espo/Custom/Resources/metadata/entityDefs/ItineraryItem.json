@@ -16,6 +16,7 @@
         "Traslado",
         "Tour",
         "Seguro",
+        "Crucero",
         "Otro"
       ],
       "audited": true
@@ -26,8 +27,18 @@
     },
     "confirmationCode": {
       "type": "varchar",
-      "maxLength": 50,
+      "maxLength": 60,
       "pattern": "$noBadCharacters"
+    },
+    "status": {
+      "type": "enum",
+      "default": "Solicitado",
+      "options": [
+        "Solicitado",
+        "Confirmado",
+        "Emitido",
+        "Cancelado"
+      ]
     },
     "notes": {
       "type": "text"

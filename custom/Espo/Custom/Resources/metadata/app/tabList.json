@@ -1,15 +1,10 @@
-{
-  "layout": [
-    "$CRM",
-    "Itinerario",
-    "Supplier",
-    "PackageTemplate",
-    "Account",
-    "Contact",
-    "Opportunity",
-    "$Activities",
-    "Meeting",
-    "Call",
-    "Task"
-  ]
-}
+[
+  "Itinerario",
+  "Passenger",
+  "PaymentSchedule",
+  "Supplier",
+  "PackageTemplate",
+  "Opportunity",
+  "Contact",
+  "Account"
+]

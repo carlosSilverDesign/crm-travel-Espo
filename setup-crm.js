@@ -41,21 +41,21 @@ entities.forEach(ent => {
 writeJSON('metadata/entityDefs/Itinerario.json', {
   fields: {
     name: { type: 'varchar', required: true, maxLength: 150, pattern: '$noBadCharacters' },
-    status: { 
-      type: 'enum', 
-      required: true, 
-      default: 'Cotización', 
-      options: ['Cotización', 'Confirmado', 'En Viaje', 'Finalizado', 'Cancelado'], 
-      audited: true 
+    status: {
+      type: 'enum',
+      required: true,
+      default: 'Cotización',
+      options: ['Cotización', 'Confirmado', 'En Viaje', 'Finalizado', 'Cancelado'],
+      audited: true
     },
     destination: { type: 'varchar', required: true, maxLength: 100, pattern: '$noBadCharacters' },
     startDate: { type: 'date', required: true },
     endDate: { type: 'date', required: true },
     quoteValidUntil: { type: 'datetime' }, // Expiración de tarifas
-    whatsappStatus: { 
-      type: 'enum', 
-      default: 'NotSent', 
-      options: ['NotSent', 'Queued', 'Sent', 'Delivered', 'Read', 'Failed'] 
+    whatsappStatus: {
+      type: 'enum',
+      default: 'NotSent',
+      options: ['NotSent', 'Queued', 'Sent', 'Delivered', 'Read', 'Failed']
     },
     notes: { type: 'text' }
   },
@@ -72,12 +72,12 @@ writeJSON('metadata/entityDefs/Itinerario.json', {
 writeJSON('metadata/entityDefs/ItineraryItem.json', {
   fields: {
     name: { type: 'varchar', required: true, maxLength: 150, pattern: '$noBadCharacters' },
-    serviceType: { 
-      type: 'enum', 
-      required: true, 
-      default: 'Vuelo', 
-      options: ['Vuelo', 'Hotel', 'Traslado', 'Tour', 'Seguro', 'Crucero', 'Otro'], 
-      audited: true 
+    serviceType: {
+      type: 'enum',
+      required: true,
+      default: 'Vuelo',
+      options: ['Vuelo', 'Hotel', 'Traslado', 'Tour', 'Seguro', 'Crucero', 'Otro'],
+      audited: true
     },
     serviceDate: { type: 'datetime', required: true },
     confirmationCode: { type: 'varchar', maxLength: 60, pattern: '$noBadCharacters' },
@@ -113,11 +113,11 @@ writeJSON('metadata/entityDefs/BudgetLine.json', {
 writeJSON('metadata/entityDefs/Passenger.json', {
   fields: {
     name: { type: 'varchar', required: true, maxLength: 150, pattern: '$noBadCharacters' },
-    documentType: { 
-      type: 'enum', 
-      required: true, 
-      default: 'Passport', 
-      options: ['Passport', 'DNI', 'IdentityCard', 'Other'] 
+    documentType: {
+      type: 'enum',
+      required: true,
+      default: 'Passport',
+      options: ['Passport', 'DNI', 'IdentityCard', 'Other']
     },
     documentNumber: { type: 'varchar', required: true, maxLength: 50, pattern: '$noBadCharacters' },
     documentExpiration: { type: 'date' },
@@ -138,16 +138,16 @@ writeJSON('metadata/entityDefs/PaymentSchedule.json', {
     name: { type: 'varchar', required: true, maxLength: 100 },
     dueDate: { type: 'date', required: true },
     amount: { type: 'currency', required: true },
-    status: { 
-      type: 'enum', 
-      required: true, 
-      default: 'Pendiente', 
+    status: {
+      type: 'enum',
+      required: true,
+      default: 'Pendiente',
       options: ['Pendiente', 'Pagado', 'Vencido', 'Cancelado'],
       audited: true
     },
-    paymentMethod: { 
-      type: 'enum', 
-      options: ['Transferencia', 'Tarjeta', 'Efectivo', 'LinkDePago', 'Otro'] 
+    paymentMethod: {
+      type: 'enum',
+      options: ['Transferencia', 'Tarjeta', 'Efectivo', 'LinkDePago', 'Otro']
     },
     transactionId: { type: 'varchar', maxLength: 100 }
   },
@@ -160,11 +160,11 @@ writeJSON('metadata/entityDefs/PaymentSchedule.json', {
 writeJSON('metadata/entityDefs/Supplier.json', {
   fields: {
     name: { type: 'varchar', required: true, maxLength: 150, pattern: '$noBadCharacters' },
-    supplierType: { 
-      type: 'enum', 
-      required: true, 
-      default: 'Operador Local', 
-      options: ['Hotel', 'Operador Local', 'Transporte', 'Guía', 'Aerolínea', 'Seguros', 'Mayorista'] 
+    supplierType: {
+      type: 'enum',
+      required: true,
+      default: 'Operador Local',
+      options: ['Hotel', 'Operador Local', 'Transporte', 'Guía', 'Aerolínea', 'Seguros', 'Mayorista']
     },
     contactEmail: { type: 'varchar', maxLength: 100, pattern: '$email' },
     contactPhone: { type: 'varchar', maxLength: 30, pattern: '$noBadCharacters' },

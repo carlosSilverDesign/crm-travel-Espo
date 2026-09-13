@@ -1,4 +1,13 @@
 {
+  "fields": {
+    "whatsappChatId": {
+      "type": "varchar",
+      "maxLength": 100
+    },
+    "lastActivepiecesSync": {
+      "type": "datetime"
+    }
+  },
   "links": {
     "cItinerarios": {
       "type": "hasMany",
