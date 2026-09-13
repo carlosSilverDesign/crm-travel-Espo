@@ -19,6 +19,10 @@
       "type": "currency",
       "required": true
     },
+    "grossProfit": {
+      "type": "currency",
+      "readOnly": true
+    },
     "notes": {
       "type": "text"
     }

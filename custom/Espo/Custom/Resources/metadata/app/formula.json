@@ -1,5 +1,5 @@
 {
   "BudgetLine": {
-    "beforeSaveCustomScript": "ifThen(costPrice != null && marginRate != null, sellingPrice = costPrice * (1 + (marginRate / 100)));"
+    "beforeSaveCustomScript": "ifThen(costPrice != null && marginRate != null, sellingPrice = costPrice * (1 + (marginRate / 100))); ifThen(sellingPrice != null && costPrice != null, grossProfit = sellingPrice - costPrice);"
   }
 }

@@ -104,6 +104,7 @@ writeJSON('metadata/entityDefs/BudgetLine.json', {
     costPrice: { type: 'currency', required: true },
     marginRate: { type: 'float', required: true, default: 15 },
     sellingPrice: { type: 'currency', required: true },
+    grossProfit: { type: 'currency', readOnly: true },
     notes: { type: 'text' }
   },
   links: {
@@ -212,7 +213,7 @@ writeJSON('metadata/entityDefs/Contact.json', {
 // ==========================================
 writeJSON('metadata/app/formula.json', {
   BudgetLine: {
-    beforeSaveCustomScript: "ifThen(costPrice != null && marginRate != null, sellingPrice = costPrice * (1 + (marginRate / 100)));"
+    beforeSaveCustomScript: "ifThen(costPrice != null && marginRate != null, sellingPrice = costPrice * (1 + (marginRate / 100))); ifThen(sellingPrice != null && costPrice != null, grossProfit = sellingPrice - costPrice);"
   }
 });
 
@@ -231,7 +232,8 @@ writeJSON('layouts/BudgetLine/listSmall.json', [
   { name: 'name', link: true },
   { name: 'costPrice' },
   { name: 'marginRate' },
-  { name: 'sellingPrice' }
+  { name: 'sellingPrice' },
+  { name: 'grossProfit' }
 ]);
 
 writeJSON('layouts/Passenger/listSmall.json', [

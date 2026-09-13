@@ -2,6 +2,7 @@
   "entity": true,
   "object": true,
   "type": "Base",
+  "acl": "Espo\\Custom\\Acl\\BudgetLine",
   "customizable": true,
   "importable": true,
   "exportable": true
