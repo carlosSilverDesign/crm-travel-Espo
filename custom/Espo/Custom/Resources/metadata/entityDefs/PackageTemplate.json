@@ -1,0 +1,27 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150,
+      "pattern": "$noBadCharacters"
+    },
+    "destination": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 100,
+      "pattern": "$noBadCharacters"
+    },
+    "durationDays": {
+      "type": "int",
+      "required": true,
+      "default": 1
+    },
+    "basePrice": {
+      "type": "currency"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150,
+      "pattern": "$noBadCharacters"
+    },
+    "costPrice": {
+      "type": "currency",
+      "required": true
+    },
+    "marginRate": {
+      "type": "float",
+      "required": true,
+      "default": 15
+    },
+    "sellingPrice": {
+      "type": "currency",
+      "required": true
+    },
+    "notes": {
+      "type": "text"
+    }
+  },
+  "links": {
+    "itinerario": {
+      "type": "belongsTo",
+      "entity": "Itinerario",
+      "foreign": "budgetLines"
+    },
+    "supplier": {
+      "type": "belongsTo",
+      "entity": "Supplier",
+      "foreign": "budgetLines"
+    }
+  }
+}

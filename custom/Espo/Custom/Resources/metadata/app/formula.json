@@ -1,0 +1,5 @@
+{
+  "BudgetLine": {
+    "beforeSaveCustomScript": "ifThen(costPrice != null && marginRate != null, sellingPrice = costPrice * (1 + (marginRate / 100)));"
+  }
+}

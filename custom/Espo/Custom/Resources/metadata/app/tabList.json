@@ -1,0 +1,15 @@
+{
+  "layout": [
+    "$CRM",
+    "Itinerario",
+    "Supplier",
+    "PackageTemplate",
+    "Account",
+    "Contact",
+    "Opportunity",
+    "$Activities",
+    "Meeting",
+    "Call",
+    "Task"
+  ]
+}

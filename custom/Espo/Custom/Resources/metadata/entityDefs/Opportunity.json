@@ -1,0 +1,9 @@
+{
+  "links": {
+    "cItinerarios": {
+      "type": "hasMany",
+      "entity": "Itinerario",
+      "foreign": "opportunity"
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150,
+      "pattern": "$noBadCharacters"
+    },
+    "serviceType": {
+      "type": "enum",
+      "required": true,
+      "default": "Vuelo",
+      "options": [
+        "Vuelo",
+        "Hotel",
+        "Traslado",
+        "Tour",
+        "Seguro",
+        "Otro"
+      ],
+      "audited": true
+    },
+    "serviceDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "confirmationCode": {
+      "type": "varchar",
+      "maxLength": 50,
+      "pattern": "$noBadCharacters"
+    },
+    "notes": {
+      "type": "text"
+    }
+  },
+  "links": {
+    "itinerario": {
+      "type": "belongsTo",
+      "entity": "Itinerario",
+      "foreign": "items"
+    },
+    "supplier": {
+      "type": "belongsTo",
+      "entity": "Supplier",
+      "foreign": "itineraryItems"
+    }
+  }
+}

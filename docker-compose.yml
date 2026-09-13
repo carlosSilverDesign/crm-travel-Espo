@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: crm_mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_segura
+      MYSQL_DATABASE: espocrm_db
+      MYSQL_USER: espocrm_user
+      MYSQL_PASSWORD: espocrm_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+  espocrm:
+    image: espocrm/espocrm
+    container_name: crm_app
+    environment:
+      ESPOCRM_DATABASE_PLATFORM: Mysql
+      ESPOCRM_DATABASE_HOST: mysql
+      ESPOCRM_DATABASE_USER: espocrm_user
+      ESPOCRM_DATABASE_PASSWORD: espocrm_password
+      ESPOCRM_DATABASE_NAME: espocrm_db
+      ESPOCRM_SITE_URL: "http://localhost:8080"
+    ports:
+      - "8080:80"
+    volumes:
+      - ./custom:/var/www/html/custom
+    depends_on:
+      - mysql
+    restart: always
+
+volumes:
+  mysql_data:

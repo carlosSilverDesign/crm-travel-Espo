@@ -1,0 +1,15 @@
+[
+  {
+    "name": "name",
+    "link": true
+  },
+  {
+    "name": "serviceType"
+  },
+  {
+    "name": "serviceDate"
+  },
+  {
+    "name": "confirmationCode"
+  }
+]
