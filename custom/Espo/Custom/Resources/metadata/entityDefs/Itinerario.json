@@ -48,6 +48,15 @@
         "Failed"
       ]
     },
+    "totalCost": {
+      "type": "currency"
+    },
+    "totalSelling": {
+      "type": "currency"
+    },
+    "grossProfit": {
+      "type": "currency"
+    },
     "notes": {
       "type": "text"
     }

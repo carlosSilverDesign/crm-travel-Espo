@@ -57,6 +57,9 @@ writeJSON('metadata/entityDefs/Itinerario.json', {
       default: 'NotSent',
       options: ['NotSent', 'Queued', 'Sent', 'Delivered', 'Read', 'Failed']
     },
+    totalCost: { type: 'currency' },
+    totalSelling: { type: 'currency' },
+    grossProfit: { type: 'currency' },
     notes: { type: 'text' }
   },
   links: {
