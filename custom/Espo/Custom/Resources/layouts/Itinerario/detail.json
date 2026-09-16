@@ -1,0 +1,21 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "status"}],
+      [{"name": "destination"}, {"name": "opportunity"}],
+      [{"name": "startDate"}, {"name": "endDate"}],
+      [{"name": "quoteValidUntil"}, {"name": "whatsappStatus"}]
+    ],
+    "style": "default",
+    "label": "Información General"
+  },
+  {
+    "rows": [
+      [{"name": "totalCost"}, {"name": "totalSelling"}],
+      [{"name": "grossProfit"}, false],
+      [{"name": "notes"}, false]
+    ],
+    "style": "default",
+    "label": "Resumen Financiero y Notas"
+  }
+]

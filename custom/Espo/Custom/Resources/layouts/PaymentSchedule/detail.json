@@ -1,0 +1,12 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "itinerario"}],
+      [{"name": "dueDate"}, {"name": "amount"}],
+      [{"name": "status"}, {"name": "paymentMethod"}],
+      [{"name": "transactionId"}, false]
+    ],
+    "style": "default",
+    "label": "Programación de Cobro"
+  }
+]

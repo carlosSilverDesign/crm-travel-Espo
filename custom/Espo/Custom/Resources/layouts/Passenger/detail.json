@@ -1,0 +1,14 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "itinerario"}],
+      [{"name": "contact"}, {"name": "birthDate"}],
+      [{"name": "documentType"}, {"name": "documentNumber"}],
+      [{"name": "documentExpiration"}, {"name": "nationality"}],
+      [{"name": "dietaryRestrictions"}, false],
+      [{"name": "notes"}, false]
+    ],
+    "style": "default",
+    "label": "Datos del Pasajero"
+  }
+]

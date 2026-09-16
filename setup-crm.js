@@ -218,14 +218,71 @@ writeJSON('metadata/app/formula.json', {
 });
 
 // ==========================================
-// 4. Layouts (Vistas resumidas y paneles)
+// 4. Layouts (Vistas detalladas, listas y paneles)
 // ==========================================
-writeJSON('layouts/ItineraryItem/listSmall.json', [
+
+// --- Itinerario ---
+writeJSON('layouts/Itinerario/detail.json', [
+  {
+    rows: [
+      [{ name: 'name' }, { name: 'status' }],
+      [{ name: 'destination' }, { name: 'opportunity' }],
+      [{ name: 'startDate' }, { name: 'endDate' }],
+      [{ name: 'quoteValidUntil' }, { name: 'whatsappStatus' }]
+    ],
+    style: 'default',
+    label: 'Información General'
+  },
+  {
+    rows: [
+      [{ name: 'totalCost' }, { name: 'totalSelling' }],
+      [{ name: 'grossProfit' }, false],
+      [{ name: 'notes' }, false]
+    ],
+    style: 'default',
+    label: 'Resumen Financiero y Notas'
+  }
+]);
+
+writeJSON('layouts/Itinerario/list.json', [
   { name: 'name', link: true },
-  { name: 'serviceType' },
-  { name: 'serviceDate' },
+  { name: 'destination' },
   { name: 'status' },
-  { name: 'confirmationCode' }
+  { name: 'startDate' },
+  { name: 'endDate' },
+  { name: 'totalSelling' },
+  { name: 'grossProfit' }
+]);
+
+writeJSON('layouts/Itinerario/bottomPanels.json', [
+  { name: 'passengers', label: 'Pasajeros' },
+  { name: 'items', label: 'Servicios Turísticos' },
+  { name: 'budgetLines', label: 'Finanzas y Márgenes' },
+  { name: 'paymentSchedules', label: 'Cronograma de Pagos' }
+]);
+
+// --- BudgetLine ---
+writeJSON('layouts/BudgetLine/detail.json', [
+  {
+    rows: [
+      [{ name: 'name' }, { name: 'itinerario' }],
+      [{ name: 'supplier' }, { name: 'costPrice' }],
+      [{ name: 'marginRate' }, { name: 'sellingPrice' }],
+      [{ name: 'grossProfit' }, false],
+      [{ name: 'notes' }, false]
+    ],
+    style: 'default',
+    label: 'Cálculo de Margen'
+  }
+]);
+
+writeJSON('layouts/BudgetLine/list.json', [
+  { name: 'name', link: true },
+  { name: 'supplier' },
+  { name: 'costPrice' },
+  { name: 'marginRate' },
+  { name: 'sellingPrice' },
+  { name: 'grossProfit' }
 ]);
 
 writeJSON('layouts/BudgetLine/listSmall.json', [
@@ -236,11 +293,57 @@ writeJSON('layouts/BudgetLine/listSmall.json', [
   { name: 'grossProfit' }
 ]);
 
+// --- Passenger ---
+writeJSON('layouts/Passenger/detail.json', [
+  {
+    rows: [
+      [{ name: 'name' }, { name: 'itinerario' }],
+      [{ name: 'contact' }, { name: 'birthDate' }],
+      [{ name: 'documentType' }, { name: 'documentNumber' }],
+      [{ name: 'documentExpiration' }, { name: 'nationality' }],
+      [{ name: 'dietaryRestrictions' }, false],
+      [{ name: 'notes' }, false]
+    ],
+    style: 'default',
+    label: 'Datos del Pasajero'
+  }
+]);
+
+writeJSON('layouts/Passenger/list.json', [
+  { name: 'name', link: true },
+  { name: 'documentType' },
+  { name: 'documentNumber' },
+  { name: 'documentExpiration' },
+  { name: 'nationality' }
+]);
+
 writeJSON('layouts/Passenger/listSmall.json', [
   { name: 'name', link: true },
   { name: 'documentType' },
   { name: 'documentNumber' },
   { name: 'nationality' }
+]);
+
+// --- PaymentSchedule ---
+writeJSON('layouts/PaymentSchedule/detail.json', [
+  {
+    rows: [
+      [{ name: 'name' }, { name: 'itinerario' }],
+      [{ name: 'dueDate' }, { name: 'amount' }],
+      [{ name: 'status' }, { name: 'paymentMethod' }],
+      [{ name: 'transactionId' }, false]
+    ],
+    style: 'default',
+    label: 'Programación de Cobro'
+  }
+]);
+
+writeJSON('layouts/PaymentSchedule/list.json', [
+  { name: 'name', link: true },
+  { name: 'dueDate' },
+  { name: 'amount' },
+  { name: 'status' },
+  { name: 'paymentMethod' }
 ]);
 
 writeJSON('layouts/PaymentSchedule/listSmall.json', [
@@ -250,11 +353,13 @@ writeJSON('layouts/PaymentSchedule/listSmall.json', [
   { name: 'status' }
 ]);
 
-writeJSON('layouts/Itinerario/bottomPanels.json', [
-  { name: 'items' },
-  { name: 'budgetLines' },
-  { name: 'passengers' },
-  { name: 'paymentSchedules' }
+// --- ItineraryItem ---
+writeJSON('layouts/ItineraryItem/listSmall.json', [
+  { name: 'name', link: true },
+  { name: 'serviceType' },
+  { name: 'serviceDate' },
+  { name: 'status' },
+  { name: 'confirmationCode' }
 ]);
 
 writeJSON('layouts/Opportunity/bottomPanels.json', [

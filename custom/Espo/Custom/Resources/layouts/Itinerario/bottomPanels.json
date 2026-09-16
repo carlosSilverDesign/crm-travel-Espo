@@ -1,14 +1,6 @@
 [
-  {
-    "name": "items"
-  },
-  {
-    "name": "budgetLines"
-  },
-  {
-    "name": "passengers"
-  },
-  {
-    "name": "paymentSchedules"
-  }
+  {"name": "passengers", "label": "Pasajeros"},
+  {"name": "items", "label": "Servicios Turísticos"},
+  {"name": "budgetLines", "label": "Finanzas y Márgenes"},
+  {"name": "paymentSchedules", "label": "Cronograma de Pagos"}
 ]

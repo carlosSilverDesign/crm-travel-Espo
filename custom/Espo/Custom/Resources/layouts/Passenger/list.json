@@ -1,0 +1,7 @@
+[
+  {"name": "name", "link": true},
+  {"name": "documentType"},
+  {"name": "documentNumber"},
+  {"name": "documentExpiration"},
+  {"name": "nationality"}
+]

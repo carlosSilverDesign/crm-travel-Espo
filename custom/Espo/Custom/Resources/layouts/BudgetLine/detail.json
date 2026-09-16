@@ -1,0 +1,13 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "itinerario"}],
+      [{"name": "supplier"}, {"name": "costPrice"}],
+      [{"name": "marginRate"}, {"name": "sellingPrice"}],
+      [{"name": "grossProfit"}, false],
+      [{"name": "notes"}, false]
+    ],
+    "style": "default",
+    "label": "Cálculo de Margen"
+  }
+]

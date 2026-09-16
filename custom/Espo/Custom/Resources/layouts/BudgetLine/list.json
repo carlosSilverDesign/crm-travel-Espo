@@ -1,0 +1,8 @@
+[
+  {"name": "name", "link": true},
+  {"name": "supplier"},
+  {"name": "costPrice"},
+  {"name": "marginRate"},
+  {"name": "sellingPrice"},
+  {"name": "grossProfit"}
+]

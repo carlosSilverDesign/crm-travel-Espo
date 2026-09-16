@@ -1,0 +1,9 @@
+[
+  {"name": "name", "link": true},
+  {"name": "destination"},
+  {"name": "status"},
+  {"name": "startDate"},
+  {"name": "endDate"},
+  {"name": "totalSelling"},
+  {"name": "grossProfit"}
+]
