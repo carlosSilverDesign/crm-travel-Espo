@@ -261,6 +261,20 @@ writeJSON('layouts/Itinerario/bottomPanels.json', [
   { name: 'paymentSchedules', label: 'Cronograma de Pagos' }
 ]);
 
+writeJSON('layouts/Itinerario/bottomPanelsDetail.json', {
+  passengers: { index: 0 },
+  items: { index: 1 },
+  budgetLines: { index: 2 },
+  paymentSchedules: { index: 3 }
+});
+
+writeJSON('layouts/Itinerario/relationships.json', [
+  'passengers',
+  'items',
+  'budgetLines',
+  'paymentSchedules'
+]);
+
 // --- BudgetLine ---
 writeJSON('layouts/BudgetLine/detail.json', [
   {
