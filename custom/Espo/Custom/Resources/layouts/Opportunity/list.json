@@ -1,0 +1,11 @@
+[
+  {"name": "name", "link": true},
+  {"name": "contact"},
+  {"name": "stage"},
+  {"name": "destination"},
+  {"name": "travelStartDate"},
+  {"name": "amount"},
+  {"name": "projectedGrossProfit"},
+  {"name": "leadSource"},
+  {"name": "assignedUser"}
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "stage"}],
+      [{"name": "contact"}, {"name": "account"}],
+      [{"name": "leadSource"}, {"name": "assignedUser"}],
+      [{"name": "destination"}, false],
+      [{"name": "travelStartDate"}, {"name": "travelEndDate"}]
+    ],
+    "style": "default",
+    "label": "Información Comercial del Viaje"
+  },
+  {
+    "rows": [
+      [{"name": "amount"}, {"name": "projectedGrossProfit"}],
+      [{"name": "probability"}, {"name": "closeDate"}],
+      [{"name": "description"}, false]
+    ],
+    "style": "default",
+    "label": "Resumen Financiero y Rentabilidad"
+  },
+  {
+    "rows": [
+      [{"name": "lostReason"}, false],
+      [{"name": "lostReasonDetails"}, false]
+    ],
+    "style": "default",
+    "label": "Auditoría de Descarte (Closed Lost)"
+  }
+]

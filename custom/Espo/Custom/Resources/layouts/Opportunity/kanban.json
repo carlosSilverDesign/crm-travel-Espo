@@ -1,0 +1,27 @@
+[
+  {
+    "name": "name",
+    "link": true
+  },
+  {
+    "name": "contact"
+  },
+  {
+    "name": "destination"
+  },
+  {
+    "name": "travelStartDate"
+  },
+  {
+    "name": "travelEndDate"
+  },
+  {
+    "name": "amount"
+  },
+  {
+    "name": "projectedGrossProfit"
+  },
+  {
+    "name": "leadSource"
+  }
+]
