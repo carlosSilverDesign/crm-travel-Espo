@@ -6,6 +6,70 @@
     },
     "lastActivepiecesSync": {
       "type": "datetime"
+    },
+    "stage": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "Prospecting",
+        "Qualification",
+        "Proposal",
+        "Negotiation",
+        "PaymentPending",
+        "Closed Won",
+        "Closed Lost"
+      ],
+      "default": "Prospecting",
+      "probabilityMap": {
+        "Prospecting": 10,
+        "Qualification": 25,
+        "Proposal": 50,
+        "Negotiation": 75,
+        "PaymentPending": 90,
+        "Closed Won": 100,
+        "Closed Lost": 0
+      }
+    },
+    "destination": {
+      "type": "varchar",
+      "maxLength": 100,
+      "trim": true
+    },
+    "travelStartDate": {
+      "type": "date"
+    },
+    "travelEndDate": {
+      "type": "date"
+    },
+    "projectedGrossProfit": {
+      "type": "currency",
+      "readOnly": true
+    },
+    "leadSource": {
+      "type": "enum",
+      "options": [
+        "WhatsApp",
+        "Instagram",
+        "Facebook",
+        "Referido",
+        "Web",
+        "Presencial"
+      ],
+      "default": "WhatsApp"
+    },
+    "lostReason": {
+      "type": "enum",
+      "options": [
+        "Precio / Presupuesto Alto",
+        "Eligió Competencia",
+        "Canceló Viaje",
+        "Sin Respuesta / Fantasma",
+        "Fechas / Cupos No Disponibles",
+        "Otro"
+      ]
+    },
+    "lostReasonDetails": {
+      "type": "text"
     }
   },
   "links": {
