@@ -21,8 +21,7 @@ class OpportunitySync
 
     public function afterSave(Entity $entity, array $options = []): void
     {
-        // Comprobar si el atributo 'status' fue modificado
-        if (!$entity->isAttributeChanged('status')) {
+        if (!empty($options['skipHooks'])) {
             return;
         }
 
@@ -36,39 +35,48 @@ class OpportunitySync
             return;
         }
 
-        // CASO 1: Itinerario pasa a 'Confirmado'
-        if ($entity->get('status') === 'Confirmado') {
-            $updateData = [
-                'stage' => 'Closed Won',
-                'amount' => (float) ($entity->get('totalSelling') ?? 0.0)
-            ];
+        // 1. Sincronización Financiera y de Fechas
+        $updates = [
+            'amount' => (float) ($entity->get('totalSelling') ?? 0.0),
+            'projectedGrossProfit' => (float) ($entity->get('grossProfit') ?? 0.0),
+            'travelStartDate' => $entity->get('startDate'),
+            'travelEndDate' => $entity->get('endDate'),
+        ];
 
-            if ($entity->has('totalSellingCurrency') && $entity->get('totalSellingCurrency')) {
-                $updateData['amountCurrency'] = $entity->get('totalSellingCurrency');
-            }
-
-            $opportunity->set($updateData);
-            $this->getEntityManager()->saveEntity($opportunity, ['skipHooks' => true]);
-
-            return;
+        if ($entity->has('totalSellingCurrency') && $entity->get('totalSellingCurrency')) {
+            $updates['amountCurrency'] = $entity->get('totalSellingCurrency');
+            $updates['projectedGrossProfitCurrency'] = $entity->get('totalSellingCurrency');
         }
 
-        // CASO 2: Itinerario pasa a 'Cancelado'
-        if ($entity->get('status') === 'Cancelado') {
-            // Verificar si existen otros itinerarios activos vinculados a esta oportunidad
-            $activeItineraries = $this->getEntityManager()->getRDBRepository('Itinerario')
-                ->where([
-                    'opportunityId' => $opportunityId,
-                    'id!=' => $entity->getId(),
-                    'status!=' => 'Cancelado'
-                ])
-                ->find();
+        // Asignar destino si la oportunidad no tiene uno establecido
+        if (empty($opportunity->get('destination')) && !empty($entity->get('destination'))) {
+            $updates['destination'] = $entity->get('destination');
+        }
 
-            // Si no quedan itinerarios activos, marcar la oportunidad como perdida
-            if (count($activeItineraries) === 0) {
-                $opportunity->set('stage', 'Closed Lost');
-                $this->getEntityManager()->saveEntity($opportunity, ['skipHooks' => true]);
+        // 2. Sincronización de Etapas Comerciales (Lógica previa TASK-006)
+        if ($entity->isAttributeChanged('status')) {
+            if ($entity->get('status') === 'Confirmado') {
+                $updates['stage'] = 'Closed Won';
+            } elseif ($entity->get('status') === 'Cancelado') {
+                $activeItineraries = $this->getEntityManager()->getRDBRepository('Itinerario')
+                    ->where([
+                        'opportunityId' => $opportunityId,
+                        'id!=' => $entity->getId(),
+                        'status!=' => 'Cancelado'
+                    ])
+                    ->find();
+
+                if (count($activeItineraries) === 0) {
+                    $updates['stage'] = 'Closed Lost';
+                    if (empty($opportunity->get('lostReason'))) {
+                        $updates['lostReason'] = 'Canceló Viaje';
+                    }
+                }
             }
         }
+
+        // 3. Persistencia Segura evitando bucles de hooks
+        $opportunity->set($updates);
+        $this->getEntityManager()->saveEntity($opportunity, ['skipHooks' => true]);
     }
 }

@@ -98,6 +98,6 @@ class FinancialAggregation
             'grossProfit' => round($grossProfit, 2)
         ]);
 
-        $this->getEntityManager()->saveEntity($itinerario, ['skipHooks' => true]);
+        $this->getEntityManager()->saveEntity($itinerario);
     }
 }

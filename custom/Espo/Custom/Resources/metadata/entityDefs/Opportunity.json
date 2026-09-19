@@ -47,6 +47,7 @@
     },
     "leadSource": {
       "type": "enum",
+      "optionsReference": null,
       "options": [
         "WhatsApp",
         "Instagram",
