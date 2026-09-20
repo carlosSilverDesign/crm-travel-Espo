@@ -1,0 +1,24 @@
+{
+  "recordViews": {
+    "detail": "custom:views/opportunity/record/detail"
+  },
+  "menu": {
+    "detail": {
+      "buttons": [],
+      "dropdown": [
+        {
+          "name": "escalateToAdmin",
+          "label": "Escalar a Guardia / Admin",
+          "action": "escalateToAdmin",
+          "iconClass": "fas fa-user-shield"
+        },
+        {
+          "name": "openChatwoot",
+          "label": "Abrir Chat en Chatwoot",
+          "action": "openChatwoot",
+          "iconClass": "fab fa-whatsapp"
+        }
+      ]
+    }
+  }
+}

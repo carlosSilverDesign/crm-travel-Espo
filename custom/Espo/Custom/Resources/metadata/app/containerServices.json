@@ -1,0 +1,8 @@
+{
+  "leadDistribution": {
+    "className": "Espo\\Custom\\Services\\LeadDistributionService"
+  },
+  "leadDistributionService": {
+    "className": "Espo\\Custom\\Services\\LeadDistributionService"
+  }
+}

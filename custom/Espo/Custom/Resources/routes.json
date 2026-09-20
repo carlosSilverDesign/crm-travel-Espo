@@ -1,0 +1,15 @@
+[
+  {
+    "route": "/webhook/chatwoot",
+    "method": "post",
+    "params": {
+      "controller": "WebhookChatwoot",
+      "action": "receive"
+    },
+    "noAuth": true,
+    "conditions": {
+      "auth": false
+    },
+    "auth": false
+  }
+]

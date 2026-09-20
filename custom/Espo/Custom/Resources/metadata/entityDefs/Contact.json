@@ -1,4 +1,21 @@
 {
+  "fields": {
+    "chatwootContactId": {
+      "type": "varchar",
+      "maxLength": 100,
+      "index": true,
+      "readOnly": true
+    },
+    "chatwootConversationId": {
+      "type": "varchar",
+      "maxLength": 100,
+      "readOnly": true
+    },
+    "lastWhatsappMessageAt": {
+      "type": "datetime",
+      "readOnly": true
+    }
+  },
   "links": {
     "passengers": {
       "type": "hasMany",

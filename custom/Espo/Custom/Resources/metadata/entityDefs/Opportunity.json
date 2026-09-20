@@ -71,6 +71,17 @@
     },
     "lostReasonDetails": {
       "type": "text"
+    },
+    "chatwootConversationId": {
+      "type": "varchar",
+      "maxLength": 100,
+      "readOnly": true,
+      "view": "custom:views/fields/chatwoot-conversation"
+    },
+    "whatsappChannel": {
+      "type": "varchar",
+      "maxLength": 50,
+      "default": "Línea Oficial WhatsApp"
     }
   },
   "links": {

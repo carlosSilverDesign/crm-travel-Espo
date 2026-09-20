@@ -4,6 +4,7 @@
       [{"name": "name"}, {"name": "stage"}],
       [{"name": "contact"}, {"name": "account"}],
       [{"name": "leadSource"}, {"name": "assignedUser"}],
+      [{"name": "whatsappChannel"}, {"name": "chatwootConversationId"}],
       [{"name": "destination"}, false],
       [{"name": "travelStartDate"}, {"name": "travelEndDate"}]
     ],
