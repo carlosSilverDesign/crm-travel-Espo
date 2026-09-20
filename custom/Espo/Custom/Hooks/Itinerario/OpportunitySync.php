@@ -57,6 +57,7 @@ class OpportunitySync
         if ($entity->isAttributeChanged('status')) {
             if ($entity->get('status') === 'Confirmado') {
                 $updates['stage'] = 'Closed Won';
+                $updates['probability'] = 100;
             } elseif ($entity->get('status') === 'Cancelado') {
                 $activeItineraries = $this->getEntityManager()->getRDBRepository('Itinerario')
                     ->where([
@@ -68,6 +69,7 @@ class OpportunitySync
 
                 if (count($activeItineraries) === 0) {
                     $updates['stage'] = 'Closed Lost';
+                    $updates['probability'] = 0;
                     if (empty($opportunity->get('lostReason'))) {
                         $updates['lostReason'] = 'Canceló Viaje';
                     }

@@ -40,5 +40,8 @@ class LostReasonGuard
                 "Debe especificar el motivo de pérdida (lostReason) para cerrar la oportunidad como descartada o perdida."
             );
         }
+
+        // Asegurar que la probabilidad sea 0% al cerrar como perdida
+        $entity->set('probability', 0);
     }
 }
