@@ -4,5 +4,6 @@
   "type": "Base",
   "customizable": true,
   "importable": true,
-  "exportable": true
+  "exportable": true,
+  "acl": true
 }

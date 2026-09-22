@@ -1,0 +1,158 @@
+{
+  "name": "Copiloto Cotizador IA (Módulo 04)",
+  "description": "Flujo de 5 pasos con adaptador desacoplado para extraer requerimientos de chat, cruzar con catálogo EspoCRM y generar borrador en Chatwoot",
+  "version": "1.0.0",
+  "schemaVersion": "1.0",
+  "trigger": {
+    "name": "chatwoot_webhook_trigger",
+    "displayName": "Paso 1: Webhook Chatwoot (conversation_updated)",
+    "type": "WEBHOOK",
+    "settings": {
+      "auth": "none",
+      "method": "POST"
+    },
+    "validations": {
+      "event": "conversation_updated",
+      "triggerLabel": "{{env.TRIGGER_LABEL_NAME}}"
+    },
+    "nextAction": "guard_filter_step"
+  },
+  "actions": {
+    "guard_filter_step": {
+      "name": "guard_filter_step",
+      "displayName": "Paso 1 (Guarda): Filtro Fail-Fast #Cotizar",
+      "type": "BRANCH",
+      "settings": {
+        "conditions": [
+          {
+            "operator": "TEXT_CONTAINS",
+            "firstValue": "{{trigger.body.labels}}",
+            "secondValue": "{{env.TRIGGER_LABEL_NAME}}"
+          }
+        ]
+      },
+      "onTrue": "extract_chatwoot_history",
+      "onFalse": "terminate_silently"
+    },
+    "terminate_silently": {
+      "name": "terminate_silently",
+      "displayName": "Abortar Silente (Consumo 0 tokens)",
+      "type": "RETURN_RESPONSE",
+      "settings": {
+        "status": 200,
+        "body": {
+          "status": "ignored",
+          "reason": "trigger_label_not_present",
+          "tokens_consumed": 0
+        }
+      }
+    },
+    "extract_chatwoot_history": {
+      "name": "extract_chatwoot_history",
+      "displayName": "Paso 2: Extracción y Depuración de Historial (Últimos 15)",
+      "type": "PIECE",
+      "pieceName": "@activepieces/piece-http",
+      "actionName": "send_request",
+      "settings": {
+        "method": "GET",
+        "url": "{{env.CHATWOOT_BASE_URL}}/api/v1/accounts/{{env.CHATWOOT_ACCOUNT_ID}}/conversations/{{trigger.body.id}}/messages",
+        "headers": {
+          "api_access_token": "{{env.CHATWOOT_API_TOKEN}}",
+          "Content-Type": "application/json"
+        },
+        "timeout": 5000
+      },
+      "transformation": {
+        "type": "CODE",
+        "script": "const raw = Array.isArray(inputs.response.body.payload) ? inputs.response.body.payload : []; return raw.filter(m => !m.private && (m.message_type === 0 || m.message_type === 1)).slice(-15).map(m => ({ role: (m.message_type === 0) ? 'client' : 'agent', text: (m.content || '').replace(/<[^>]*>?/gm, '').trim() })).filter(m => m.text.length > 0);"
+      },
+      "nextAction": "fetch_espocrm_catalog"
+    },
+    "fetch_espocrm_catalog": {
+      "name": "fetch_espocrm_catalog",
+      "displayName": "Paso 3: Consulta Dinámica de Catálogo EspoCRM",
+      "type": "PIECE",
+      "pieceName": "@activepieces/piece-http",
+      "actionName": "send_request",
+      "settings": {
+        "method": "GET",
+        "url": "{{env.ESPOCRM_BASE_URL}}/api/v1/Itinerario?where[0][type]=equals&where[0][attribute]=status&where[0][value]=Plantilla&select=id,name,destination,totalSelling,description&maxSize=20",
+        "headers": {
+          "X-Api-Key": "{{env.ESPOCRM_API_KEY}}",
+          "Content-Type": "application/json"
+        },
+        "timeout": 5000
+      },
+      "nextAction": "llm_adapter_inference"
+    },
+    "llm_adapter_inference": {
+      "name": "llm_adapter_inference",
+      "displayName": "Paso 4: Adaptador LLM Conmutable (Gemini 1.5 Flash)",
+      "type": "CODE",
+      "settings": {
+        "provider": "{{env.LLM_PROVIDER}}",
+        "modelName": "{{env.LLM_MODEL_NAME}}",
+        "apiKey": "{{env.LLM_API_KEY}}",
+        "temperature": "{{env.LLM_TEMPERATURE}}",
+        "timeoutSeconds": 10,
+        "input": {
+          "catalog": "{{steps.fetch_espocrm_catalog.response.body.list}}",
+          "history": "{{steps.extract_chatwoot_history.output}}"
+        },
+        "responseFormat": "JSON_SCHEMA_STRICT",
+        "expectedSchema": {
+          "type": "object",
+          "properties": {
+            "detectedDestination": { "type": "string" },
+            "estimatedStartDate": { "type": ["string", "null"] },
+            "paxCount": { "type": "integer" },
+            "budgetMentioned": { "type": ["number", "null"] },
+            "matchedPackageId": { "type": ["string", "null"] },
+            "matchedPackageName": { "type": ["string", "null"] },
+            "suggestedDraftMessage": { "type": "string" }
+          },
+          "required": [
+            "detectedDestination",
+            "paxCount",
+            "suggestedDraftMessage"
+          ]
+        }
+      },
+      "errorHandlingOptions": {
+        "continueOnFailure": {
+          "value": true
+        },
+        "retryOnFailure": {
+          "value": false
+        }
+      },
+      "nextAction": "post_chatwoot_private_note"
+    },
+    "post_chatwoot_private_note": {
+      "name": "post_chatwoot_private_note",
+      "displayName": "Paso 5: Inyección de Nota Privada en Chatwoot",
+      "type": "PIECE",
+      "pieceName": "@activepieces/piece-http",
+      "actionName": "send_request",
+      "settings": {
+        "method": "POST",
+        "url": "{{env.CHATWOOT_BASE_URL}}/api/v1/accounts/{{env.CHATWOOT_ACCOUNT_ID}}/conversations/{{trigger.body.id}}/messages",
+        "headers": {
+          "api_access_token": "{{env.CHATWOOT_API_TOKEN}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "content": "🤖 **Copiloto IA: Propuesta Sugerida**\n\n• **Destino:** {{steps.llm_adapter_inference.output.detectedDestination}}\n• **Pasajeros:** {{steps.llm_adapter_inference.output.paxCount}}\n• **Fechas:** {{steps.llm_adapter_inference.output.estimatedStartDate}}\n• **Paquete Sugerido:** {{steps.llm_adapter_inference.output.matchedPackageName}} (ID: {{steps.llm_adapter_inference.output.matchedPackageId}})\n\n📋 **Borrador para enviar al cliente:**\n\"{{steps.llm_adapter_inference.output.suggestedDraftMessage}}\"",
+          "message_type": "activity",
+          "private": true
+        },
+        "timeout": 5000
+      },
+      "errorHandlingOptions": {
+        "continueOnFailure": {
+          "value": true
+        }
+      }
+    }
+  }
+}

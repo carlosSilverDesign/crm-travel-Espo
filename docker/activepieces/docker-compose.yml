@@ -1,0 +1,57 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ap_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${AP_POSTGRES_DATABASE:-activepieces}
+      POSTGRES_USER: ${AP_POSTGRES_USERNAME:-activepieces}
+      POSTGRES_PASSWORD: ${AP_POSTGRES_PASSWORD:-activepieces_secret_pass}
+    volumes:
+      - ap_postgres_data:/var/lib/postgresql/data
+    networks:
+      - travel_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${AP_POSTGRES_USERNAME:-activepieces} -d ${AP_POSTGRES_DATABASE:-activepieces}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ap_redis
+    restart: always
+    command: redis-server --save "" --appendonly no
+    networks:
+      - travel_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  activepieces:
+    image: activepieces/activepieces:latest
+    container_name: ap_engine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "8082:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./flows:/usr/src/app/flows
+      - ../../data/logs:/data/logs
+    networks:
+      - travel_network
+
+volumes:
+  ap_postgres_data:
+
+networks:
+  travel_network:
+    external: true
