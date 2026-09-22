@@ -63,6 +63,27 @@
     },
     "notes": {
       "type": "text"
+    },
+    "publicAccessToken": {
+      "type": "varchar",
+      "maxLength": 64,
+      "index": true,
+      "unique": true,
+      "readOnly": true
+    },
+    "webAccessCount": {
+      "type": "int",
+      "default": 0,
+      "readOnly": true
+    },
+    "lastWebAccessAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "pdfCacheFileId": {
+      "type": "varchar",
+      "maxLength": 100,
+      "readOnly": true
     }
   },
   "links": {

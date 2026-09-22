@@ -34,6 +34,33 @@ services:
     networks:
       - travel_network
 
+  pdf-service:
+    build:
+      context: ./docker/pdf-service
+      dockerfile: Dockerfile
+    container_name: crm_pdf_service
+    environment:
+      PORT: 3000
+      PDF_SERVICE_SECRET: ${PDF_SERVICE_SECRET:-travel_pdf_secret_2026}
+    ports:
+      - "3000:3000"
+    restart: always
+    networks:
+      - travel_network
+
+  travel-web:
+    build:
+      context: ./docker/travel-web
+      dockerfile: Dockerfile
+    container_name: crm_travel_web
+    environment:
+      PORT: 8080
+    ports:
+      - "8085:8080"
+    restart: always
+    networks:
+      - travel_network
+
 volumes:
   mysql_data:
 

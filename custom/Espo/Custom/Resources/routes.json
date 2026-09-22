@@ -11,5 +11,13 @@
       "auth": false
     },
     "auth": false
+  },
+  {
+    "route": "/Itinerario/action/generatePdf",
+    "method": "post",
+    "params": {
+      "controller": "ItinerarioPdf",
+      "action": "generatePdf"
+    }
   }
 ]

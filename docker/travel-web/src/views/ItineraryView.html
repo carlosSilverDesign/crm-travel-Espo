@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Expediente Digital e Itinerario de Viaje">
+  <title>Expediente de Viaje: Cusco Mágico & Machu Picchu | Agencia de Viajes</title>
+  
+  <!-- Hoja de Estilos Responsive & Imprimible -->
+  <link rel="stylesheet" href="../public/css/itinerary.css">
+  <!-- Fallback relativo si se sirve desde servidor estático -->
+  <link rel="stylesheet" href="/css/itinerary.css">
+</head>
+<body>
+
+  <!-- Contenedor Principal del Expediente -->
+  <main class="itinerary-container" id="itineraryApp">
+
+    <!-- ========================================================================
+         1. HEADER HERO: Resumen General del Expediente (Heurística 10 y Miller)
+         ======================================================================== -->
+    <header class="hero-card" role="banner">
+      <div class="hero-top-meta">
+        <div class="agency-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+          </svg>
+          <span>Expediente Oficial de Viaje</span>
+        </div>
+
+        <div class="pnr-pill" title="Localizador PNR General (Click para copiar)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="3" rx="2"/>
+            <path d="M7 7h10"/>
+            <path d="M7 12h10"/>
+            <path d="M7 17h6"/>
+          </svg>
+          <span>PNR: <strong id="heroPnr">CUZ-94821X</strong></span>
+        </div>
+      </div>
+
+      <h1 class="hero-title" id="heroTitle">Cusco Mágico, Valle Sagrado & Machu Picchu</h1>
+
+      <div class="hero-passenger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="5"/>
+          <path d="M20 21a8 8 0 0 0-16 0"/>
+        </svg>
+        <span>Titular de la reserva: <strong id="passengerName">Carlos Aventura & Familia (4 Pasajeros)</strong></span>
+      </div>
+
+      <!-- Metadatos Clave del Viaje -->
+      <div class="hero-details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Destino Principal</span>
+          <span class="detail-value" id="destinationValue">Cusco & Valle Sagrado, Perú</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Fechas del Viaje</span>
+          <span class="detail-value" id="datesValue">15 Oct 2026 — 18 Oct 2026 (4 Días / 3 Noches)</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Estado de la Reserva</span>
+          <span class="detail-value" style="color: #047857;">✓ Confirmado y Emitido</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========================================================================
+         Barra de Acciones de Pantalla (No imprimible - Ley de Fitts)
+         ======================================================================== -->
+    <section class="actions-bar no-print" aria-label="Acciones del Expediente">
+      <div class="actions-bar-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+          <line x1="16" x2="16" y1="2" y2="6"/>
+          <line x1="8" x2="8" y1="2" y2="6"/>
+          <line x1="3" x2="21" y1="10" y2="10"/>
+        </svg>
+        <span>Cronograma Diario de Actividades</span>
+      </div>
+
+      <!-- Botón de Descarga Offline / Impresión -->
+      <button type="button" class="btn-download-pdf" id="btnDownloadPdf" aria-label="Descargar o Imprimir Expediente en PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" x2="12" y1="15" y2="3"/>
+        </svg>
+        <span>Descargar Copia Offline (PDF)</span>
+      </button>
+    </section>
+
+    <!-- ========================================================================
+         2. CRONOGRAMA DIARIO (DayTimeline - Chunking de Miller)
+         ======================================================================== -->
+    <div class="timeline-stream" role="feed" aria-label="Días del Itinerario">
+
+      <!-- ==================== DÍA 01 ==================== -->
+      <article class="itinerary-day-card" aria-labelledby="day1-heading">
+        <header class="day-header">
+          <div class="day-badge-wrap">
+            <span class="day-number-badge">DÍA 01</span>
+            <h2 class="day-title-text" id="day1-heading">Llegada, Bienvenida y Traslado a Cusco</h2>
+          </div>
+          <div class="day-date-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Jueves, 15 de Octubre 2026</span>
+          </div>
+        </header>
+
+        <div class="services-list">
+          
+          <!-- Servicio 1: Vuelo -->
+          <section class="service-item-block" aria-label="Servicio de Vuelo">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="08:45">08:45 AM</time> — <time datetime="10:05">10:05 AM</time>
+              </div>
+              <span class="service-badge badge-flight">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+                </svg>
+                <span>Vuelo Comercial</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Vuelo Lima (LIM) ➔ Cusco (CUZ) — LATAM Airlines LA2045</h3>
+              <p class="service-description">
+                Vuelo directo regular con equipaje de mano (10 kg) y equipaje de bodega (23 kg) incluido por pasajero. Presentarse en counter con 2 horas de anticipación.
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Localizador / Ticket:</span> <span class="meta-code">LA-892401</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div><span class="meta-label">Salida:</span> Aeropuerto Jorge Chávez (Terminal 1)</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Servicio 2: Traslado Privado -->
+          <section class="service-item-block" aria-label="Servicio de Traslado">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="10:30">10:30 AM</time> (Recogida estimada)
+              </div>
+              <span class="service-badge badge-transfer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                  <circle cx="7" cy="17" r="2"/>
+                  <path d="M9 17h6"/>
+                  <circle cx="17" cy="17" r="2"/>
+                </svg>
+                <span>Traslado Privado</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Traslado Aeropuerto Alejandro Velasco Astete ➔ Hotel en Centro Histórico</h3>
+              <p class="service-description">
+                Nuestro conductor lo esperará en la puerta de arribos nacionales con un letrero con su apellido. Vehículo sanitizado con asistencia de maleteros y mate de coca de cortesía.
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Voucher Operador:</span> <span class="meta-code">TRF-CUZ-1102</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <div><span class="meta-label">Coordinación Receptiva:</span> <a href="tel:+51984123456" class="emergency-phone-link">+51 984 123 456</a></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Servicio 3: Hotel -->
+          <section class="service-item-block" aria-label="Servicio de Alojamiento">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="13:00">01:00 PM</time> (Check-in)
+              </div>
+              <span class="service-badge badge-hotel">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 4v16"/>
+                  <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
+                  <path d="M2 17h20"/>
+                  <path d="M6 8v9"/>
+                </svg>
+                <span>Alojamiento</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Hotel Palacio del Inka Luxury Collection — Habitación Clásica Doble</h3>
+              <p class="service-description">
+                3 Noches de hospedaje con desayuno buffet andino incluido. Sistema de oxígeno asistido en habitación para aclimatación.
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Confirmación Hotelera:</span> <span class="meta-code">HTL-MAR-7734</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div><span class="meta-label">Dirección:</span> Santo Domingo 259, Cusco Centro</div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </article>
+
+      <!-- ==================== DÍA 02 ==================== -->
+      <article class="itinerary-day-card" aria-labelledby="day2-heading">
+        <header class="day-header">
+          <div class="day-badge-wrap">
+            <span class="day-number-badge">DÍA 02</span>
+            <h2 class="day-title-text" id="day2-heading">Valle Sagrado de los Incas, Pisac & Ollantaytambo</h2>
+          </div>
+          <div class="day-date-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Viernes, 16 de Octubre 2026</span>
+          </div>
+        </header>
+
+        <div class="services-list">
+          
+          <!-- Servicio 4: Tour Guiado -->
+          <section class="service-item-block" aria-label="Servicio de Tour">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="08:00">08:00 AM</time> — <time datetime="16:30">04:30 PM</time>
+              </div>
+              <span class="service-badge badge-tour">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                </svg>
+                <span>Tour Exclusivo con Guía</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Excursión al Valle Sagrado: Mirador de Taray, Complejo Pisac & Fortaleza Ollantaytambo</h3>
+              <p class="service-description">
+                Incluye transporte turístico privado, guía oficial bilingüe acreditado, boleto turístico integral (BTC) y almuerzo buffet campestre en Urubamba (Hacienda Huayoccari).
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Voucher del Tour:</span> <span class="meta-code">EXP-VAL-4091</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <div><span class="meta-label">Punto de Encuentro:</span> Lobby del Hotel (07:50 AM)</div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </article>
+
+      <!-- ==================== DÍA 03 ==================== -->
+      <article class="itinerary-day-card" aria-labelledby="day3-heading">
+        <header class="day-header">
+          <div class="day-badge-wrap">
+            <span class="day-number-badge">DÍA 03</span>
+            <h2 class="day-title-text" id="day3-heading">Santuario Histórico de Machu Picchu (Maravilla del Mundo)</h2>
+          </div>
+          <div class="day-date-text">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Sábado, 17 de Octubre 2026</span>
+          </div>
+        </header>
+
+        <div class="services-list">
+          
+          <!-- Servicio 5: Tren Turístico -->
+          <section class="service-item-block" aria-label="Servicio de Tren">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="06:10">06:10 AM</time> — <time datetime="07:45">07:45 AM</time>
+              </div>
+              <span class="service-badge badge-flight">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect width="16" height="16" x="4" y="4" rx="2"/>
+                  <path d="M4 10h16"/>
+                  <path d="M12 4v16"/>
+                </svg>
+                <span>Tren Panorámico Vistadome</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Tren PeruRail Vistadome 601: Estación Ollantaytambo ➔ Aguas Calientes (Machu Picchu Pueblo)</h3>
+              <p class="service-description">
+                Coche panorámico con vista al río Urubamba y picos nevados. Espectáculo de danza en vivo y snack andino a bordo. Portar pasaporte físico original.
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Ticket Ferroviario:</span> <span class="meta-code">PR-VIST-5521</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" x2="12" y1="8" y2="12"/>
+                  <line x1="12" x2="12.01" y1="16" y2="16"/>
+                </svg>
+                <div><span class="meta-label">Requisito Obligatorio:</span> Pasaporte original vigente</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Servicio 6: Ciudadela Machu Picchu -->
+          <section class="service-item-block" aria-label="Servicio de Ciudadela">
+            <div class="service-header">
+              <div class="service-time-block">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <time datetime="09:00">09:00 AM</time> — <time datetime="12:30">12:30 PM</time>
+              </div>
+              <span class="service-badge badge-tour">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 21h18"/>
+                  <path d="M5 21V7l7-4 7 4v14"/>
+                </svg>
+                <span>Visita Arqueológica</span>
+              </span>
+            </div>
+
+            <div class="service-content">
+              <h3 class="service-name">Ingreso a la Llaqta Inca de Machu Picchu — Circuito Clásico 02 (Foto Postal)</h3>
+              <p class="service-description">
+                Ascenso en bus ecológico Consettur (ida y retorno) y recorrido guiado privado de 2.5 horas por la Casa del Guardián, Templo del Sol y Zona Sagrada.
+              </p>
+            </div>
+
+            <div class="service-meta-grid">
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                </svg>
+                <div><span class="meta-label">Boleto Ministerio Cultura:</span> <span class="meta-code">MINCUL-MCP-99214</span></div>
+              </div>
+              <div class="meta-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <div><span class="meta-label">Guía Oficial en Destino:</span> <a href="tel:+51984998877" class="emergency-phone-link">+51 984 998 877</a></div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ========================================================================
+         5. Footer Informativo de Asistencia
+         ======================================================================== -->
+    <footer class="itinerary-footer" role="contentinfo">
+      <p class="footer-agency-name">Travel Agency SaaS — Expediente de Viaje y Vouchers Digitales</p>
+      <div class="footer-secure-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>Acceso Seguro Cifrado por Token • Información de solo lectura para el viajero</span>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ==========================================================================
+       4. BOTÓN FLOTANTE WHATSAPP (Ley de Fitts: Pulgar Móvil - No imprimible)
+       ========================================================================== -->
+  <a href="https://wa.me/51987654321?text=Hola%2C%20necesito%20asistencia%20con%20mi%20itinerario%20CUZ-94821X"
+     class="chat-floating-button no-print"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="Contactar asistencia de guardia por WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.49-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.1-.23-.17-.48-.29z"/>
+    </svg>
+    <span>Asistencia 24/7</span>
+  </a>
+
+  <!-- Script de Interacciones y Detección de Impresión -->
+  <script src="../public/js/itinerary.js"></script>
+  <script src="/js/itinerary.js"></script>
+</body>
+</html>
