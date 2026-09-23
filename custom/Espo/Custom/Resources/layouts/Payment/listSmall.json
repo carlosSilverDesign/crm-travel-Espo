@@ -1,0 +1,7 @@
+[
+  {"name": "paymentReference", "link": true},
+  {"name": "amount"},
+  {"name": "currency"},
+  {"name": "status"},
+  {"name": "dueDate"}
+]

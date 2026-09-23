@@ -1,0 +1,10 @@
+[
+  {"name": "name", "link": true},
+  {"name": "paymentReference"},
+  {"name": "opportunity"},
+  {"name": "amount"},
+  {"name": "currency"},
+  {"name": "status"},
+  {"name": "dueDate"},
+  {"name": "verifiedBy"}
+]

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instrucciones de Pago y Transferencia Bancaria — Viajes SaaS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/itinerary.css">
+  <style>
+    /* Estilos específicos para la pasarela de transferencias bancarias */
+    .checkout-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    .brand-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-brand-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .security-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--badge-tour-text);
+      background: var(--badge-tour-bg);
+      border: 1px solid var(--badge-tour-border);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+    }
+
+    /* Tarjeta de Resumen Financiero */
+    .summary-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .summary-item label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 0.25rem;
+    }
+
+    .summary-item .value {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .summary-item .amount-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--color-brand-primary);
+    }
+
+    /* Caja de Referencia Destacada (Efecto von Restorff) */
+    .reference-box {
+      background: linear-gradient(135deg, #0f2b48 0%, #1e3a5f 100%);
+      color: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .reference-text h3 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #93c5fd;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 0.25rem;
+    }
+
+    .reference-text p {
+      font-size: 0.875rem;
+      color: #e2e8f0;
+      margin: 0;
+    }
+
+    .reference-code-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 0.75rem 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .reference-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.375rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #ffffff;
+    }
+
+    .btn-copy {
+      min-width: 44px;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-copy:active {
+      transform: scale(0.96);
+    }
+
+    .btn-copy.copied {
+      background: #22c55e !important;
+      border-color: #22c55e !important;
+      color: #ffffff !important;
+    }
+
+    /* Tarjetas de Cuentas Bancarias */
+    .bank-section-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 2rem 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .currency-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.625rem;
+      border-radius: var(--radius-full);
+      background: var(--badge-flight-bg);
+      color: var(--badge-flight-text);
+      border: 1px solid var(--badge-flight-border);
+    }
+
+    .bank-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .bank-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.375rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .bank-card:hover {
+      border-color: var(--color-brand-accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .bank-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .bank-name-badge {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-brand-primary);
+    }
+
+    .bank-account-type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    .bank-detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      font-size: 0.875rem;
+    }
+
+    .bank-detail-row .detail-label {
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .bank-detail-row .detail-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-copy-inline {
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-subtle);
+      color: var(--color-brand-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-copy-inline:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+    }
+
+    .btn-copy-inline:active {
+      transform: scale(0.95);
+    }
+
+    .btn-copy-inline.copied {
+      background: #22c55e !important;
+      color: #ffffff !important;
+      border-color: #22c55e !important;
+    }
+
+    /* Formulario de Reporte de Pago */
+    .report-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .report-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0 0 0.5rem;
+    }
+
+    .report-card p.subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin: 0 0 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    .form-group label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .form-control {
+      width: 100%;
+      min-height: 44px;
+      padding: 0.625rem 0.875rem;
+      font-family: inherit;
+      font-size: 0.9375rem;
+      color: var(--text-main);
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-brand-accent);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+
+    /* Zona de Carga de Archivos Drag & Drop */
+    .file-dropzone {
+      border: 2px dashed var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.75rem 1rem;
+      text-align: center;
+      background: var(--bg-subtle);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .file-dropzone:hover, .file-dropzone.dragover {
+      border-color: var(--color-brand-accent);
+      background: #f0f9ff;
+    }
+
+    .file-dropzone input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .dropzone-icon {
+      font-size: 2rem;
+      color: var(--color-brand-accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .dropzone-text {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .dropzone-hint {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+
+    .file-preview {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .btn-submit-payment {
+      width: 100%;
+      min-height: 48px;
+      background: var(--color-brand-primary);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: background var(--transition-fast), transform var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-submit-payment:hover {
+      background: #1e3a5f;
+    }
+
+    .btn-submit-payment:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit-payment:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Banner de Notificación de Estado */
+    .status-banner {
+      display: none;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2rem;
+      animation: fadeIn 300ms ease-out forwards;
+    }
+
+    .status-banner.under-review {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+
+    .status-banner.confirmed {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+
+    .status-banner-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-banner-desc {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="checkout-container">
+    <!-- Cabecera de Marca -->
+    <header class="brand-header">
+      <div class="brand-title">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>Agencia de Viajes — Pasarela de Pago</span>
+      </div>
+      <div class="security-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Transferencia Segura 100% Verificada</span>
+      </div>
+    </header>
+
+    <!-- Banner de Estado Dinámico -->
+    <div id="statusBanner" class="status-banner">
+      <div class="status-banner-title" id="statusBannerTitle">
+        <!-- Icono y título insertado por JS -->
+      </div>
+      <p class="status-banner-desc" id="statusBannerDesc"></p>
+    </div>
+
+    <!-- 1. Tarjeta de Resumen Financiero (Miller Chunking) -->
+    <section class="summary-card">
+      <div class="summary-item">
+        <label>Reserva / Expediente</label>
+        <div class="value" id="summaryReservation">Cargando...</div>
+      </div>
+      <div class="summary-item">
+        <label>Titular del Viaje</label>
+        <div class="value" id="summaryClient">Cargando...</div>
+      </div>
+      <div class="summary-item">
+        <label>Monto a Pagar</label>
+        <div class="amount-value" id="summaryAmount">---</div>
+      </div>
+      <div class="summary-item">
+        <label>Fecha Límite</label>
+        <div class="value" id="summaryDueDate">---</div>
+      </div>
+    </section>
+
+    <!-- 2. Bloque de Referencia de Pago Obligatoria (Efecto von Restorff / Fitts) -->
+    <section class="reference-box">
+      <div class="reference-text">
+        <h3>Referencia de Pago Obligatoria</h3>
+        <p>Coloca exactamente este código en el <strong>asunto, motivo o concepto</strong> de tu transferencia bancaria:</p>
+      </div>
+      <div class="reference-code-wrapper">
+        <span class="reference-code" id="displayRefCode">Cargando...</span>
+        <button type="button" class="btn-copy" id="btnCopyRef" aria-label="Copiar referencia de pago">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span class="copy-label">Copiar</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 3. Cuentas Bancarias Habilitadas (Moneda Estricta / Heurística 5) -->
+    <div class="bank-section-title">
+      <span>Cuentas Bancarias Autorizadas</span>
+      <span class="currency-pill" id="bankCurrencyPill">Moneda: USD</span>
+    </div>
+    <div class="bank-cards-grid" id="bankCardsContainer">
+      <!-- Cuentas renderizadas dinámicamente por JS -->
+    </div>
+
+    <!-- 4. Formulario de Reporte de Transferencia -->
+    <section class="report-card" id="reportSection">
+      <h3>¿Ya realizaste tu transferencia bancaria?</h3>
+      <p class="subtitle">Infórmanos los datos de tu comprobante para iniciar la conciliación y validación de tu reserva.</p>
+
+      <form id="paymentReportForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="inputOperationNumber">Número / Código de Operación *</label>
+            <input type="text" id="inputOperationNumber" class="form-control" placeholder="Ej. 08492041" required>
+          </div>
+          <div class="form-group">
+            <label for="inputDeclaredAmount">Monto Transferido *</label>
+            <input type="number" id="inputDeclaredAmount" class="form-control" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="inputDeclaredDate">Fecha de Transferencia *</label>
+            <input type="date" id="inputDeclaredDate" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="selectDestinationBank">Banco de Destino</label>
+            <select id="selectDestinationBank" class="form-control">
+              <option value="">Seleccione cuenta receptora...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Adjuntar Comprobante o Voucher (JPG, PNG o PDF hasta 10 MB) *</label>
+          <div class="file-dropzone" id="dropzone">
+            <div class="dropzone-icon">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </div>
+            <div class="dropzone-text">Arrastra tu constancia aquí o haz clic para seleccionar</div>
+            <div class="dropzone-hint">Formatos aceptados: JPG, PNG o PDF (Máx. 10 MB)</div>
+            <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" required>
+          </div>
+          <div class="file-preview" id="filePreview">
+            <span id="previewFileName">archivo.jpg</span>
+            <button type="button" class="btn-copy-inline" id="btnRemoveFile">Cambiar</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit-payment" id="btnSubmit">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          <span>Informar Pago y Enviar Constancia</span>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    window.PAYMENT_CONFIG = {
+      token: "{{TOKEN}}",
+      paymentId: "{{PAYMENT_ID}}"
+    };
+  </script>
+  <script src="/js/payment-checkout.js"></script>
+</body>
+</html>

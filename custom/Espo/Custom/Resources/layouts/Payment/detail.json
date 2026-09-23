@@ -1,0 +1,37 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "status"}],
+      [{"name": "amount"}, {"name": "currency"}],
+      [{"name": "dueDate"}, {"name": "paymentReference"}],
+      [{"name": "opportunity"}, {"name": "paymentSchedule"}]
+    ],
+    "style": "default",
+    "label": "Datos Esperados del Cobro"
+  },
+  {
+    "rows": [
+      [{"name": "clientDeclaredAmount"}, {"name": "clientDeclaredDate"}],
+      [{"name": "clientOperationNumber"}, {"name": "proofAttachment"}]
+    ],
+    "style": "default",
+    "label": "Datos Declarados por el Cliente (Comprobante)"
+  },
+  {
+    "rows": [
+      [{"name": "method"}, {"name": "destinationBankAccount"}],
+      [{"name": "gatewayProvider"}, false]
+    ],
+    "style": "default",
+    "label": "Método de Pago y Destino"
+  },
+  {
+    "rows": [
+      [{"name": "verifiedBy"}, {"name": "verifiedAt"}],
+      [{"name": "rejectionReason"}, false],
+      [{"name": "verificationNotes"}, false]
+    ],
+    "style": "default",
+    "label": "Auditoría y Verificación"
+  }
+]

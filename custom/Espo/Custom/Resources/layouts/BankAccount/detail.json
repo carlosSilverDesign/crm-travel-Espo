@@ -1,0 +1,27 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "isActive"}],
+      [{"name": "bankName"}, {"name": "currency"}],
+      [{"name": "accountHolder"}, {"name": "accountType"}]
+    ],
+    "style": "default",
+    "label": "Información Bancaria"
+  },
+  {
+    "rows": [
+      [{"name": "accountNumber"}, {"name": "cci"}],
+      [{"name": "swiftBic"}, {"name": "country"}]
+    ],
+    "style": "default",
+    "label": "Códigos de Cuenta e Identificación"
+  },
+  {
+    "rows": [
+      [{"name": "instructions"}, false],
+      [{"name": "intermediaryBankInfo"}, false]
+    ],
+    "style": "default",
+    "label": "Instrucciones de Pago e Info Internacional"
+  }
+]

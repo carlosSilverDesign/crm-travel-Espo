@@ -82,12 +82,37 @@
       "type": "varchar",
       "maxLength": 50,
       "default": "Línea Oficial WhatsApp"
+    },
+    "amountPaid": {
+      "type": "currency",
+      "default": 0,
+      "readOnly": true
+    },
+    "pendingBalance": {
+      "type": "currency",
+      "readOnly": true
+    },
+    "financialStatus": {
+      "type": "enum",
+      "options": [
+        "Unpaid",
+        "PartiallyPaid",
+        "PaidInFull",
+        "Overpaid"
+      ],
+      "default": "Unpaid",
+      "readOnly": true
     }
   },
   "links": {
     "cItinerarios": {
       "type": "hasMany",
       "entity": "Itinerario",
+      "foreign": "opportunity"
+    },
+    "payments": {
+      "type": "hasMany",
+      "entity": "Payment",
       "foreign": "opportunity"
     }
   }

@@ -1,0 +1,26 @@
+{
+  "iconClass": "fas fa-money-check-alt",
+  "color": "#2e7d32",
+  "recordViews": {
+    "detail": "custom:views/payment/record/detail"
+  },
+  "menu": {
+    "detail": {
+      "buttons": [
+        {
+          "name": "confirmPayment",
+          "label": "Confirmar Pago",
+          "style": "success",
+          "action": "confirmPayment"
+        },
+        {
+          "name": "rejectPayment",
+          "label": "Rechazar Pago",
+          "style": "danger",
+          "action": "rejectPayment"
+        }
+      ],
+      "dropdown": []
+    }
+  }
+}

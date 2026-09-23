@@ -45,6 +45,11 @@
       "type": "belongsTo",
       "entity": "Itinerario",
       "foreign": "paymentSchedules"
+    },
+    "payments": {
+      "type": "hasMany",
+      "entity": "Payment",
+      "foreign": "paymentSchedule"
     }
   }
 }

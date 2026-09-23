@@ -19,5 +19,51 @@
       "controller": "ItinerarioPdf",
       "action": "generatePdf"
     }
+  },
+  {
+    "route": "/PublicPayment/options/:publicAccessToken/:paymentId",
+    "method": "get",
+    "params": {
+      "controller": "PublicPayment",
+      "action": "getOptions",
+      "publicAccessToken": ":publicAccessToken",
+      "paymentId": ":paymentId"
+    },
+    "noAuth": true,
+    "conditions": {
+      "auth": false
+    },
+    "auth": false
+  },
+  {
+    "route": "/PublicPayment/report/:publicAccessToken/:paymentId",
+    "method": "post",
+    "params": {
+      "controller": "PublicPayment",
+      "action": "postReport",
+      "publicAccessToken": ":publicAccessToken",
+      "paymentId": ":paymentId"
+    },
+    "noAuth": true,
+    "conditions": {
+      "auth": false
+    },
+    "auth": false
+  },
+  {
+    "route": "/Payment/action/confirm",
+    "method": "post",
+    "params": {
+      "controller": "Payment",
+      "action": "confirm"
+    }
+  },
+  {
+    "route": "/Payment/action/reject",
+    "method": "post",
+    "params": {
+      "controller": "Payment",
+      "action": "reject"
+    }
   }
 ]

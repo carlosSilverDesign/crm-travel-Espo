@@ -1,0 +1,73 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150
+    },
+    "bankName": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "BCP",
+        "BBVA",
+        "Interbank",
+        "Scotiabank",
+        "Otro"
+      ],
+      "default": "BCP"
+    },
+    "country": {
+      "type": "varchar",
+      "maxLength": 3,
+      "default": "PER"
+    },
+    "currency": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "USD",
+        "PEN"
+      ],
+      "index": true
+    },
+    "accountHolder": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150
+    },
+    "accountType": {
+      "type": "enum",
+      "options": [
+        "Corriente",
+        "Ahorros"
+      ],
+      "default": "Corriente"
+    },
+    "accountNumber": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 50
+    },
+    "cci": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 50
+    },
+    "swiftBic": {
+      "type": "varchar",
+      "maxLength": 20
+    },
+    "intermediaryBankInfo": {
+      "type": "text"
+    },
+    "instructions": {
+      "type": "text"
+    },
+    "isActive": {
+      "type": "bool",
+      "default": true,
+      "index": true
+    }
+  }
+}

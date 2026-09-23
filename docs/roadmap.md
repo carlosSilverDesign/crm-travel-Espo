@@ -1,7 +1,7 @@
 # Product Roadmap Completo: CRM SaaS Viajes B2C
 
 ## 1. Visión y Estado Global
-* **Arquitectura Base:** Single-Tenant por agencia en VPS Hetzner contenerizado (Docker + MySQL con integridad transaccional ACID).
+* **Arquitectura Base:** Single-Tenant por agencia en VPS Hetzner contenerizado (Docker + MySQL con integridad transaccional ACID en InnoDB).
 * **Core:** EspoCRM (Self-hosted) con Regla de Oro de Aislamiento estricta: cero modificaciones en `application/`; 100% de customizaciones en `custom/Espo/Custom/`.
 * **Microservicios e Integraciones Desacopladas:**
   * **Chatwoot (WhatsApp & Omnicanalidad):** Plataforma open-source self-hosted en Docker, garantizando soberanía de datos y eliminando costos de licenciamiento por usuario.
@@ -10,7 +10,7 @@
   * **Puppeteer Headless (`pdf-service`):** Microservicio Node.js + Chromium optimizado sobre Alpine Linux para renderizado PDF de fidelidad de impresión A4.
   * **Travel Web (`travel-web`):** Portal web público desacoplado para viajeros con acceso seguro vía token UUIDv4 y diseño responsive mobile-first.
 * **Metodología:** Spec-Driven Development (SDD).
-* **Fase Actual:** Módulos 01 al 05 completados y validados al 100%. Iniciando **Módulo 06: Conciliación de Cobros y Links de Pago**.
+* **Fase Actual:** Módulos 01 al 06 completados y validados al 100%. Iniciando **Módulo 07: Operación en Destino y Post-Venta**.
 
 ---
 
@@ -24,6 +24,7 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
 | **Motor de IA** | Claude API directa | **Gemini 1.5 Flash + Capa Conmutable (Activepieces)** | Tiempos de respuesta ultra-rápidos (<400 ms para cumplir con el Umbral de Doherty), costos de inferencia 10x menores y tolerancia a fallos mediante desacoplamiento no bloqueante. |
 | **Renderizado de Documentos** | Plantillas HTML/PDF internas en PHP/EspoCRM | **Microservicio Node.js Puppeteer Headless (`pdf-service`)** | Aislamiento de carga de CPU/RAM fuera del CRM, soporte total de CSS moderno (`@media print`, flexbox, grid, web fonts) y generación idéntica pixel-perfect del expediente interactivo. |
 | **Expediente del Cliente** | PDF adjunto tradicional enviado por correo | **Portal Web Responsive (`travel-web`) + PDF en Caché** | Acceso inmediato al itinerario en destino desde el smartphone con botones táctiles (Fitts's Law), actualización en tiempo real, chunking por días (Miller's Law) y privacidad absoluta sin fuga de márgenes comerciales. |
+| **Cobros y Conciliación** | Pasarela de pagos automatizada obligatoria (Stripe/Culqi) | **Transferencias Bancarias Empresariales con Auditoría Humana + Arquitectura Extensible para Pasarelas Futuras** | Cero comisiones de intermediación en la fase inicial, validación directa de constancias bancarias por cajeros/asesores, blindaje contable con inmutabilidad en MySQL InnoDB y desacoplamiento limpio para conectar gateways a posteriori sin rediseñar el modelo de datos. |
 
 ---
 
@@ -60,13 +61,19 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
     * Servicio de integración y caché en EspoCRM (`pdfCacheFileId`) con respuesta < 200 ms (Umbral de Doherty) y degradación elegante HTTP 503 ante caídas del microservicio (Heurística 9 y Ley de Postel).
   * *Estado:* ✅ **Validado al 100% (Fase 6 — TASK-031 a TASK-036 completadas con suite unitaria e integración E2E)**.
 
-* **Módulo 06: Conciliación de Cobros y Links de Pago**  
-  * *Alcance:* Generación y disparo de links de pago automáticos desde `PaymentSchedule`, integración con pasarelas de pago (Stripe / MercadoPago / Wompi) y conciliación automática de estados de cobranza vía webhooks hacia `Opportunity` e `Itinerario`.  
-  * *Estado:* 🟡 **Siguiente en Backlog / Preparando Especificación (Fase 2)**.
+* **Módulo 06: Conciliación de Cobros, Cuentas Bancarias y Verificación de Constancias**  
+  * *Alcance:*
+    * **TASK-037:** Entidad `BankAccount` con catálogo multi-divisa (USD / PEN), control RBAC estricto para cajeros y finanzas, y seed determinista (BCP USD, BBVA PEN, Interbank USD).
+    * **TASK-038:** Entidad transaccional `Payment` con generación automática de referencias (`PAY-XXXXXX`), acumulación financiera en `Opportunity` (`amountPaid`, `pendingBalance`, `financialStatus`) y vistas de listado/detalle.
+    * **TASK-039:** Hook `FinancialReconciliation` y servicio de dominio con inmutabilidad contable (excepción `403 Forbidden` ante alteración de pagos confirmados), validación de motivos de rechazo (`400 BadRequest`) y recálculo atómico bajo transacción ACID en MySQL (marcando cuotas de `PaymentSchedule` como `Pagado` y cerrando automáticamente a `Closed Won` al liquidar el 100%).
+    * **TASK-040:** API pública (`PublicPaymentController`) y portal web en `travel-web` con filtrado estricto por moneda (cero cuentas cruzadas), botones de copia de CCI/cuenta con feedback visual rápido (<200 ms) y subida segura de comprobantes JPG/PNG/PDF pasando defensivamente a `UnderReview`.
+    * **TASK-041:** Mesa de control en EspoCRM para cajeros/asesores con banner comparativo (monto esperado vs declarado), visualizador embebido de voucher (imágenes y PDFs sin descarga forzada), confirmación en 1 clic y modal con motivo de rechazo obligatorio.
+    * **TASK-042:** Suite completa de pruebas unitarias (`FinancialReconciliationTest`) e integración E2E (`PaymentLifecycleE2ETest`) verificando aislamiento por divisa, inmutabilidad contable, transaccionalidad ACID y cierre comercial automático.
+  * *Estado:* ✅ **Validado al 100% (Fase 6 — TASK-037 a TASK-042 completadas con 73/73 tests en verde y 506 aserciones)**.
 
 * **Módulo 07: Operación en Destino y Post-Venta**  
   * *Alcance:* Tablero de control y seguimiento operativo para pasajeros en estado "En Viaje", gestión ágil de reprogramaciones, cancelaciones, retrasos y recolección automatizada de feedback de satisfacción al retorno.  
-  * *Estado:* ⚪ Pendiente.
+  * *Estado:* 🟡 **Siguiente en Backlog / Preparando Especificación (Fase 2)**.
 
 ---
 
@@ -87,6 +94,6 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
 ---
 
 ## 4. Próximos Pasos Inmediatos
-1. Iniciar el ciclo SDD del **Módulo 06: Conciliación de Cobros y Links de Pago**.
-2. Redactar la especificación funcional y técnica del flujo de pago en `docs/specs/payment-reconciliation.spec.md`.
-3. Modelar la integración con webhooks de pasarelas de pago y sincronización con `PaymentSchedule`.
+1. Iniciar el ciclo SDD del **Módulo 07: Operación en Destino y Post-Venta**.
+2. Redactar la especificación funcional y técnica en `docs/specs/destination-operations.spec.md`.
+3. Modelar el tablero de monitoreo operativo de pasajeros en tránsito y protocolos de contingencia.

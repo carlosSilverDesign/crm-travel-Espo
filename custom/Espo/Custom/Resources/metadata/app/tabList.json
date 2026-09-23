@@ -2,6 +2,8 @@
   "Itinerario",
   "Passenger",
   "PaymentSchedule",
+  "Payment",
+  "BankAccount",
   "Supplier",
   "PackageTemplate",
   "Opportunity",

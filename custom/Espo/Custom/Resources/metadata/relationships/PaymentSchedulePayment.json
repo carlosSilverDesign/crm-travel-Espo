@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "PaymentSchedule",
+  "link": "payments",
+  "foreignEntity": "Payment",
+  "foreignLink": "paymentSchedule"
+}

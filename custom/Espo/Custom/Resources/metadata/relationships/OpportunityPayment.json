@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Opportunity",
+  "link": "payments",
+  "foreignEntity": "Payment",
+  "foreignLink": "opportunity"
+}

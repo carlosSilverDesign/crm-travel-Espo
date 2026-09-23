@@ -1,0 +1,140 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "readOnly": true,
+      "maxLength": 100
+    },
+    "paymentReference": {
+      "type": "varchar",
+      "readOnly": true,
+      "index": true,
+      "maxLength": 100
+    },
+    "opportunity": {
+      "type": "link",
+      "entity": "Opportunity",
+      "required": true,
+      "index": true
+    },
+    "paymentSchedule": {
+      "type": "link",
+      "entity": "PaymentSchedule",
+      "index": true
+    },
+    "amount": {
+      "type": "currency",
+      "required": true
+    },
+    "currency": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "USD",
+        "PEN"
+      ]
+    },
+    "status": {
+      "type": "enum",
+      "options": [
+        "Draft",
+        "Pending",
+        "UnderReview",
+        "Confirmed",
+        "Rejected",
+        "Expired",
+        "Canceled"
+      ],
+      "default": "Pending",
+      "index": true
+    },
+    "method": {
+      "type": "enum",
+      "options": [
+        "bank_transfer",
+        "payment_gateway",
+        "cash",
+        "other"
+      ],
+      "default": "bank_transfer"
+    },
+    "gatewayProvider": {
+      "type": "enum",
+      "options": [
+        "none",
+        "stripe",
+        "culqi",
+        "mercadopago"
+      ],
+      "default": "none"
+    },
+    "destinationBankAccount": {
+      "type": "link",
+      "entity": "BankAccount"
+    },
+    "clientDeclaredAmount": {
+      "type": "currency"
+    },
+    "clientDeclaredDate": {
+      "type": "date"
+    },
+    "clientOperationNumber": {
+      "type": "varchar",
+      "maxLength": 100
+    },
+    "proofAttachment": {
+      "type": "link",
+      "entity": "Attachment"
+    },
+    "verifiedBy": {
+      "type": "link",
+      "entity": "User",
+      "readOnly": true
+    },
+    "verifiedAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "rejectionReason": {
+      "type": "enum",
+      "options": [
+        "wrong_amount",
+        "transfer_not_found",
+        "invalid_account",
+        "unreadable_voucher",
+        "duplicate_operation",
+        "other"
+      ]
+    },
+    "verificationNotes": {
+      "type": "text"
+    },
+    "dueDate": {
+      "type": "date"
+    }
+  },
+  "links": {
+    "opportunity": {
+      "type": "belongsTo",
+      "entity": "Opportunity",
+      "foreign": "payments"
+    },
+    "paymentSchedule": {
+      "type": "belongsTo",
+      "entity": "PaymentSchedule",
+      "foreign": "payments"
+    },
+    "destinationBankAccount": {
+      "type": "belongsTo",
+      "entity": "BankAccount"
+    },
+    "proofAttachment": {
+      "type": "belongsTo",
+      "entity": "Attachment"
+    },
+    "verifiedBy": {
+      "type": "belongsTo",
+      "entity": "User"
+    }
+  }
+}
