@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Contact",
+  "link": "feedbacks",
+  "foreignEntity": "Feedback",
+  "foreignLink": "contact"
+}

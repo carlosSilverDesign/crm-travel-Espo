@@ -21,6 +21,11 @@
       "type": "hasMany",
       "entity": "Passenger",
       "foreign": "contact"
+    },
+    "feedbacks": {
+      "type": "hasMany",
+      "entity": "Feedback",
+      "foreign": "contact"
     }
   }
 }

@@ -1,0 +1,24 @@
+{
+  "iconClass": "fas fa-route",
+  "color": "#00838f",
+  "boolFilterList": [
+    "onlyMy",
+    "currentInDestination"
+  ],
+  "recordViews": {
+    "list": "custom:views/itinerario/record/list",
+    "detail": "custom:views/itinerario/record/detail"
+  },
+  "operationalBoard": {
+    "enabled": true,
+    "primaryFilter": "currentInDestination",
+    "cardFields": [
+      "leadPassengerName",
+      "paxCount",
+      "todaysActiveService",
+      "assignedSupplierName",
+      "emergencyPhone",
+      "chatwootChatUrl"
+    ]
+  }
+}

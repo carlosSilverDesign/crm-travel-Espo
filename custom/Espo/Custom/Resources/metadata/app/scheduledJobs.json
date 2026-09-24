@@ -1,0 +1,8 @@
+{
+  "TriggerPostTripSurveyJob": {
+    "name": "Disparar Encuesta Post-Viaje a Pasajeros Retornados (NPS)",
+    "jobClassName": "Espo\\Custom\\Jobs\\TriggerPostTripSurveyJob",
+    "scheduling": "0 9 * * *",
+    "isDefault": true
+  }
+}

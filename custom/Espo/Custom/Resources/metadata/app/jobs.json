@@ -1,0 +1,8 @@
+{
+  "TriggerPostTripSurveyJob": {
+    "name": "TriggerPostTripSurveyJob",
+    "jobClassName": "Espo\\Custom\\Jobs\\TriggerPostTripSurveyJob",
+    "scheduling": "0 9 * * *",
+    "isDefault": true
+  }
+}

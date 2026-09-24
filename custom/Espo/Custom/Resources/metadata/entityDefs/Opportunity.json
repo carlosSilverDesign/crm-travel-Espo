@@ -114,6 +114,16 @@
       "type": "hasMany",
       "entity": "Payment",
       "foreign": "opportunity"
+    },
+    "incidents": {
+      "type": "hasMany",
+      "entity": "Incident",
+      "foreign": "opportunity"
+    },
+    "feedbacks": {
+      "type": "hasMany",
+      "entity": "Feedback",
+      "foreign": "opportunity"
     }
   }
 }

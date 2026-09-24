@@ -1,0 +1,6 @@
+[
+  {"name": "name", "link": true},
+  {"name": "severity"},
+  {"name": "status"},
+  {"name": "costImpact"}
+]

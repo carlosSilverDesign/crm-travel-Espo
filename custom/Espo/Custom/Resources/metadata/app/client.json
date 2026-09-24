@@ -1,6 +1,7 @@
 {
   "scriptList": [
     "client/custom/modules/whatsapp/chatwoot.js",
-    "client/custom/modules/travel/payment.js"
+    "client/custom/modules/travel/payment.js",
+    "client/custom/modules/travel/itinerario.js"
   ]
 }

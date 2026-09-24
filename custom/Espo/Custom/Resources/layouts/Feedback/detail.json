@@ -1,0 +1,25 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "npsScore"}],
+      [{"name": "sentiment"}, {"name": "channel"}]
+    ],
+    "style": "default",
+    "label": "Métricas NPS y Canal"
+  },
+  {
+    "rows": [
+      [{"name": "contact"}, {"name": "opportunity"}]
+    ],
+    "style": "default",
+    "label": "Vinculación con Pasajero y Oportunidad"
+  },
+  {
+    "rows": [
+      [{"name": "followUpRequired"}, {"name": "followUpStatus"}],
+      [{"name": "comments"}, false]
+    ],
+    "style": "default",
+    "label": "Comentarios y Gestión de Seguimiento"
+  }
+]

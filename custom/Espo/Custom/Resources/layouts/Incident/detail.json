@@ -1,0 +1,26 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "status"}],
+      [{"name": "severity"}, {"name": "category"}]
+    ],
+    "style": "default",
+    "label": "Clasificación y Estado"
+  },
+  {
+    "rows": [
+      [{"name": "opportunity"}, {"name": "reportedBy"}],
+      [{"name": "itinerario"}, {"name": "itemItinerario"}]
+    ],
+    "style": "default",
+    "label": "Contexto Operativo del Destino"
+  },
+  {
+    "rows": [
+      [{"name": "costImpact"}, {"name": "resolvedAt"}],
+      [{"name": "resolutionPlan"}, false]
+    ],
+    "style": "default",
+    "label": "Resolución e Impacto Financiero Aislado"
+  }
+]

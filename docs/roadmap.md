@@ -10,7 +10,7 @@
   * **Puppeteer Headless (`pdf-service`):** Microservicio Node.js + Chromium optimizado sobre Alpine Linux para renderizado PDF de fidelidad de impresión A4.
   * **Travel Web (`travel-web`):** Portal web público desacoplado para viajeros con acceso seguro vía token UUIDv4 y diseño responsive mobile-first.
 * **Metodología:** Spec-Driven Development (SDD).
-* **Fase Actual:** Módulos 01 al 06 completados y validados al 100%. Iniciando **Módulo 07: Operación en Destino y Post-Venta**.
+* **Fase Actual:** Módulos 01 al 07 completados y validados al 100%. **Fase II: Cierre de Venta, Documentación y Operación en Viaje culminada con éxito**. Iniciando **Fase III: Escalamiento SaaS, Analítica y White-Label (Módulo 08)**.
 
 ---
 
@@ -25,6 +25,7 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
 | **Renderizado de Documentos** | Plantillas HTML/PDF internas en PHP/EspoCRM | **Microservicio Node.js Puppeteer Headless (`pdf-service`)** | Aislamiento de carga de CPU/RAM fuera del CRM, soporte total de CSS moderno (`@media print`, flexbox, grid, web fonts) y generación idéntica pixel-perfect del expediente interactivo. |
 | **Expediente del Cliente** | PDF adjunto tradicional enviado por correo | **Portal Web Responsive (`travel-web`) + PDF en Caché** | Acceso inmediato al itinerario en destino desde el smartphone con botones táctiles (Fitts's Law), actualización en tiempo real, chunking por días (Miller's Law) y privacidad absoluta sin fuga de márgenes comerciales. |
 | **Cobros y Conciliación** | Pasarela de pagos automatizada obligatoria (Stripe/Culqi) | **Transferencias Bancarias Empresariales con Auditoría Humana + Arquitectura Extensible para Pasarelas Futuras** | Cero comisiones de intermediación en la fase inicial, validación directa de constancias bancarias por cajeros/asesores, blindaje contable con inmutabilidad en MySQL InnoDB y desacoplamiento limpio para conectar gateways a posteriori sin rediseñar el modelo de datos. |
+| **Operación en Destino y Post-Venta** | Formulario web estático o encuestas por email desconectadas | **Detección Automática de Retornos por Cron + Encuesta Conversacional WhatsApp (Activepieces/Chatwoot) + Tareas Urgentes de Calidad** | Captura de satisfacción en el canal natural del cliente (WhatsApp) a las 24 horas del regreso (*Peak-End Rule*), parser tolerante (*Ley de Postel*) y mitigación inmediata de insatisfacción con SLA < 2 horas antes de que escale a quejas públicas. |
 
 ---
 
@@ -71,9 +72,15 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
     * **TASK-042:** Suite completa de pruebas unitarias (`FinancialReconciliationTest`) e integración E2E (`PaymentLifecycleE2ETest`) verificando aislamiento por divisa, inmutabilidad contable, transaccionalidad ACID y cierre comercial automático.
   * *Estado:* ✅ **Validado al 100% (Fase 6 — TASK-037 a TASK-042 completadas con 73/73 tests en verde y 506 aserciones)**.
 
-* **Módulo 07: Operación en Destino y Post-Venta**  
-  * *Alcance:* Tablero de control y seguimiento operativo para pasajeros en estado "En Viaje", gestión ágil de reprogramaciones, cancelaciones, retrasos y recolección automatizada de feedback de satisfacción al retorno.  
-  * *Estado:* 🟡 **Siguiente en Backlog / Preparando Especificación (Fase 2)**.
+* **Módulo 07: Operación en Destino, Incidentes y Post-Venta**  
+  * *Alcance:*
+    * **TASK-043:** Entidades `Incident` y `Feedback` con aislamiento contable estricto (`costImpact` en incidentes sin mutar saldos de `Opportunity` ni cobros en `Payment`), categorización de disrupciones (`severity`, `category`, `status`), relaciones 1:N y layout de paneles.
+    * **TASK-044:** Hook `ClassifyNpsScore` con validación defensiva (1-10), clasificación matemática automatizada (`Promoter`, `Passive`, `Detractor`), y alerta reactiva con generación atómica de `Task` urgente (< 2h SLA) para detractores (*Heurística 9* y *Peak-End Rule*).
+    * **TASK-045:** Consola y tablero operativo de pasajeros "En Viaje" (`currentInDestination`) con filtro SQL indexado sobre fechas de viaje (`startDate <= CURDATE() AND endDate >= CURDATE()`) y tiempo de respuesta < 400 ms (*Umbral de Doherty* y *Heurística 6*).
+    * **TASK-046:** Scheduled Job `TriggerPostTripSurveyJob` que corre diariamente (09:00 UTC) detectando retornos a las 24 horas (`endDate = ayer`), normalizando teléfonos a estándar internacional `E.164` y despachando webhooks hacia Activepieces con tolerancia a fallos (*Ley de Postel*).
+    * **TASK-047:** Flujo de integración en Activepieces (`post-trip-nps-survey.json` y motor desacoplado) con envío de plantilla WhatsApp vía Chatwoot / Meta WhatsApp Cloud API, parser conversacional tolerante de calificaciones (ej: "10!", "10/10", "3 - pésimo hotel") e ingesta REST autenticada en `POST /api/v1/Feedback` en 29 ms.
+    * **TASK-048:** Suite completa de pruebas unitarias (`FeedbackClassificationTest`) e integración E2E (`InTripOperationsE2ETest`) verificando la clasificación, alerta de detractores, aislamiento contable y ciclo post-viaje completo.
+  * *Estado:* ✅ **Validado al 100% (Fase 6 — TASK-043 a TASK-048 completadas con 107/107 tests en verde y 827 aserciones)**.
 
 ---
 
@@ -81,7 +88,7 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
 
 * **Módulo 08: Reportería Comercial y Analítica de Rentabilidad**  
   * *Alcance:* Dashboards analíticos de conversión por canal y etapa, rentabilidad bruta real consolidada por operador y destino, y tiempos de respuesta por asesor de viajes.  
-  * *Estado:* ⚪ Pendiente.
+  * *Estado:* 🟡 **Siguiente en Backlog / Preparando Especificación (Fase 1 - SDD)**.
 
 * **Módulo 09: Branding y Replicabilidad Multi-Agencia (White-Label)**  
   * *Alcance:* Tematizado visual configurable por agencia cliente (paleta cromática, logotipos, dominios personalizados) e imagen Docker parametrizable para aprovisionamiento automatizado de nuevas instancias de agencias.  
@@ -94,6 +101,6 @@ Durante el ciclo de desarrollo bajo metodología SDD, se aplicaron mejoras estra
 ---
 
 ## 4. Próximos Pasos Inmediatos
-1. Iniciar el ciclo SDD del **Módulo 07: Operación en Destino y Post-Venta**.
-2. Redactar la especificación funcional y técnica en `docs/specs/destination-operations.spec.md`.
-3. Modelar el tablero de monitoreo operativo de pasajeros en tránsito y protocolos de contingencia.
+1. Iniciar el ciclo SDD de la **Fase III: Escalamiento SaaS, Analítica y White-Label**, arrancando con el **Módulo 08: Reportería Comercial y Analítica de Rentabilidad**.
+2. Redactar la especificación funcional y técnica en `docs/specs/analytics-reporting.spec.md`.
+3. Modelar los dashboards ejecutivos y métricas de rentabilidad comercial consolidada.

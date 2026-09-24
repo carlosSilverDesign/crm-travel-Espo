@@ -4,6 +4,8 @@
   "PaymentSchedule",
   "Payment",
   "BankAccount",
+  "Incident",
+  "Feedback",
   "Supplier",
   "PackageTemplate",
   "Opportunity",

@@ -1,0 +1,8 @@
+{
+  "boolFilterClassNameMap": {
+    "currentInDestination": "Espo\\Custom\\Classes\\Select\\Itinerario\\BoolFilters\\CurrentInDestination"
+  },
+  "primaryFilterClassNameMap": {
+    "currentInDestination": "Espo\\Custom\\Classes\\Select\\Itinerario\\PrimaryFilters\\CurrentInDestination"
+  }
+}

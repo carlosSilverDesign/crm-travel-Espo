@@ -10,6 +10,7 @@
       "type": "enum",
       "required": true,
       "default": "Cotización",
+      "index": true,
       "options": [
         "Cotización",
         "Confirmado",
@@ -31,11 +32,13 @@
     },
     "startDate": {
       "type": "date",
-      "required": true
+      "required": true,
+      "index": true
     },
     "endDate": {
       "type": "date",
-      "required": true
+      "required": true,
+      "index": true
     },
     "quoteValidUntil": {
       "type": "datetime"

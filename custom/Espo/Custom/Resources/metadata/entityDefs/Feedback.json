@@ -1,0 +1,70 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 100
+    },
+    "contact": {
+      "type": "link",
+      "entity": "Contact",
+      "required": true,
+      "index": true
+    },
+    "opportunity": {
+      "type": "link",
+      "entity": "Opportunity",
+      "index": true
+    },
+    "npsScore": {
+      "type": "int",
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "sentiment": {
+      "type": "enum",
+      "options": [
+        "Promoter",
+        "Passive",
+        "Detractor"
+      ],
+      "readOnly": true,
+      "index": true
+    },
+    "comments": {
+      "type": "text"
+    },
+    "channel": {
+      "type": "varchar",
+      "default": "WhatsApp",
+      "readOnly": true
+    },
+    "followUpRequired": {
+      "type": "bool",
+      "default": false
+    },
+    "followUpStatus": {
+      "type": "enum",
+      "options": [
+        "Pending",
+        "Contacted",
+        "Resolved",
+        "NotNeeded"
+      ],
+      "default": "NotNeeded"
+    }
+  },
+  "links": {
+    "contact": {
+      "type": "belongsTo",
+      "entity": "Contact",
+      "foreign": "feedbacks"
+    },
+    "opportunity": {
+      "type": "belongsTo",
+      "entity": "Opportunity",
+      "foreign": "feedbacks"
+    }
+  }
+}

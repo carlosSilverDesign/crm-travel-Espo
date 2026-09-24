@@ -1,0 +1,87 @@
+{
+  "name": "Encuesta Post-Viaje NPS WhatsApp (Módulo 07)",
+  "description": "Flujo de 4 pasos para ingesta de retornos desde EspoCRM, despacho de plantilla HSM en Chatwoot/WhatsApp, parsing tolerante de respuesta e ingesta de Feedback y remediación de Detractores.",
+  "version": "1.0.0",
+  "schemaVersion": "1.0",
+  "trigger": {
+    "name": "post_trip_webhook_trigger",
+    "displayName": "Paso 1: Receptor Webhook Retornos EspoCRM",
+    "type": "WEBHOOK",
+    "settings": {
+      "auth": "none",
+      "method": "POST"
+    },
+    "validations": {
+      "requiredFields": [
+        "itineraryId",
+        "phone",
+        "clientName",
+        "destination"
+      ]
+    },
+    "nextAction": "send_whatsapp_survey_template"
+  },
+  "actions": {
+    "send_whatsapp_survey_template": {
+      "name": "send_whatsapp_survey_template",
+      "displayName": "Paso 2: Despacho de Plantilla WhatsApp vía Chatwoot",
+      "type": "PIECE",
+      "pieceName": "@activepieces/piece-http",
+      "actionName": "send_request",
+      "settings": {
+        "method": "POST",
+        "url": "{{env.CHATWOOT_BASE_URL}}/api/v1/accounts/{{env.CHATWOOT_ACCOUNT_ID}}/conversations/{{trigger.body.conversationId || 'new'}}/messages",
+        "headers": {
+          "api_access_token": "{{env.CHATWOOT_API_TOKEN}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "content": "¡Hola {{trigger.body.clientName}}! Bienvenido de regreso de tu viaje a {{trigger.body.destination}}. En nuestra agencia queremos garantizar tu satisfacción total. Del 1 al 10, ¿qué tan probable es que nos recomiendes con amigos o familiares? Puedes responder con tu puntaje y cualquier comentario que nos ayude a mejorar.",
+          "message_type": "outgoing",
+          "template_name": "post_trip_nps_survey",
+          "phone": "{{trigger.body.phone}}"
+        }
+      },
+      "nextAction": "parse_nps_customer_response"
+    },
+    "parse_nps_customer_response": {
+      "name": "parse_nps_customer_response",
+      "displayName": "Paso 3: Parser de Respuesta y Extracción de Score (Postel's Law)",
+      "type": "CODE",
+      "settings": {
+        "input": {
+          "messageText": "{{chatwoot_response.body.content}}",
+          "clientName": "{{trigger.body.clientName}}",
+          "contactId": "{{trigger.body.contactId}}",
+          "itineraryId": "{{trigger.body.itineraryId}}",
+          "opportunityId": "{{trigger.body.opportunityId}}"
+        },
+        "code": "module.exports = async (inputs) => { const engine = require('./post-trip-nps-engine'); return engine.parseNpsResponse(inputs.messageText, inputs); };"
+      },
+      "nextAction": "ingest_espocrm_feedback"
+    },
+    "ingest_espocrm_feedback": {
+      "name": "ingest_espocrm_feedback",
+      "displayName": "Paso 4: Ingesta REST en EspoCRM",
+      "type": "PIECE",
+      "pieceName": "@activepieces/piece-http",
+      "actionName": "send_request",
+      "settings": {
+        "method": "POST",
+        "url": "{{env.ESPOCRM_BASE_URL}}/api/v1/Feedback",
+        "headers": {
+          "X-Api-Key": "{{env.ESPOCRM_API_KEY}}",
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "name": "NPS-WA: {{parse_nps_customer_response.clientName}}",
+          "contactId": "{{parse_nps_customer_response.contactId}}",
+          "opportunityId": "{{parse_nps_customer_response.opportunityId}}",
+          "npsScore": "{{parse_nps_customer_response.npsScore}}",
+          "comments": "{{parse_nps_customer_response.comments}}",
+          "channel": "WhatsApp"
+        }
+      }
+    }
+  }
+}

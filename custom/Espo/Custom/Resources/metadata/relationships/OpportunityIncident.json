@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Opportunity",
+  "link": "incidents",
+  "foreignEntity": "Incident",
+  "foreignLink": "opportunity"
+}

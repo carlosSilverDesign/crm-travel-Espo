@@ -1,0 +1,11 @@
+[
+  {"name": "name", "link": true},
+  {"name": "contact"},
+  {"name": "opportunity"},
+  {"name": "npsScore"},
+  {"name": "sentiment"},
+  {"name": "channel"},
+  {"name": "followUpRequired"},
+  {"name": "followUpStatus"},
+  {"name": "createdAt"}
+]

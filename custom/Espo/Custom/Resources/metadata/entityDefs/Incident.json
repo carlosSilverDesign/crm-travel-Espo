@@ -1,0 +1,91 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150
+    },
+    "opportunity": {
+      "type": "link",
+      "entity": "Opportunity",
+      "required": true,
+      "index": true
+    },
+    "itinerario": {
+      "type": "link",
+      "entity": "Itinerario",
+      "index": true
+    },
+    "itemItinerario": {
+      "type": "link",
+      "entity": "ItineraryItem"
+    },
+    "severity": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ],
+      "default": "Medium"
+    },
+    "category": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "FlightDelay",
+        "SupplierFailure",
+        "HealthEmergency",
+        "WeatherForceMajeure",
+        "CustomerComplaint",
+        "Other"
+      ]
+    },
+    "status": {
+      "type": "enum",
+      "options": [
+        "Reported",
+        "InInvestigation",
+        "Resolved",
+        "Escalated"
+      ],
+      "default": "Reported",
+      "index": true
+    },
+    "costImpact": {
+      "type": "currency",
+      "default": 0.0
+    },
+    "resolutionPlan": {
+      "type": "text"
+    },
+    "resolvedAt": {
+      "type": "datetime"
+    },
+    "reportedBy": {
+      "type": "link",
+      "entity": "User"
+    }
+  },
+  "links": {
+    "opportunity": {
+      "type": "belongsTo",
+      "entity": "Opportunity",
+      "foreign": "incidents"
+    },
+    "itinerario": {
+      "type": "belongsTo",
+      "entity": "Itinerario"
+    },
+    "itemItinerario": {
+      "type": "belongsTo",
+      "entity": "ItineraryItem"
+    },
+    "reportedBy": {
+      "type": "belongsTo",
+      "entity": "User"
+    }
+  }
+}
