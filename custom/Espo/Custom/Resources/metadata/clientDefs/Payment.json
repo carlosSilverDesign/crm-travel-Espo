@@ -1,4 +1,5 @@
 {
+  "controller": "controllers/record",
   "iconClass": "fas fa-money-check-alt",
   "color": "#2e7d32",
   "recordViews": {

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "name",
+    "link": true
+  },
+  {
+    "name": "serviceType"
+  },
+  {
+    "name": "serviceDate"
+  },
+  {
+    "name": "itinerario"
+  },
+  {
+    "name": "supplier"
+  },
+  {
+    "name": "status"
+  },
+  {
+    "name": "confirmationCode"
+  }
+]

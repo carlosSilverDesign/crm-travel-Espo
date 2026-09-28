@@ -102,6 +102,15 @@
       ],
       "default": "Unpaid",
       "readOnly": true
+    },
+    "clientType": {
+      "type": "enum",
+      "options": [
+        "B2C_Direct",
+        "B2B_Corporate"
+      ],
+      "default": "B2C_Direct",
+      "index": true
     }
   },
   "links": {
@@ -123,6 +132,11 @@
     "feedbacks": {
       "type": "hasMany",
       "entity": "Feedback",
+      "foreign": "opportunity"
+    },
+    "stageHistory": {
+      "type": "hasMany",
+      "entity": "OpportunityStageHistory",
       "foreign": "opportunity"
     }
   }

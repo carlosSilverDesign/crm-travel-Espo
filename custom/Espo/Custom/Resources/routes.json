@@ -65,5 +65,69 @@
       "controller": "Payment",
       "action": "reject"
     }
+  },
+  {
+    "route": "/Analytics/pipeline-conversion",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "pipelineConversion"
+    }
+  },
+  {
+    "route": "/Analytics/real-profitability",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "realProfitability"
+    }
+  },
+  {
+    "route": "/Analytics/agent-performance",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "agentPerformance"
+    }
+  },
+  {
+    "route": "/Analytics/destination-quality",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "destinationQuality"
+    }
+  },
+  {
+    "route": "/Analytics/export-real-profitability",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "exportRealProfitability"
+    }
+  },
+  {
+    "route": "/Analytics/export-pipeline-conversion",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "exportPipelineConversion"
+    }
+  },
+  {
+    "route": "/Analytics/export-agent-performance",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "exportAgentPerformance"
+    }
+  },
+  {
+    "route": "/Analytics/export-destination-quality",
+    "method": "get",
+    "params": {
+      "controller": "Analytics",
+      "action": "exportDestinationQuality"
+    }
   }
 ]

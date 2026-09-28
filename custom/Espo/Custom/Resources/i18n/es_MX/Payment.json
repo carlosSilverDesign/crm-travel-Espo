@@ -1,0 +1,41 @@
+{
+  "fields": {
+    "name": "Concepto del Cobro",
+    "amount": "Monto Esperado ($)",
+    "currency": "Moneda",
+    "paymentMethod": "Método de Pago",
+    "status": "Estado de Conciliación",
+    "paymentDate": "Fecha de Confirmación",
+    "clientOperationNumber": "N° de Operación Bancaria",
+    "clientDeclaredAmount": "Monto Declarado por Cliente ($)",
+    "clientDeclaredDate": "Fecha de Transferencia",
+    "proofAttachmentId": "Archivo de Comprobante / Voucher",
+    "rejectionReason": "Motivo de Rechazo",
+    "verificationNotes": "Notas de Auditoría y Verificación",
+    "destinationBankAccount": "Cuenta Bancaria Receptora",
+    "opportunity": "Oportunidad Comercial",
+    "paymentSchedule": "Cuota Programada Asignada"
+  },
+  "links": {
+    "opportunity": "Oportunidad Comercial",
+    "paymentSchedule": "Cuota Programada",
+    "destinationBankAccount": "Cuenta Bancaria Receptora"
+  },
+  "options": {
+    "status": {
+      "Pending": "Pendiente de Reporte",
+      "UnderReview": "En Revisión (Mesa de Control)",
+      "Confirmed": "Confirmado y Conciliado",
+      "Rejected": "Rechazado"
+    },
+    "paymentMethod": {
+      "BankTransfer": "Transferencia Bancaria",
+      "CreditCard": "Tarjeta de Crédito/Débito",
+      "Cash": "Efectivo",
+      "Other": "Otro"
+    }
+  },
+  "labels": {
+    "Create Payment": "Registrar Cobro"
+  }
+}

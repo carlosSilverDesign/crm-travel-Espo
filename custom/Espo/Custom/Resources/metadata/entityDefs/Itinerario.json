@@ -87,6 +87,14 @@
       "type": "varchar",
       "maxLength": 100,
       "readOnly": true
+    },
+    "createdAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "modifiedAt": {
+      "type": "datetime",
+      "readOnly": true
     }
   },
   "links": {

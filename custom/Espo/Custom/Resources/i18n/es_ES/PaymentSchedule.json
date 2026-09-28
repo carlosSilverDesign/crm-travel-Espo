@@ -1,0 +1,25 @@
+{
+  "fields": {
+    "name": "Concepto de la Cuota",
+    "amount": "Monto de la Cuota ($)",
+    "dueDate": "Fecha Límite de Pago",
+    "status": "Estado de la Cuota",
+    "itinerario": "Itinerario",
+    "payments": "Cobros Realizados"
+  },
+  "links": {
+    "itinerario": "Itinerario",
+    "payments": "Cobros Realizados"
+  },
+  "options": {
+    "status": {
+      "Pending": "Pendiente",
+      "Partial": "Parcialmente Pagado",
+      "Paid": "Pagado",
+      "Overdue": "Vencido"
+    }
+  },
+  "labels": {
+    "Create PaymentSchedule": "Programar Cuota de Cobro"
+  }
+}

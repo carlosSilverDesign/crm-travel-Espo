@@ -1,0 +1,15 @@
+{
+  "labels": {
+    "Create OpportunityStageHistory": "Create Stage History Record",
+    "OpportunityStageHistory": "Stage History"
+  },
+  "fields": {
+    "opportunity": "Opportunity",
+    "stage": "Stage",
+    "enteredAt": "Entered At",
+    "exitedAt": "Exited At",
+    "durationSeconds": "Duration (Seconds)",
+    "leadSource": "Lead Source",
+    "assignedUser": "Assigned User"
+  }
+}

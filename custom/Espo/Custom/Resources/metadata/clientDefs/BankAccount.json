@@ -1,4 +1,5 @@
 {
+  "controller": "controllers/record",
   "iconClass": "fas fa-university",
   "color": "#1976d2"
 }

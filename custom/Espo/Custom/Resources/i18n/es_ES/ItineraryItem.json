@@ -1,0 +1,36 @@
+{
+  "fields": {
+    "name": "Nombre del Servicio Turístico",
+    "serviceType": "Tipo de Servicio",
+    "serviceDate": "Fecha y Hora del Servicio",
+    "confirmationCode": "Código de Confirmación / Ticket",
+    "status": "Estado de la Reserva",
+    "notes": "Notas y Requisitos Especiales",
+    "itinerario": "Itinerario",
+    "supplier": "Proveedor Asignado"
+  },
+  "links": {
+    "itinerario": "Itinerario",
+    "supplier": "Proveedor Asignado"
+  },
+  "options": {
+    "serviceType": {
+      "Vuelo": "Vuelo Comercial",
+      "Hotel": "Alojamiento / Hotel",
+      "Traslado": "Traslado Privado / Regular",
+      "Tour": "Excursión / Tour Guiado",
+      "Seguro": "Asistencia / Seguro de Viaje",
+      "Crucero": "Crucero / Barco",
+      "Otro": "Otro Servicio"
+    },
+    "status": {
+      "Solicitado": "Solicitado",
+      "Confirmado": "Confirmado",
+      "Emitido": "Emitido (Voucher Listo)",
+      "Cancelado": "Cancelado"
+    }
+  },
+  "labels": {
+    "Create ItineraryItem": "Agregar Servicio Turístico"
+  }
+}

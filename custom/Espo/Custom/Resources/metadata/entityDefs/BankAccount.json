@@ -68,6 +68,14 @@
       "type": "bool",
       "default": true,
       "index": true
+    },
+    "createdAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "modifiedAt": {
+      "type": "datetime",
+      "readOnly": true
     }
   }
 }

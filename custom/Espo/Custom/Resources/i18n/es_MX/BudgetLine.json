@@ -1,0 +1,18 @@
+{
+  "fields": {
+    "name": "Concepto / Servicio Presupuestado",
+    "costPrice": "Costo Neto Proveedor ($)",
+    "sellingPrice": "Precio de Venta ($)",
+    "marginRate": "Margen Comercial (%)",
+    "grossProfit": "Utilidad Bruta ($)",
+    "itinerario": "Itinerario",
+    "supplier": "Proveedor Asignado"
+  },
+  "links": {
+    "itinerario": "Itinerario",
+    "supplier": "Proveedor Asignado"
+  },
+  "labels": {
+    "Create BudgetLine": "Agregar Línea de Presupuesto"
+  }
+}

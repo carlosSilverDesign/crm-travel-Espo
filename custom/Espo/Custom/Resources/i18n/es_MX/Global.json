@@ -1,0 +1,34 @@
+{
+  "scopeNames": {
+    "Itinerario": "Itinerario",
+    "ItineraryItem": "Servicio Turístico",
+    "BudgetLine": "Línea de Presupuesto",
+    "Passenger": "Pasajero",
+    "PaymentSchedule": "Cronograma de Cobro",
+    "Payment": "Cobro / Pago",
+    "BankAccount": "Cuenta Bancaria",
+    "Incident": "Incidencia en Viaje",
+    "Feedback": "Encuesta NPS",
+    "Supplier": "Proveedor / Operador",
+    "PackageTemplate": "Plantilla de Paquete"
+  },
+  "scopeNamesPlural": {
+    "Itinerario": "Itinerarios",
+    "ItineraryItem": "Servicios Turísticos",
+    "BudgetLine": "Líneas de Presupuesto",
+    "Passenger": "Pasajeros",
+    "PaymentSchedule": "Cronogramas de Cobro",
+    "Payment": "Cobros y Pagos",
+    "BankAccount": "Cuentas Bancarias",
+    "Incident": "Incidencias en Viaje",
+    "Feedback": "Encuestas de Calidad (NPS)",
+    "Supplier": "Proveedores y Operadores",
+    "PackageTemplate": "Plantillas de Paquetes"
+  },
+  "dashlets": {
+    "PipelineFunnel": "Embudo de Conversión & Tiempos de Etapa",
+    "RealProfitability": "Rentabilidad Real Consolidada",
+    "AgentPerformance": "Rendimiento y Tiempos de Asesores",
+    "DestinationQuality": "Calidad en Destino & Satisfacción (NPS)"
+  }
+}

@@ -1,8 +1,13 @@
 {
   "entity": true,
   "object": true,
+  "tab": true,
+  "layouts": true,
   "type": "BasePlus",
+  "status": "default",
+  "module": "Travel",
   "customizable": true,
   "importable": true,
-  "exportable": true
+  "exportable": true,
+  "acl": true
 }

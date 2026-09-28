@@ -1,0 +1,11 @@
+[
+  {
+    "rows": [
+      [{ "name": "name" }, { "name": "supplierType" }],
+      [{ "name": "contactEmail" }, { "name": "contactPhone" }],
+      [{ "name": "paymentTerms" }, false]
+    ],
+    "style": "default",
+    "label": "Información del Proveedor"
+  }
+]

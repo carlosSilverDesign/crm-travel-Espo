@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Opportunity",
+  "link": "stageHistory",
+  "foreignEntity": "OpportunityStageHistory",
+  "foreignLink": "opportunity"
+}

@@ -1,0 +1,24 @@
+{
+    "view": "custom:views/dashlets/real-profitability",
+    "aclScope": "Opportunity",
+    "options": {
+        "fields": {
+            "title": {
+                "type": "varchar"
+            }
+        },
+        "defaults": {
+            "title": "Rentabilidad Real Consolidada"
+        },
+        "layout": [
+            {
+                "rows": [
+                    [
+                        {"name": "title"},
+                        false
+                    ]
+                ]
+            }
+        ]
+    }
+}

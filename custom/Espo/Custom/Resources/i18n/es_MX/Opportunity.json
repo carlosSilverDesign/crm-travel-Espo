@@ -1,0 +1,12 @@
+{
+  "fields": {
+    "clientType": "Tipo de Cliente",
+    "stageHistory": "Historial de Etapas"
+  },
+  "options": {
+    "clientType": {
+      "B2C_Direct": "B2C - Directo / Individual",
+      "B2B_Corporate": "B2B - Corporativo / Empresa"
+    }
+  }
+}

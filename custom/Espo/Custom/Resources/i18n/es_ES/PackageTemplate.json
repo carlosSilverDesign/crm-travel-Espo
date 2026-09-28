@@ -1,0 +1,13 @@
+{
+  "fields": {
+    "name": "Nombre de la Plantilla",
+    "destination": "Destino",
+    "durationDays": "Duración (Días)",
+    "basePrice": "Precio Base Sugerido ($)",
+    "description": "Descripción del Paquete",
+    "includedServices": "Servicios Incluidos"
+  },
+  "labels": {
+    "Create PackageTemplate": "Crear Plantilla de Paquete"
+  }
+}

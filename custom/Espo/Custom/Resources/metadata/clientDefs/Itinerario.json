@@ -1,13 +1,34 @@
 {
+  "controller": "controllers/record",
+  "recordViews": {
+    "detail": "custom:views/itinerario/record/detail"
+  },
   "iconClass": "fas fa-route",
   "color": "#00838f",
   "boolFilterList": [
     "onlyMy",
     "currentInDestination"
   ],
-  "recordViews": {
-    "list": "custom:views/itinerario/record/list",
-    "detail": "custom:views/itinerario/record/detail"
+  "menu": {
+    "detail": {
+      "buttons": [
+        {
+          "name": "generatePdf",
+          "label": "Generar / Descargar PDF",
+          "style": "primary",
+          "action": "generatePdf",
+          "iconClass": "fas fa-file-pdf"
+        },
+        {
+          "name": "openPublicWeb",
+          "label": "Ver Web del Viajero",
+          "style": "default",
+          "action": "openPublicWeb",
+          "iconClass": "fas fa-external-link-alt"
+        }
+      ],
+      "dropdown": []
+    }
   },
   "operationalBoard": {
     "enabled": true,

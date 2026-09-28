@@ -89,7 +89,9 @@ class Itinerario extends Base
             if ($opp) {
                 $chatwootConversationId = $opp->get('chatwootConversationId');
                 if ($chatwootConversationId) {
-                    $chatwootUrl = "/app/accounts/1/conversations/{$chatwootConversationId}";
+                    $baseUrl = rtrim((string) ($this->getConfig()->get('chatwootBaseUrl') ?: getenv('CHATWOOT_BASE_URL') ?: 'https://chat.agencia.com'), '/');
+                    $accountId = (string) ($this->getConfig()->get('chatwootAccountId') ?: 1);
+                    $chatwootUrl = "{$baseUrl}/app/accounts/{$accountId}/conversations/{$chatwootConversationId}";
                 }
             }
         }

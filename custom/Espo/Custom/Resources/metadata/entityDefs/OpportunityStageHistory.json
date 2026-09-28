@@ -1,0 +1,71 @@
+{
+  "fields": {
+    "name": {
+      "type": "varchar",
+      "required": true,
+      "maxLength": 150
+    },
+    "opportunity": {
+      "type": "link",
+      "entity": "Opportunity",
+      "required": true,
+      "index": true
+    },
+    "stage": {
+      "type": "enum",
+      "required": true,
+      "options": [
+        "Prospecting",
+        "Qualification",
+        "Proposal",
+        "Negotiation",
+        "PaymentPending",
+        "Closed Won",
+        "Closed Lost"
+      ],
+      "index": true
+    },
+    "enteredAt": {
+      "type": "datetime",
+      "required": true,
+      "index": true
+    },
+    "exitedAt": {
+      "type": "datetime",
+      "index": true
+    },
+    "durationSeconds": {
+      "type": "int",
+      "min": 0
+    },
+    "leadSource": {
+      "type": "enum",
+      "options": [
+        "WhatsApp",
+        "Instagram",
+        "Facebook",
+        "Referido",
+        "Web",
+        "Presencial",
+        "Otro"
+      ],
+      "index": true
+    },
+    "assignedUser": {
+      "type": "link",
+      "entity": "User",
+      "index": true
+    }
+  },
+  "links": {
+    "opportunity": {
+      "type": "belongsTo",
+      "entity": "Opportunity",
+      "foreign": "stageHistory"
+    },
+    "assignedUser": {
+      "type": "belongsTo",
+      "entity": "User"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "stage"
+  },
+  {
+    "name": "enteredAt"
+  },
+  {
+    "name": "exitedAt"
+  },
+  {
+    "name": "durationSeconds"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "rows": [
+      [
+        {"name": "name"},
+        {"name": "opportunity"}
+      ],
+      [
+        {"name": "stage"},
+        {"name": "leadSource"}
+      ],
+      [
+        {"name": "enteredAt"},
+        {"name": "exitedAt"}
+      ],
+      [
+        {"name": "durationSeconds"},
+        {"name": "assignedUser"}
+      ]
+    ]
+  }
+]

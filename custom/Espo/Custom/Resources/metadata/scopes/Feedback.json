@@ -1,7 +1,9 @@
 {
   "entity": true,
   "object": true,
-  "type": "Base",
+  "tab": true,
+  "layouts": true,
+  "type": "BasePlus",
   "status": "default",
   "module": "Travel",
   "customizable": true,

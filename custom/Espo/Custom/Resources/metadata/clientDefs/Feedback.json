@@ -1,4 +1,5 @@
 {
+  "controller": "controllers/record",
   "iconClass": "fas fa-star",
   "color": "#f57c00"
 }

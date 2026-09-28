@@ -1,0 +1,11 @@
+[
+  {
+    "rows": [
+      [{ "name": "name" }, { "name": "destination" }],
+      [{ "name": "durationDays" }, { "name": "basePrice" }],
+      [{ "name": "description" }, false]
+    ],
+    "style": "default",
+    "label": "Información de la Plantilla"
+  }
+]

@@ -1,0 +1,24 @@
+{
+    "view": "custom:views/dashlets/agent-performance",
+    "aclScope": "User",
+    "options": {
+        "fields": {
+            "title": {
+                "type": "varchar"
+            }
+        },
+        "defaults": {
+            "title": "Rendimiento y Tiempos de Respuesta de Asesores"
+        },
+        "layout": [
+            {
+                "rows": [
+                    [
+                        {"name": "title"},
+                        false
+                    ]
+                ]
+            }
+        ]
+    }
+}

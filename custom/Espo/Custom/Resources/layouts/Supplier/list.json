@@ -1,0 +1,6 @@
+[
+  { "name": "name", "link": true },
+  { "name": "supplierType" },
+  { "name": "contactEmail" },
+  { "name": "contactPhone" }
+]

@@ -67,6 +67,14 @@
     "reportedBy": {
       "type": "link",
       "entity": "User"
+    },
+    "createdAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "modifiedAt": {
+      "type": "datetime",
+      "readOnly": true
     }
   },
   "links": {

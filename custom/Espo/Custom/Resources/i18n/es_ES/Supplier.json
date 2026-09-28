@@ -1,0 +1,28 @@
+{
+  "fields": {
+    "name": "Razón Social / Nombre",
+    "supplierType": "Tipo de Proveedor",
+    "contactEmail": "Correo de Reservas",
+    "contactPhone": "Teléfono de Emergencias / Receptivo",
+    "paymentTerms": "Condiciones de Pago"
+  },
+  "links": {
+    "itineraryItems": "Servicios Turísticos",
+    "budgetLines": "Líneas de Presupuesto"
+  },
+  "options": {
+    "supplierType": {
+      "Hotel": "Hotel / Cadena",
+      "Operador Local": "Operador Local (DMC)",
+      "Aerolínea": "Aerolínea",
+      "Transporte": "Transporte / Traslados",
+      "Guía": "Guía Oficial",
+      "Seguros": "Asistencia / Seguros",
+      "Crucero": "Naviera / Crucero",
+      "Otro": "Otro"
+    }
+  },
+  "labels": {
+    "Create Supplier": "Registrar Proveedor"
+  }
+}

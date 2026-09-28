@@ -2,11 +2,36 @@
 
 namespace Espo\Custom\Controllers;
 
+use Espo\Core\Templates\Controllers\Base;
+
 /**
- * Alias de controlador para la entidad Payment.
- * Extiende PaymentController garantizando que el despachador de rutas
- * de EspoCRM resuelva de forma idéntica tanto 'Payment' como 'PaymentController'.
+ * Controlador de EspoCRM para la entidad Payment.
+ * Extiende Base para proveer automáticamente las acciones CRUD estándar (list, read, create, update, delete)
+ * y expone los endpoints de decisión de mesa de control (confirm, reject).
  */
-class Payment extends PaymentController
+class Payment extends Base
 {
+    public function postActionConfirm(...$args)
+    {
+        $controller = new PaymentController($this->getContainer(), $this->getEntityManager(), $this->getConfig());
+        return $controller->postActionConfirm(...$args);
+    }
+
+    public function actionConfirm(...$args)
+    {
+        $controller = new PaymentController($this->getContainer(), $this->getEntityManager(), $this->getConfig());
+        return $controller->postActionConfirm(...$args);
+    }
+
+    public function postActionReject(...$args)
+    {
+        $controller = new PaymentController($this->getContainer(), $this->getEntityManager(), $this->getConfig());
+        return $controller->postActionReject(...$args);
+    }
+
+    public function actionReject(...$args)
+    {
+        $controller = new PaymentController($this->getContainer(), $this->getEntityManager(), $this->getConfig());
+        return $controller->postActionReject(...$args);
+    }
 }

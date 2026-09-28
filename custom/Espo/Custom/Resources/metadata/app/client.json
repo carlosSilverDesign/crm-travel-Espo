@@ -2,6 +2,13 @@
   "scriptList": [
     "client/custom/modules/whatsapp/chatwoot.js",
     "client/custom/modules/travel/payment.js",
-    "client/custom/modules/travel/itinerario.js"
+    "client/custom/modules/travel/itinerario.js",
+    "client/custom/modules/travel/views/dashlets/pipeline-funnel.js",
+    "client/custom/modules/travel/views/dashlets/real-profitability.js",
+    "client/custom/modules/travel/views/dashlets/agent-performance.js",
+    "client/custom/modules/travel/views/dashlets/destination-quality.js"
+  ],
+  "stylesheetList": [
+    "client/custom/css/travel-theme.css"
   ]
 }

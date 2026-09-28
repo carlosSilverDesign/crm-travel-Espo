@@ -1,0 +1,15 @@
+{
+  "labels": {
+    "Create OpportunityStageHistory": "Crear Registro de Historial",
+    "OpportunityStageHistory": "Historial de Etapa"
+  },
+  "fields": {
+    "opportunity": "Oportunidad",
+    "stage": "Etapa",
+    "enteredAt": "Fecha de Entrada",
+    "exitedAt": "Fecha de Salida",
+    "durationSeconds": "Duración (Segundos)",
+    "leadSource": "Canal de Origen",
+    "assignedUser": "Asesor Asignado"
+  }
+}

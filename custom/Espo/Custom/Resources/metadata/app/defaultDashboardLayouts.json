@@ -1,0 +1,62 @@
+{
+  "Standard": [
+    {
+      "name": "General",
+      "layout": [
+        {
+          "id": "default-stream",
+          "name": "Stream",
+          "x": 0,
+          "y": 0,
+          "width": 2,
+          "height": 4
+        },
+        {
+          "id": "default-activities",
+          "name": "Activities",
+          "x": 2,
+          "y": 0,
+          "width": 2,
+          "height": 4
+        }
+      ]
+    },
+    {
+      "name": "Analítica de Negocio",
+      "layout": [
+        {
+          "id": "dashlet-pipeline-funnel",
+          "name": "PipelineFunnel",
+          "x": 0,
+          "y": 0,
+          "width": 2,
+          "height": 4
+        },
+        {
+          "id": "dashlet-real-profitability",
+          "name": "RealProfitability",
+          "x": 2,
+          "y": 0,
+          "width": 2,
+          "height": 4
+        },
+        {
+          "id": "dashlet-agent-performance",
+          "name": "AgentPerformance",
+          "x": 0,
+          "y": 4,
+          "width": 2,
+          "height": 4
+        },
+        {
+          "id": "dashlet-destination-quality",
+          "name": "DestinationQuality",
+          "x": 2,
+          "y": 4,
+          "width": 2,
+          "height": 4
+        }
+      ]
+    }
+  ]
+}

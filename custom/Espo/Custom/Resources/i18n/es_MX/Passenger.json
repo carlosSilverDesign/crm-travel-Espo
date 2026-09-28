@@ -1,0 +1,33 @@
+{
+  "fields": {
+    "name": "Nombre Completo",
+    "firstName": "Nombres",
+    "lastName": "Apellidos",
+    "passengerType": "Tipo de Pasajero",
+    "documentType": "Tipo de Documento",
+    "documentNumber": "Número de Documento / Pasaporte",
+    "documentExpiryDate": "Vencimiento del Documento",
+    "birthDate": "Fecha de Nacimiento",
+    "nationality": "Nacionalidad",
+    "medicalNotes": "Observaciones Médicas / Dietéticas",
+    "itinerario": "Itinerario"
+  },
+  "links": {
+    "itinerario": "Itinerario"
+  },
+  "options": {
+    "passengerType": {
+      "Adult": "Adulto",
+      "Child": "Niño (2-11 años)",
+      "Infant": "Infante (0-23 meses)"
+    },
+    "documentType": {
+      "Passport": "Pasaporte",
+      "DNI": "DNI / Cédula",
+      "Other": "Otro"
+    }
+  },
+  "labels": {
+    "Create Passenger": "Registrar Pasajero"
+  }
+}

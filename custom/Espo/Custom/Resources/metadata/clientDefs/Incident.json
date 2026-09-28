@@ -1,4 +1,5 @@
 {
+  "controller": "controllers/record",
   "iconClass": "fas fa-exclamation-triangle",
   "color": "#d32f2f"
 }

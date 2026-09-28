@@ -108,30 +108,17 @@ class ItinerarioPdfController extends Base
 
         $result = $this->getPdfService()->generatePdf($itinerarioId);
 
+        $attachmentId = $result['attachmentId'] ?? null;
         $filename = $result['filename'] ?? ("Expediente-{$itinerarioId}.pdf");
-        $content = $result['content'] ?? '';
 
-        // Encabezados HTTP defensivos
-        if (!headers_sent()) {
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="' . $filename . '"');
-            header('Content-Length: ' . strlen($content));
-            header('Cache-Control: private, must-revalidate, max-age=0');
-            header('Pragma: public');
-        }
-
-        // Si se recibió un objeto de respuesta PSR-7 / Slim
-        foreach ($args as $arg) {
-            if (is_object($arg) && method_exists($arg, 'getBody') && method_exists($arg, 'withHeader')) {
-                $arg->getBody()->write($content);
-                return $arg
-                    ->withHeader('Content-Type', 'application/pdf')
-                    ->withHeader('Content-Disposition', 'attachment; filename="' . $filename . '"')
-                    ->withHeader('Content-Length', (string) strlen($content));
-            }
-        }
-
-        return $content;
+        return [
+            'success' => true,
+            'attachmentId' => $attachmentId,
+            'id' => $attachmentId,
+            'filename' => $filename,
+            'fromCache' => $result['fromCache'] ?? false,
+            'downloadUrl' => '?entryPoint=download&id=' . $attachmentId,
+        ];
     }
 
     /**

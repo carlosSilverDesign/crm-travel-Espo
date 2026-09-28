@@ -11,6 +11,14 @@
   },
   {
     "rows": [
+      [{"name": "publicAccessToken"}, {"name": "webAccessCount"}],
+      [{"name": "lastWebAccessAt"}, false]
+    ],
+    "style": "default",
+    "label": "Expediente Digital y Portal Web del Viajero"
+  },
+  {
+    "rows": [
       [{"name": "totalCost"}, {"name": "totalSelling"}],
       [{"name": "grossProfit"}, false],
       [{"name": "notes"}, false]

@@ -38,6 +38,14 @@
     "transactionId": {
       "type": "varchar",
       "maxLength": 100
+    },
+    "createdAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "modifiedAt": {
+      "type": "datetime",
+      "readOnly": true
     }
   },
   "links": {

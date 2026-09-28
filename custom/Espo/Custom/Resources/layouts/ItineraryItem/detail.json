@@ -1,0 +1,13 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "status"}],
+      [{"name": "serviceType"}, {"name": "serviceDate"}],
+      [{"name": "itinerario"}, {"name": "supplier"}],
+      [{"name": "confirmationCode"}, false],
+      [{"name": "notes"}, false]
+    ],
+    "style": "default",
+    "label": "Información del Servicio Turístico"
+  }
+]

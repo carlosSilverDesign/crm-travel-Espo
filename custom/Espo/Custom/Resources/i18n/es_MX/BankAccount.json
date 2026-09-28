@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "name": "Nombre / Identificador de la Cuenta",
+    "bankName": "Entidad Bancaria",
+    "accountNumber": "Número de Cuenta",
+    "cci": "CCI Interbancario",
+    "swiftBic": "Código SWIFT / BIC",
+    "currency": "Moneda",
+    "accountType": "Tipo de Cuenta",
+    "accountHolder": "Titular de la Cuenta",
+    "instructions": "Instrucciones de Transferencia",
+    "isActive": "Cuenta Activa para Cobros"
+  },
+  "labels": {
+    "Create BankAccount": "Registrar Cuenta Bancaria"
+  }
+}

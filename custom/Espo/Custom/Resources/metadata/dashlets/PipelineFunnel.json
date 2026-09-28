@@ -1,0 +1,24 @@
+{
+    "view": "custom:views/dashlets/pipeline-funnel",
+    "aclScope": "Opportunity",
+    "options": {
+        "fields": {
+            "title": {
+                "type": "varchar"
+            }
+        },
+        "defaults": {
+            "title": "Embudo de Conversión & Tiempos de Etapa"
+        },
+        "layout": [
+            {
+                "rows": [
+                    [
+                        {"name": "title"},
+                        false
+                    ]
+                ]
+            }
+        ]
+    }
+}

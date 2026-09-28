@@ -1,0 +1,6 @@
+[
+  { "name": "name", "link": true },
+  { "name": "destination" },
+  { "name": "durationDays" },
+  { "name": "basePrice" }
+]

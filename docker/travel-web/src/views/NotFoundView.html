@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expediente no encontrado (404) — Agencia de Viajes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/itinerary.css">
+  <style>
+    .error-container {
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 2.5rem 2rem;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    .error-icon {
+      width: 80px;
+      height: 80px;
+      background: #fef2f2;
+      color: #ef4444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .error-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 0.75rem;
+    }
+    .error-message {
+      font-size: 0.9375rem;
+      color: #475569;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    .actions-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 0.9375rem;
+    }
+    .btn-primary-action {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-primary-action:hover {
+      background: #0369a1;
+    }
+    .btn-whatsapp-action {
+      background: #22c55e;
+      color: #ffffff;
+    }
+    .btn-whatsapp-action:hover {
+      background: #16a34a;
+    }
+  </style>
+</head>
+<body style="background: #f8fafc; font-family: 'Plus Jakarta Sans', sans-serif;">
+  <main class="error-container">
+    <div class="error-icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+    </div>
+    <h1 class="error-title">Expediente o Sección No Encontrada</h1>
+    <p class="error-message">
+      El enlace o identificador de viaje proporcionado no existe, expiró o no cuenta con servicios registrados. Si eres viajero, contacta a tu asesor para recibir el enlace actualizado de tu itinerario.
+    </p>
+    <div class="actions-group">
+      <a href="https://wa.me/51987654321?text=Hola%2C%20tengo%20un%20problema%20con%20el%20enlace%20de%20mi%20itinerario" target="_blank" rel="noopener noreferrer" class="btn-action btn-whatsapp-action">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2"/></svg>
+        <span>Contactar Asistencia por WhatsApp</span>
+      </a>
+      <a href="/p/demo" class="btn-action btn-primary-action">
+        <span>Ver Itinerario de Demostración</span>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

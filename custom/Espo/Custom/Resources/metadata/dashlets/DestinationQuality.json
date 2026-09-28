@@ -1,0 +1,24 @@
+{
+    "view": "custom:views/dashlets/destination-quality",
+    "aclScope": "Opportunity",
+    "options": {
+        "fields": {
+            "title": {
+                "type": "varchar"
+            }
+        },
+        "defaults": {
+            "title": "Calidad en Destino y Satisfacción (NPS)"
+        },
+        "layout": [
+            {
+                "rows": [
+                    [
+                        {"name": "title"},
+                        false
+                    ]
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,5 @@
+{
+  "controller": "controllers/base",
+  "iconClass": "fas fa-history",
+  "color": "#3949ab"
+}

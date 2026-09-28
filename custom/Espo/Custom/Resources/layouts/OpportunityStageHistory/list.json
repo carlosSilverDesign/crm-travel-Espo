@@ -1,0 +1,23 @@
+[
+  {
+    "name": "opportunity"
+  },
+  {
+    "name": "stage"
+  },
+  {
+    "name": "enteredAt"
+  },
+  {
+    "name": "exitedAt"
+  },
+  {
+    "name": "durationSeconds"
+  },
+  {
+    "name": "leadSource"
+  },
+  {
+    "name": "assignedUser"
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "scopeNames": {
+    "Itinerario": "Itinerary",
+    "ItineraryItem": "Itinerary Item",
+    "BudgetLine": "Budget Line",
+    "Passenger": "Passenger",
+    "PaymentSchedule": "Payment Schedule",
+    "Payment": "Payment",
+    "BankAccount": "Bank Account",
+    "Incident": "Incident",
+    "Feedback": "NPS Feedback",
+    "Supplier": "Supplier / Operator",
+    "PackageTemplate": "Package Template"
+  },
+  "scopeNamesPlural": {
+    "Itinerario": "Itineraries",
+    "ItineraryItem": "Itinerary Items",
+    "BudgetLine": "Budget Lines",
+    "Passenger": "Passengers",
+    "PaymentSchedule": "Payment Schedules",
+    "Payment": "Payments",
+    "BankAccount": "Bank Accounts",
+    "Incident": "Incidents",
+    "Feedback": "NPS Feedbacks",
+    "Supplier": "Suppliers & Operators",
+    "PackageTemplate": "Package Templates"
+  },
+  "dashlets": {
+    "PipelineFunnel": "Pipeline Conversion & Stage Durations",
+    "RealProfitability": "Real Profitability & Margins",
+    "AgentPerformance": "Agent Performance & Speed",
+    "DestinationQuality": "Destination Quality & NPS"
+  }
+}
