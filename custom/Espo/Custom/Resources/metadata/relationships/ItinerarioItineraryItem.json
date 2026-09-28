@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Itinerario",
+  "link": "items",
+  "foreignEntity": "ItineraryItem",
+  "foreignLink": "itinerario"
+}

@@ -6,6 +6,16 @@
       "maxLength": 150,
       "pattern": "$noBadCharacters"
     },
+    "itinerario": {
+      "type": "link",
+      "entity": "Itinerario",
+      "index": true
+    },
+    "supplier": {
+      "type": "link",
+      "entity": "Supplier",
+      "index": true
+    },
     "serviceType": {
       "type": "enum",
       "required": true,
@@ -17,6 +27,7 @@
         "Tour",
         "Seguro",
         "Crucero",
+        "Alquiler",
         "Otro"
       ],
       "audited": true
@@ -25,10 +36,55 @@
       "type": "datetime",
       "required": true
     },
+    "serviceEndDate": {
+      "type": "datetime"
+    },
+    "origin": {
+      "type": "varchar",
+      "maxLength": 100
+    },
+    "originIata": {
+      "type": "varchar",
+      "maxLength": 10
+    },
+    "destination": {
+      "type": "varchar",
+      "maxLength": 100
+    },
+    "destinationIata": {
+      "type": "varchar",
+      "maxLength": 10
+    },
+    "carrier": {
+      "type": "varchar",
+      "maxLength": 100
+    },
+    "flightNumber": {
+      "type": "varchar",
+      "maxLength": 50
+    },
+    "cabin": {
+      "type": "varchar",
+      "maxLength": 50
+    },
     "confirmationCode": {
       "type": "varchar",
       "maxLength": 60,
       "pattern": "$noBadCharacters"
+    },
+    "costPrice": {
+      "type": "currency"
+    },
+    "sellingPrice": {
+      "type": "currency"
+    },
+    "grossProfit": {
+      "type": "currency",
+      "readOnly": true
+    },
+    "orderIndex": {
+      "type": "int",
+      "default": 0
     },
     "status": {
       "type": "enum",
@@ -42,6 +98,14 @@
     },
     "notes": {
       "type": "text"
+    },
+    "createdAt": {
+      "type": "datetime",
+      "readOnly": true
+    },
+    "modifiedAt": {
+      "type": "datetime",
+      "readOnly": true
     }
   },
   "links": {

@@ -2,28 +2,29 @@
   {
     "rows": [
       [{"name": "name"}, {"name": "status"}],
-      [{"name": "destination"}, {"name": "opportunity"}],
+      [{"name": "tripType"}, {"name": "opportunity"}],
+      [{"name": "origin"}, {"name": "destination"}],
       [{"name": "startDate"}, {"name": "endDate"}],
-      [{"name": "quoteValidUntil"}, {"name": "whatsappStatus"}]
+      [{"name": "quoteValidUntil"}, {"name": "description"}]
     ],
     "style": "default",
-    "label": "Información General"
-  },
-  {
-    "rows": [
-      [{"name": "publicAccessToken"}, {"name": "webAccessCount"}],
-      [{"name": "lastWebAccessAt"}, false]
-    ],
-    "style": "default",
-    "label": "Expediente Digital y Portal Web del Viajero"
+    "label": "Información Comercial y Resumen de Viaje"
   },
   {
     "rows": [
       [{"name": "totalCost"}, {"name": "totalSelling"}],
-      [{"name": "grossProfit"}, false],
+      [{"name": "grossProfit"}, {"name": "grossMargin"}],
       [{"name": "notes"}, false]
     ],
     "style": "default",
-    "label": "Resumen Financiero y Notas"
+    "label": "Resumen Financiero y Rentabilidad"
+  },
+  {
+    "rows": [
+      [{"name": "whatsappStatus"}, {"name": "webAccessCount"}],
+      [{"name": "publicAccessToken"}, {"name": "lastWebAccessAt"}]
+    ],
+    "style": "default",
+    "label": "Portal Web del Viajero y Notificaciones"
   }
 ]

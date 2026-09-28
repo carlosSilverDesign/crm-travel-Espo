@@ -17,6 +17,7 @@
           "label": "Generar / Descargar PDF",
           "style": "primary",
           "action": "generatePdf",
+          "handler": "custom:handlers/itinerario/header-actions",
           "iconClass": "fas fa-file-pdf"
         },
         {
@@ -24,6 +25,7 @@
           "label": "Ver Web del Viajero",
           "style": "default",
           "action": "openPublicWeb",
+          "handler": "custom:handlers/itinerario/header-actions",
           "iconClass": "fas fa-external-link-alt"
         }
       ],

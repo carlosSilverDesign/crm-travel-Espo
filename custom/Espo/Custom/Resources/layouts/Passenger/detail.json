@@ -1,11 +1,12 @@
 [
   {
     "rows": [
-      [{"name": "name"}, {"name": "itinerario"}],
-      [{"name": "contact"}, {"name": "birthDate"}],
+      [{"name": "name"}, {"name": "passengerType"}],
+      [{"name": "firstName"}, {"name": "lastName"}],
+      [{"name": "itinerario"}, {"name": "contact"}],
       [{"name": "documentType"}, {"name": "documentNumber"}],
-      [{"name": "documentExpiration"}, {"name": "nationality"}],
-      [{"name": "dietaryRestrictions"}, false],
+      [{"name": "documentExpiration"}, {"name": "birthDate"}],
+      [{"name": "nationality"}, {"name": "dietaryRestrictions"}],
       [{"name": "notes"}, false]
     ],
     "style": "default",

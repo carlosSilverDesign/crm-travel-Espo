@@ -4,14 +4,16 @@
  * Script de Poblado (Seed) de Datos de Prueba para Demostración y Preventa
  * CRM Viajes SaaS - Travel Agency Platform 2026
  *
- * Crea expedientes completos y representativos con:
- * - 6 Casuísticas operativas (En Viaje, Cotización, Confirmado, Post-Viaje Promotor, Incidencia/Detractor, Descarte)
- * - Líneas de Presupuesto con cálculo de márgenes y comisiones
- * - Cronogramas de pago y conciliación bancaria
- * - Pasajeros y validaciones documentarias
- * - Incidencias en viaje con impacto financiero
- * - Encuestas de satisfacción NPS (Promotor y Detractor con SLA urgente < 2h)
- * - Historial de etapas para embudo de conversión y dashlets ECharts
+ * Cubre exhaustivamente todas las casuísticas de viajes:
+ * 1. Paquete Turístico VIP (Lima ➔ Cusco, En Viaje, 3 Pax, Vuelo+Hotel+Tour+Transfer, Conciliado 100%)
+ * 2. Vuelo Nacional Solo Ida (Lima ➔ Arequipa, Cotización, SKY H2-5101, 1 Pax)
+ * 3. Vuelo Nacional Ida y Vuelta (Lima ➔ Tarapoto ➔ Lima, Confirmado, Star Perú, 2 Pax)
+ * 4. Vuelo Internacional Ida y Vuelta (Lima ➔ Madrid ➔ Lima, Cotización, Air Europa, 2 Pax: Adulto + Infante)
+ * 5. Vuelo Internacional Multidestino (Lima ➔ Madrid ➔ Roma ➔ París ➔ Lima, Iberia + Air France, 2 Pax, Hoteles)
+ * 6. Vuelo + Hotel All-Inclusive (Lima ➔ Cancún, Confirmado con Pago Parcial 50%, LATAM + Riu Palace + Xcaret)
+ * 7. Post-Viaje Promotor (París & Niza, Finalizado, NPS 10)
+ * 8. Alerta Detractor (Egipto, Finalizado, Overbooking resuelto, NPS 4, Tarea Urgente SLA < 2h)
+ * 9. Descarte Comercial (Safari Tanzania, Closed Lost por Presupuesto)
  *
  * Todos los registros contienen el prefijo '[DEMO]' para borrado fácil y seguro.
  */
@@ -45,13 +47,14 @@ $today = date('Y-m-d');
 $todayTime = date('Y-m-d H:i:s');
 
 echo "====================================================================\n";
-echo "  🚀 INICIANDO POBLADO DE DATOS DE DEMOSTRACIÓN (CRM VIAJES SAAS)\n";
+echo "  🚀 INICIANDO POBLADO DE DATOS DE DEMOSTRACIÓN (CRM VIAJES SAAS 2026)\n";
 echo "====================================================================\n\n";
 
-// Helper para buscar o crear registros demo
 function getOrCreate($entityManager, $entityType, $criteria, $data) {
     $existing = $entityManager->getRDBRepository($entityType)->where($criteria)->findOne();
     if ($existing) {
+        $existing->set($data);
+        $entityManager->saveEntity($existing, ['skipHooks' => true]);
         return $existing;
     }
     $entity = $entityManager->getNewEntity($entityType);
@@ -63,7 +66,55 @@ function getOrCreate($entityManager, $entityType, $criteria, $data) {
 // -----------------------------------------------------------------------------
 // 1. PROVEEDORES Y OPERADORES LOCALES (Suppliers)
 // -----------------------------------------------------------------------------
-echo "▶ [1/8] Verificando / Creando Proveedores y Operadores...\n";
+echo "▶ [1/9] Creando Proveedores y Aerolíneas...\n";
+
+$supplierLatam = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] LATAM Airlines Group'], [
+    'name' => '[DEMO] LATAM Airlines Group',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'agencias@latam.demo',
+    'contactPhone' => '+51 1 213 8200',
+    'paymentTerms' => 'Emisión inmediata GDS'
+]);
+
+$supplierSky = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] SKY Airline Perú'], [
+    'name' => '[DEMO] SKY Airline Perú',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'agencias@skyairline.demo',
+    'contactPhone' => '+51 1 391 3600',
+    'paymentTerms' => 'Prepago directo NDC'
+]);
+
+$supplierStarPeru = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Star Perú'], [
+    'name' => '[DEMO] Star Perú',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'reservas@starperu.demo',
+    'contactPhone' => '+51 1 705 9000',
+    'paymentTerms' => 'Emisión inmediata'
+]);
+
+$supplierAirEuropa = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Air Europa'], [
+    'name' => '[DEMO] Air Europa',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'ventas.peru@aireuropa.demo',
+    'contactPhone' => '+51 1 652 7373',
+    'paymentTerms' => 'Emisión BSP IATA'
+]);
+
+$supplierIberia = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Iberia Líneas Aéreas'], [
+    'name' => '[DEMO] Iberia Líneas Aéreas',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'helpdesk@iberia.demo',
+    'contactPhone' => '+34 900 111 500',
+    'paymentTerms' => 'Emisión BSP IATA'
+]);
+
+$supplierAirFrance = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Air France'], [
+    'name' => '[DEMO] Air France',
+    'supplierType' => 'Aerolínea',
+    'contactEmail' => 'b2b@airfrance.demo',
+    'contactPhone' => '+33 1 70 36 39 50',
+    'paymentTerms' => 'Emisión BSP IATA'
+]);
 
 $supplierRiu = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Riu Palace Riviera Maya'], [
     'name' => '[DEMO] Riu Palace Riviera Maya',
@@ -81,14 +132,6 @@ $supplierInca = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Inca 
     'paymentTerms' => 'Crédito a 30 días, liquidación mensual'
 ]);
 
-$supplierLatam = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] LATAM Airlines Group'], [
-    'name' => '[DEMO] LATAM Airlines Group',
-    'supplierType' => 'Aerolínea',
-    'contactEmail' => 'agencias@latam.demo',
-    'contactPhone' => '+51 1 213 8200',
-    'paymentTerms' => 'Emisión inmediata GDS'
-]);
-
 $supplierAssist = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Assist Card Internacional'], [
     'name' => '[DEMO] Assist Card Internacional',
     'supplierType' => 'Seguros',
@@ -97,20 +140,12 @@ $supplierAssist = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Ass
     'paymentTerms' => 'Liquidación quincenal'
 ]);
 
-$supplierPatagonia = getOrCreate($entityManager, 'Supplier', ['name' => '[DEMO] Patagonia Wilderness Receptivo'], [
-    'name' => '[DEMO] Patagonia Wilderness Receptivo',
-    'supplierType' => 'Operador Local',
-    'contactEmail' => 'info@patagoniawilderness.demo',
-    'contactPhone' => '+54 2902 491 500',
-    'paymentTerms' => 'Seña del 30% a la reserva'
-]);
-
-echo "   ✔ Proveedores listos.\n";
+echo "   ✔ Proveedores y aerolíneas listos.\n";
 
 // -----------------------------------------------------------------------------
 // 2. CUENTAS BANCARIAS OPERATIVAS (BankAccounts)
 // -----------------------------------------------------------------------------
-echo "▶ [2/8] Verificando Cuentas Bancarias Operativas...\n";
+echo "▶ [2/9] Creando Cuentas Bancarias Operativas...\n";
 
 $bankBcp = getOrCreate($entityManager, 'BankAccount', ['accountNumber' => '194-98765432-1-89'], [
     'name' => '[DEMO] BCP Dólares Corriente Empresa',
@@ -145,30 +180,46 @@ echo "   ✔ Cuentas Bancarias operativas verificadas.\n";
 // -----------------------------------------------------------------------------
 // 3. CONTACTOS / VIAJEROS (Contacts)
 // -----------------------------------------------------------------------------
-echo "▶ [3/8] Creando Contactos y Viajeros Frecuentes...\n";
+echo "▶ [3/9] Creando Contactos y Viajeros...\n";
 
 $contactCarlos = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'carlos.mendoza@demo.viajes'], [
     'firstName' => '[DEMO] Carlos',
     'lastName' => 'Mendoza V.',
     'emailAddress' => 'carlos.mendoza@demo.viajes',
     'phoneNumber' => '+51987654321',
-    'description' => '[DEMO_DATA] Titular de viaje familiar a Cusco. Viajero frecuente VIP.'
+    'description' => '[DEMO_DATA] Titular de viaje familiar a Cusco. Viajero VIP.'
 ]);
 
 $contactLucia = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'lucia.fernandez@demo.viajes'], [
     'firstName' => '[DEMO] Lucía',
     'lastName' => 'Fernández G.',
     'emailAddress' => 'lucia.fernandez@demo.viajes',
-    'phoneNumber' => '+5491187654321',
-    'description' => '[DEMO_DATA] Interesada en turismo aventura en Patagonia.'
+    'phoneNumber' => '+51977654321',
+    'description' => '[DEMO_DATA] Viajera frecuente corporativa. Cotización Vuelo Solo Ida Arequipa.'
 ]);
 
 $contactAndres = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'andres.bustamante@demo.viajes'], [
     'firstName' => '[DEMO] Andrés',
     'lastName' => 'Bustamante R.',
     'emailAddress' => 'andres.bustamante@demo.viajes',
-    'phoneNumber' => '+529987654321',
-    'description' => '[DEMO_DATA] Reserva paquete Caribe Cancún todo incluido.'
+    'phoneNumber' => '+51998765432',
+    'description' => '[DEMO_DATA] Reserva paquete Caribe Cancún y Vuelos Selva Tarapoto.'
+]);
+
+$contactDiego = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'diego.morales@demo.viajes'], [
+    'firstName' => '[DEMO] Diego',
+    'lastName' => 'Morales T.',
+    'emailAddress' => 'diego.morales@demo.viajes',
+    'phoneNumber' => '+51966554433',
+    'description' => '[DEMO_DATA] Cotización vuelo internacional a Madrid con infante.'
+]);
+
+$contactFernando = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'fernando.castro@demo.viajes'], [
+    'firstName' => '[DEMO] Fernando',
+    'lastName' => 'Castro M.',
+    'emailAddress' => 'fernando.castro@demo.viajes',
+    'phoneNumber' => '+51955443322',
+    'description' => '[DEMO_DATA] Eurotrip Multidestino Madrid, Roma y París.'
 ]);
 
 $contactMarcela = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'marcela.pena@demo.viajes'], [
@@ -198,66 +249,71 @@ $contactJavier = getOrCreate($entityManager, 'Contact', ['emailAddress' => 'javi
 echo "   ✔ Contactos demo listos.\n";
 
 // -----------------------------------------------------------------------------
-// 4. CASO 1 (ESTRELLA): VIAJE EN CURSO (EN VIAJE) & RECONCILIADO AL 100%
+// 4. CASO 1: PAQUETE TURÍSTICO VIP - CUSCO & MACHU PICCHU (EN VIAJE, 100% PAGADO)
 // -----------------------------------------------------------------------------
-echo "▶ [4/8] Generando Caso 1 (Estrella): 'Cusco Mágico VIP' - Estado: EN VIAJE...\n";
+echo "▶ [4/9] Generando Caso 1: Paquete Turístico VIP 'Cusco Mágico' (EN VIAJE)...\n";
 
-// Fechas que cubren el día actual para activar la consola en destino
-$startTrip = date('Y-m-d', $now - (2 * 86400)); // Empezó hace 2 días
-$endTrip = date('Y-m-d', $now + (3 * 86400));   // Termina en 3 días
+$startTrip1 = date('Y-m-d', $now - (2 * 86400));
+$endTrip1 = date('Y-m-d', $now + (3 * 86400));
 
-$opp1 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Vacaciones en Familia: Cusco Mágico & Machu Picchu VIP'], [
-    'name' => '[DEMO] Vacaciones en Familia: Cusco Mágico & Machu Picchu VIP',
+$opp1 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Paquete VIP: Cusco Mágico, Valle Sagrado & Machu Picchu'], [
+    'name' => '[DEMO] Paquete VIP: Cusco Mágico, Valle Sagrado & Machu Picchu',
     'stage' => 'Closed Won',
     'contactId' => $contactCarlos->getId(),
     'destination' => 'Cusco & Valle Sagrado, Perú',
     'leadSource' => 'WhatsApp',
     'whatsappChatId' => 'demo-cw-1001',
     'chatwootConversationId' => '1001',
-    'travelStartDate' => $startTrip,
-    'travelEndDate' => $endTrip,
+    'travelStartDate' => $startTrip1,
+    'travelEndDate' => $endTrip1,
     'amount' => 4000.00,
     'amountPaid' => 4000.00,
     'pendingBalance' => 0.00,
     'financialStatus' => 'PaidInFull',
     'projectedGrossProfit' => 800.00,
-    'clientType' => 'B2C_Direct',
-    'description' => '[DEMO_DATA] Expediente en destino activo. Demuestra consola operativa y expediente web/PDF.'
+    'clientType' => 'B2C_Direct'
 ]);
 
 $itinerario1 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Cusco Mágico, Valle Sagrado & Machu Picchu VIP'], [
     'name' => '[DEMO] Cusco Mágico, Valle Sagrado & Machu Picchu VIP',
-    'destination' => 'Cusco & Valle Sagrado, Perú',
+    'tripType' => 'Paquete Turístico',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'Cusco & Valle Sagrado (CUZ)',
     'status' => 'En Viaje',
     'opportunityId' => $opp1->getId(),
-    'startDate' => $startTrip,
-    'endDate' => $endTrip,
+    'startDate' => $startTrip1,
+    'endDate' => $endTrip1,
     'quoteValidUntil' => date('Y-m-d H:i:s', $now + (30 * 86400)),
     'whatsappStatus' => 'Delivered',
     'totalCost' => 3200.00,
     'totalSelling' => 4000.00,
     'grossProfit' => 800.00,
-    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000001', // Token UUID accesible para pruebas
-    'description' => '[DEMO_DATA] Expediente de demostración principal. Compatible con /p/demo y vista PDF.'
+    'grossMargin' => 20.00,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000001',
+    'description' => '[DEMO_DATA] Paquete turístico completo en destino activo con vuelos, hotel 5*, traslados y excursión a Machu Picchu.'
 ]);
 
-// Pasajeros del caso 1
-$pax1 = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Carlos Mendoza', 'itinerarioId' => $itinerario1->getId()], [
+// Pasajeros Caso 1
+$pax1A = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Carlos Mendoza', 'itinerarioId' => $itinerario1->getId()], [
     'name' => '[DEMO] Carlos Mendoza',
+    'firstName' => 'Carlos',
+    'lastName' => 'Mendoza',
+    'passengerType' => 'Adult',
     'itinerarioId' => $itinerario1->getId(),
     'contactId' => $contactCarlos->getId(),
     'documentType' => 'Passport',
     'documentNumber' => 'PAS-PE-772819',
     'documentExpiration' => date('Y-m-d', $now + (365 * 86400)),
     'birthDate' => '1984-05-12',
-    'nationality' => 'Peruana',
-    'dietaryRestrictions' => 'Ninguna'
+    'nationality' => 'Peruana'
 ]);
 
-$pax2 = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Valeria Soto', 'itinerarioId' => $itinerario1->getId()], [
+$pax1B = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Valeria Soto', 'itinerarioId' => $itinerario1->getId()], [
     'name' => '[DEMO] Valeria Soto',
+    'firstName' => 'Valeria',
+    'lastName' => 'Soto',
+    'passengerType' => 'Adult',
     'itinerarioId' => $itinerario1->getId(),
-    'contactId' => $contactCarlos->getId(),
     'documentType' => 'Passport',
     'documentNumber' => 'PAS-PE-883920',
     'documentExpiration' => date('Y-m-d', $now + (400 * 86400)),
@@ -266,10 +322,12 @@ $pax2 = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Valeria Soto
     'dietaryRestrictions' => 'Celíaca (Gluten Free)'
 ]);
 
-$pax3 = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Mateo Mendoza (Hijo)', 'itinerarioId' => $itinerario1->getId()], [
+$pax1C = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Mateo Mendoza (Hijo)', 'itinerarioId' => $itinerario1->getId()], [
     'name' => '[DEMO] Mateo Mendoza (Hijo)',
+    'firstName' => 'Mateo',
+    'lastName' => 'Mendoza',
+    'passengerType' => 'Child',
     'itinerarioId' => $itinerario1->getId(),
-    'contactId' => $contactCarlos->getId(),
     'documentType' => 'DNI',
     'documentNumber' => '72918273',
     'birthDate' => '2016-03-15',
@@ -277,16 +335,26 @@ $pax3 = getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Mateo Mendoz
     'notes' => 'Menor de edad, viaja con ambos padres'
 ]);
 
-// Servicios del Itinerario 1 (ItineraryItems)
-getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo LIM-CUZ-LIM (LATAM LA-2194)', 'itinerarioId' => $itinerario1->getId()], [
-    'name' => '[DEMO] Vuelo LIM-CUZ-LIM (LATAM LA-2194)',
+// Servicios Caso 1
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo Ida LIM-CUZ (LATAM LA-2194)', 'itinerarioId' => $itinerario1->getId()], [
+    'name' => '[DEMO] Vuelo Ida LIM-CUZ (LATAM LA-2194)',
     'itinerarioId' => $itinerario1->getId(),
     'supplierId' => $supplierLatam->getId(),
     'serviceType' => 'Vuelo',
-    'serviceDate' => $startTrip . ' 08:30:00',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'Cusco',
+    'destinationIata' => 'CUZ',
+    'carrier' => 'LATAM Airlines',
+    'flightNumber' => 'LA-2194',
+    'cabin' => 'Economy',
+    'serviceDate' => $startTrip1 . ' 08:30:00',
     'confirmationCode' => 'LA-PNR-CUZ99',
+    'costPrice' => 300.00,
+    'sellingPrice' => 360.00,
+    'grossProfit' => 60.00,
     'status' => 'Emitido',
-    'notes' => 'Equipaje de mano y bodega 23kg incluidos'
+    'notes' => 'Equipaje 23kg incluido por pasajero'
 ]);
 
 getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Alojamiento Palacio del Inka 5* (4 Noches)', 'itinerarioId' => $itinerario1->getId()], [
@@ -294,8 +362,13 @@ getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Alojamiento Pala
     'itinerarioId' => $itinerario1->getId(),
     'supplierId' => $supplierInca->getId(),
     'serviceType' => 'Hotel',
-    'serviceDate' => $startTrip . ' 14:00:00',
+    'destination' => 'Cusco',
+    'serviceDate' => $startTrip1 . ' 14:00:00',
+    'serviceEndDate' => $endTrip1 . ' 11:00:00',
     'confirmationCode' => 'HTL-INKA-8821',
+    'costPrice' => 1400.00,
+    'sellingPrice' => 1750.00,
+    'grossProfit' => 350.00,
     'status' => 'Confirmado',
     'notes' => 'Suite Familiar con desayuno buffet andino incluido'
 ]);
@@ -305,15 +378,39 @@ getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Tour Privado Mac
     'itinerarioId' => $itinerario1->getId(),
     'supplierId' => $supplierInca->getId(),
     'serviceType' => 'Tour',
-    'serviceDate' => date('Y-m-d', $now) . ' 06:00:00', // SERVICIO ACTIVO HOY!
+    'destination' => 'Machu Picchu',
+    'serviceDate' => date('Y-m-d', $now) . ' 06:00:00', // ACTIVO HOY
     'confirmationCode' => 'TOUR-MP-4402',
+    'costPrice' => 800.00,
+    'sellingPrice' => 1000.00,
+    'grossProfit' => 200.00,
     'status' => 'Confirmado',
     'notes' => 'Guía privado en español, entradas Circuito 2A y bus Consettur ida/vuelta'
 ]);
 
-// Líneas de Presupuesto del Caso 1 (BudgetLines)
-getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Vuelos LATAM Airlines (3 Pasajeros)', 'itinerarioId' => $itinerario1->getId()], [
-    'name' => '[DEMO] Vuelos LATAM Airlines (3 Pasajeros)',
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo Retorno CUZ-LIM (LATAM LA-2195)', 'itinerarioId' => $itinerario1->getId()], [
+    'name' => '[DEMO] Vuelo Retorno CUZ-LIM (LATAM LA-2195)',
+    'itinerarioId' => $itinerario1->getId(),
+    'supplierId' => $supplierLatam->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Cusco',
+    'originIata' => 'CUZ',
+    'destination' => 'Lima',
+    'destinationIata' => 'LIM',
+    'carrier' => 'LATAM Airlines',
+    'flightNumber' => 'LA-2195',
+    'cabin' => 'Economy',
+    'serviceDate' => $endTrip1 . ' 17:30:00',
+    'confirmationCode' => 'LA-PNR-CUZ99',
+    'costPrice' => 300.00,
+    'sellingPrice' => 360.00,
+    'grossProfit' => 60.00,
+    'status' => 'Emitido'
+]);
+
+// Líneas de Presupuesto Caso 1
+getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Vuelos LATAM LIM-CUZ-LIM (3 Pax)', 'itinerarioId' => $itinerario1->getId()], [
+    'name' => '[DEMO] Vuelos LATAM LIM-CUZ-LIM (3 Pax)',
     'itinerarioId' => $itinerario1->getId(),
     'supplierId' => $supplierLatam->getId(),
     'costPrice' => 600.00,
@@ -322,8 +419,8 @@ getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Vuelos LATAM Airlin
     'grossProfit' => 120.00
 ]);
 
-getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Palacio del Inka Hotel & Spa (Suite 4N)', 'itinerarioId' => $itinerario1->getId()], [
-    'name' => '[DEMO] Palacio del Inka Hotel & Spa (Suite 4N)',
+getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Hotel Palacio del Inka 5* (Suite 4N)', 'itinerarioId' => $itinerario1->getId()], [
+    'name' => '[DEMO] Hotel Palacio del Inka 5* (Suite 4N)',
     'itinerarioId' => $itinerario1->getId(),
     'supplierId' => $supplierInca->getId(),
     'costPrice' => 1400.00,
@@ -352,7 +449,7 @@ getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Traslados y Asisten
     'grossProfit' => 130.00
 ]);
 
-// Cronograma de Cobros Caso 1 (PaymentSchedule)
+// Pagos Caso 1
 $sched1A = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Cuota 1 (50% Seña Reserva) - Cusco', 'itinerarioId' => $itinerario1->getId()], [
     'name' => '[DEMO] Cuota 1 (50% Seña Reserva) - Cusco',
     'itinerarioId' => $itinerario1->getId(),
@@ -373,7 +470,6 @@ $sched1B = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Cuo
     'transactionId' => 'BCP-TX-999432'
 ]);
 
-// Pagos Reconciliados en Caso 1 (Payments)
 getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO01'], [
     'name' => 'PAY-DEMO01',
     'paymentReference' => 'PAY-DEMO01',
@@ -387,8 +483,7 @@ getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO01'], [
     'clientDeclaredAmount' => 2000.00,
     'clientOperationNumber' => 'BCP-OP-112233',
     'clientDeclaredDate' => date('Y-m-d', $now - (20 * 86400)),
-    'verifiedAt' => date('Y-m-d H:i:s', $now - (19 * 86400)),
-    'verificationNotes' => '[DEMO_DATA] Verificado contra extracto BCP Dólares sin diferencias.'
+    'verifiedAt' => date('Y-m-d H:i:s', $now - (19 * 86400))
 ]);
 
 getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO02'], [
@@ -404,109 +499,397 @@ getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO02'], [
     'clientDeclaredAmount' => 2000.00,
     'clientOperationNumber' => 'BCP-OP-445566',
     'clientDeclaredDate' => date('Y-m-d', $now - (5 * 86400)),
-    'verifiedAt' => date('Y-m-d H:i:s', $now - (4 * 86400)),
-    'verificationNotes' => '[DEMO_DATA] Saldo total cancelado con éxito.'
+    'verifiedAt' => date('Y-m-d H:i:s', $now - (4 * 86400))
 ]);
 
-// Incidencia en Viaje Menor (Resuelta sin costo)
-getOrCreate($entityManager, 'Incident', ['name' => '[DEMO] Retraso Transfer Valle Sagrado por Tráfico', 'opportunityId' => $opp1->getId()], [
-    'name' => '[DEMO] Retraso Transfer Valle Sagrado por Tráfico',
-    'opportunityId' => $opp1->getId(),
-    'itinerarioId' => $itinerario1->getId(),
-    'severity' => 'Low',
-    'category' => 'SupplierFailure',
-    'status' => 'Resolved',
-    'costImpact' => 0.0,
-    'resolutionPlan' => 'Se coordinó vehículo alterno con Inca Rail. Pasajeros llegaron a tiempo al tren sin contratiempos.',
-    'resolvedAt' => date('Y-m-d H:i:s', $now - (1 * 86400))
-]);
-
-echo "   ✔ Caso 1 generado (En Viaje, 4K USD reconciliado, PNR LA-PNR-CUZ99).\n";
-
 // -----------------------------------------------------------------------------
-// 5. CASO 2: NEGOCIACIÓN ACTIVA / COTIZACIÓN (PATAGONIA)
+// 5. CASO 2: VUELO NACIONAL SOLO IDA (LIMA ➔ AREQUIPA, COTIZACIÓN)
 // -----------------------------------------------------------------------------
-echo "▶ [5/8] Generando Caso 2: Cotización en Negociación 'Patagonia & Calafate'...\n";
+echo "▶ [5/9] Generando Caso 2: Vuelo Nacional Solo Ida 'Lima ➔ Arequipa' (COTIZACIÓN)...\n";
 
-$startPata = date('Y-m-d', $now + (45 * 86400));
-$endPata = date('Y-m-d', $now + (53 * 86400));
+$startFlight2 = date('Y-m-d', $now + (15 * 86400));
 
-$opp2 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Aventura Glaciares: Patagonia & El Calafate 2026'], [
-    'name' => '[DEMO] Aventura Glaciares: Patagonia & El Calafate 2026',
-    'stage' => 'Negotiation',
+$opp2 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Vuelo Express Solo Ida: Lima a Arequipa'], [
+    'name' => '[DEMO] Vuelo Express Solo Ida: Lima a Arequipa',
+    'stage' => 'Proposal',
     'contactId' => $contactLucia->getId(),
-    'destination' => 'El Calafate, Argentina',
-    'leadSource' => 'WhatsApp',
-    'whatsappChatId' => 'demo-cw-1002',
-    'chatwootConversationId' => '1002',
-    'travelStartDate' => $startPata,
-    'travelEndDate' => $endPata,
-    'amount' => 5400.00,
+    'destination' => 'Arequipa, Perú',
+    'leadSource' => 'Web',
+    'travelStartDate' => $startFlight2,
+    'travelEndDate' => $startFlight2,
+    'amount' => 120.00,
     'amountPaid' => 0.00,
-    'pendingBalance' => 5400.00,
+    'pendingBalance' => 120.00,
     'financialStatus' => 'Unpaid',
-    'projectedGrossProfit' => 1200.00,
-    'clientType' => 'B2C_Direct',
-    'description' => '[DEMO_DATA] Cotización enviada. Cliente solicitó opción con trekking Minitrekking sobre el glaciar.'
+    'projectedGrossProfit' => 35.00,
+    'clientType' => 'B2B_Corporate'
 ]);
 
-$itinerario2 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Expediente Patagonia: El Calafate & Glaciar Perito Moreno'], [
-    'name' => '[DEMO] Expediente Patagonia: El Calafate & Glaciar Perito Moreno',
-    'destination' => 'El Calafate, Argentina',
+$itinerario2 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Vuelo Solo Ida: Lima (LIM) ➔ Arequipa (AQP)'], [
+    'name' => '[DEMO] Vuelo Solo Ida: Lima (LIM) ➔ Arequipa (AQP)',
+    'tripType' => 'Vuelo Solo Ida',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'Arequipa (AQP)',
     'status' => 'Cotización',
     'opportunityId' => $opp2->getId(),
-    'startDate' => $startPata,
-    'endDate' => $endPata,
-    'quoteValidUntil' => date('Y-m-d H:i:s', $now + (7 * 86400)), // Tarifa válida por 7 días
+    'startDate' => $startFlight2,
+    'endDate' => $startFlight2,
+    'quoteValidUntil' => date('Y-m-d H:i:s', $now + (3 * 86400)),
     'whatsappStatus' => 'Sent',
-    'totalCost' => 4200.00,
-    'totalSelling' => 5400.00,
-    'grossProfit' => 1200.00,
+    'totalCost' => 85.00,
+    'totalSelling' => 120.00,
+    'grossProfit' => 35.00,
+    'grossMargin' => 29.17,
     'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000002',
-    'description' => '[DEMO_DATA] Itinerario en cotización con alerta de vigencia de tarifas.'
+    'description' => '[DEMO_DATA] Cotización de vuelo corporativo solo ida con tarifa flexible.'
 ]);
 
-getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Vuelos Buenos Aires - El Calafate', 'itinerarioId' => $itinerario2->getId()], [
-    'name' => '[DEMO] Vuelos Buenos Aires - El Calafate',
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Lucía Fernández G.', 'itinerarioId' => $itinerario2->getId()], [
+    'name' => '[DEMO] Lucía Fernández G.',
+    'firstName' => 'Lucía',
+    'lastName' => 'Fernández',
+    'passengerType' => 'Adult',
     'itinerarioId' => $itinerario2->getId(),
-    'supplierId' => $supplierLatam->getId(),
-    'costPrice' => 1200.00,
-    'marginRate' => 20.00,
-    'sellingPrice' => 1440.00,
-    'grossProfit' => 240.00
+    'contactId' => $contactLucia->getId(),
+    'documentType' => 'DNI',
+    'documentNumber' => '44882211',
+    'nationality' => 'Peruana'
 ]);
 
-getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Hotel Boutique Posada Los Álamos (7N)', 'itinerarioId' => $itinerario2->getId()], [
-    'name' => '[DEMO] Hotel Boutique Posada Los Álamos (7N)',
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo LIM-AQP (SKY Airline H2-5101)', 'itinerarioId' => $itinerario2->getId()], [
+    'name' => '[DEMO] Vuelo LIM-AQP (SKY Airline H2-5101)',
     'itinerarioId' => $itinerario2->getId(),
-    'supplierId' => $supplierPatagonia->getId(),
-    'costPrice' => 1800.00,
-    'marginRate' => 30.00,
-    'sellingPrice' => 2340.00,
-    'grossProfit' => 540.00
+    'supplierId' => $supplierSky->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'Arequipa',
+    'destinationIata' => 'AQP',
+    'carrier' => 'SKY Airline Perú',
+    'flightNumber' => 'H2-5101',
+    'cabin' => 'Economy',
+    'serviceDate' => $startFlight2 . ' 07:15:00',
+    'confirmationCode' => 'H2-AQP-101',
+    'costPrice' => 85.00,
+    'sellingPrice' => 120.00,
+    'grossProfit' => 35.00,
+    'status' => 'Borrador',
+    'notes' => 'Incluye bolso de mano y equipaje de cabina 10kg'
 ]);
 
-getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Safari Náutico & Trekking Perito Moreno', 'itinerarioId' => $itinerario2->getId()], [
-    'name' => '[DEMO] Safari Náutico & Trekking Perito Moreno',
+getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] Boleto Aéreo SKY LIM-AQP', 'itinerarioId' => $itinerario2->getId()], [
+    'name' => '[DEMO] Boleto Aéreo SKY LIM-AQP',
     'itinerarioId' => $itinerario2->getId(),
-    'supplierId' => $supplierPatagonia->getId(),
-    'costPrice' => 1200.00,
-    'marginRate' => 35.00,
+    'supplierId' => $supplierSky->getId(),
+    'costPrice' => 85.00,
+    'marginRate' => 41.18,
+    'sellingPrice' => 120.00,
+    'grossProfit' => 35.00
+]);
+
+// -----------------------------------------------------------------------------
+// 6. CASO 3: VUELO NACIONAL IDA Y VUELTA (LIMA ➔ TARAPOTO ➔ LIMA, CONFIRMADO)
+// -----------------------------------------------------------------------------
+echo "▶ [6/9] Generando Caso 3: Vuelo Nacional Ida y Vuelta 'Lima ➔ Tarapoto' (CONFIRMADO)...\n";
+
+$startFlight3 = date('Y-m-d', $now + (10 * 86400));
+$endFlight3 = date('Y-m-d', $now + (14 * 86400));
+
+$opp3 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Vuelo Selva: Lima ➔ Tarapoto ➔ Lima'], [
+    'name' => '[DEMO] Vuelo Selva: Lima ➔ Tarapoto ➔ Lima',
+    'stage' => 'Closed Won',
+    'contactId' => $contactAndres->getId(),
+    'destination' => 'Tarapoto, Perú',
+    'leadSource' => 'WhatsApp',
+    'travelStartDate' => $startFlight3,
+    'travelEndDate' => $endFlight3,
+    'amount' => 380.00,
+    'amountPaid' => 380.00,
+    'pendingBalance' => 0.00,
+    'financialStatus' => 'PaidInFull',
+    'projectedGrossProfit' => 100.00,
+    'clientType' => 'B2C_Direct'
+]);
+
+$itinerario3 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Vuelo Ida y Vuelta: Lima (LIM) ⇄ Tarapoto (TPP)'], [
+    'name' => '[DEMO] Vuelo Ida y Vuelta: Lima (LIM) ⇄ Tarapoto (TPP)',
+    'tripType' => 'Vuelo Ida y Vuelta',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'Tarapoto (TPP)',
+    'status' => 'Confirmado',
+    'opportunityId' => $opp3->getId(),
+    'startDate' => $startFlight3,
+    'endDate' => $endFlight3,
+    'quoteValidUntil' => date('Y-m-d H:i:s', $now + (30 * 86400)),
+    'whatsappStatus' => 'Delivered',
+    'totalCost' => 280.00,
+    'totalSelling' => 380.00,
+    'grossProfit' => 100.00,
+    'grossMargin' => 26.32,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000003',
+    'description' => '[DEMO_DATA] Vuelos ida y vuelta confirmados para 2 pasajeros con Star Perú.'
+]);
+
+// Pasajeros Caso 3
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Andrés Bustamante', 'itinerarioId' => $itinerario3->getId()], [
+    'name' => '[DEMO] Andrés Bustamante',
+    'firstName' => 'Andrés',
+    'lastName' => 'Bustamante',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario3->getId(),
+    'contactId' => $contactAndres->getId(),
+    'documentType' => 'DNI',
+    'documentNumber' => '45998812',
+    'nationality' => 'Peruana'
+]);
+
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Sofía Delgado', 'itinerarioId' => $itinerario3->getId()], [
+    'name' => '[DEMO] Sofía Delgado',
+    'firstName' => 'Sofía',
+    'lastName' => 'Delgado',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario3->getId(),
+    'documentType' => 'DNI',
+    'documentNumber' => '47112233',
+    'nationality' => 'Peruana'
+]);
+
+// Servicios Caso 3
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo Ida LIM-TPP (Star Perú 2I-3112)', 'itinerarioId' => $itinerario3->getId()], [
+    'name' => '[DEMO] Vuelo Ida LIM-TPP (Star Perú 2I-3112)',
+    'itinerarioId' => $itinerario3->getId(),
+    'supplierId' => $supplierStarPeru->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'Tarapoto',
+    'destinationIata' => 'TPP',
+    'carrier' => 'Star Perú',
+    'flightNumber' => '2I-3112',
+    'cabin' => 'Economy',
+    'serviceDate' => $startFlight3 . ' 09:40:00',
+    'confirmationCode' => '2I-TPP-44',
+    'costPrice' => 140.00,
+    'sellingPrice' => 190.00,
+    'grossProfit' => 50.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo Retorno TPP-LIM (Star Perú 2I-3113)', 'itinerarioId' => $itinerario3->getId()], [
+    'name' => '[DEMO] Vuelo Retorno TPP-LIM (Star Perú 2I-3113)',
+    'itinerarioId' => $itinerario3->getId(),
+    'supplierId' => $supplierStarPeru->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Tarapoto',
+    'originIata' => 'TPP',
+    'destination' => 'Lima',
+    'destinationIata' => 'LIM',
+    'carrier' => 'Star Perú',
+    'flightNumber' => '2I-3113',
+    'cabin' => 'Economy',
+    'serviceDate' => $endFlight3 . ' 18:20:00',
+    'confirmationCode' => '2I-TPP-44',
+    'costPrice' => 140.00,
+    'sellingPrice' => 190.00,
+    'grossProfit' => 50.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'BudgetLine', ['name' => '[DEMO] 2x Boletos Star Perú LIM-TPP-LIM', 'itinerarioId' => $itinerario3->getId()], [
+    'name' => '[DEMO] 2x Boletos Star Perú LIM-TPP-LIM',
+    'itinerarioId' => $itinerario3->getId(),
+    'supplierId' => $supplierStarPeru->getId(),
+    'costPrice' => 280.00,
+    'marginRate' => 35.71,
+    'sellingPrice' => 380.00,
+    'grossProfit' => 100.00
+]);
+
+// -----------------------------------------------------------------------------
+// 7. CASO 4: VUELO INTERNACIONAL MULTIDESTINO (MADRID, ROMA, PARÍS - CONFIRMADO)
+// -----------------------------------------------------------------------------
+echo "▶ [7/9] Generando Caso 4: Vuelo Multidestino 'Lima ➔ Madrid ➔ Roma ➔ París ➔ Lima'...\n";
+
+$startMulti = date('Y-m-d', $now + (30 * 86400));
+$endMulti = date('Y-m-d', $now + (44 * 86400));
+
+$opp4 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Eurotrip Multidestino: España, Italia & Francia'], [
+    'name' => '[DEMO] Eurotrip Multidestino: España, Italia & Francia',
+    'stage' => 'Closed Won',
+    'contactId' => $contactFernando->getId(),
+    'destination' => 'Madrid, Roma & París (Europa)',
+    'leadSource' => 'Referido',
+    'travelStartDate' => $startMulti,
+    'travelEndDate' => $endMulti,
+    'amount' => 7200.00,
+    'amountPaid' => 7200.00,
+    'pendingBalance' => 0.00,
+    'financialStatus' => 'PaidInFull',
+    'projectedGrossProfit' => 1600.00,
+    'clientType' => 'B2C_Direct'
+]);
+
+$itinerario4 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Eurotrip Multidestino: Lima ➔ Madrid ➔ Roma ➔ París ➔ Lima'], [
+    'name' => '[DEMO] Eurotrip Multidestino: Lima ➔ Madrid ➔ Roma ➔ París ➔ Lima',
+    'tripType' => 'Vuelo Multidestino',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'Madrid (MAD), Roma (FCO), París (CDG)',
+    'status' => 'Confirmado',
+    'opportunityId' => $opp4->getId(),
+    'startDate' => $startMulti,
+    'endDate' => $endMulti,
+    'quoteValidUntil' => date('Y-m-d H:i:s', $now + (60 * 86400)),
+    'whatsappStatus' => 'Delivered',
+    'totalCost' => 5600.00,
+    'totalSelling' => 7200.00,
+    'grossProfit' => 1600.00,
+    'grossMargin' => 22.22,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000005',
+    'description' => '[DEMO_DATA] Itinerario multidestino internacional que integra vuelos intercontinentales e inter-europeos con hoteles en Roma y París.'
+]);
+
+// Pasajeros Multidestino
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Fernando Castro M.', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Fernando Castro M.',
+    'firstName' => 'Fernando',
+    'lastName' => 'Castro',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario4->getId(),
+    'contactId' => $contactFernando->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-PE-991122',
+    'nationality' => 'Peruana'
+]);
+
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Mariana Rojas B.', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Mariana Rojas B.',
+    'firstName' => 'Mariana',
+    'lastName' => 'Rojas',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario4->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-PE-991123',
+    'nationality' => 'Peruana'
+]);
+
+// Segmentos de Vuelo y Alojamiento Multidestino
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Segmento 1: Vuelo LIM-MAD (Iberia IB-6650)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Segmento 1: Vuelo LIM-MAD (Iberia IB-6650)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierIberia->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'Madrid',
+    'destinationIata' => 'MAD',
+    'carrier' => 'Iberia',
+    'flightNumber' => 'IB-6650',
+    'cabin' => 'Economy',
+    'serviceDate' => $startMulti . ' 19:45:00',
+    'confirmationCode' => 'IB-EUR-901',
+    'costPrice' => 1400.00,
+    'sellingPrice' => 1750.00,
+    'grossProfit' => 350.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Segmento 2: Vuelo MAD-FCO (Iberia Express IB-3732)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Segmento 2: Vuelo MAD-FCO (Iberia Express IB-3732)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierIberia->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Madrid',
+    'originIata' => 'MAD',
+    'destination' => 'Roma',
+    'destinationIata' => 'FCO',
+    'carrier' => 'Iberia Express',
+    'flightNumber' => 'IB-3732',
+    'cabin' => 'Economy',
+    'serviceDate' => date('Y-m-d', strtotime($startMulti) + (4 * 86400)) . ' 11:20:00',
+    'confirmationCode' => 'IB-EUR-901',
+    'costPrice' => 200.00,
+    'sellingPrice' => 280.00,
+    'grossProfit' => 80.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel Roma: Hotel Artemide 4* (3 Noches)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Hotel Roma: Hotel Artemide 4* (3 Noches)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'Roma',
+    'serviceDate' => date('Y-m-d', strtotime($startMulti) + (4 * 86400)) . ' 15:00:00',
+    'confirmationCode' => 'HTL-ROM-7721',
+    'costPrice' => 900.00,
+    'sellingPrice' => 1150.00,
+    'grossProfit' => 250.00,
+    'status' => 'Confirmado'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Segmento 3: Vuelo FCO-CDG (Air France AF-1404)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Segmento 3: Vuelo FCO-CDG (Air France AF-1404)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierAirFrance->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Roma',
+    'originIata' => 'FCO',
+    'destination' => 'París',
+    'destinationIata' => 'CDG',
+    'carrier' => 'Air France',
+    'flightNumber' => 'AF-1404',
+    'cabin' => 'Economy',
+    'serviceDate' => date('Y-m-d', strtotime($startMulti) + (7 * 86400)) . ' 14:10:00',
+    'confirmationCode' => 'AF-PAR-22',
+    'costPrice' => 220.00,
+    'sellingPrice' => 300.00,
+    'grossProfit' => 80.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel París: Le Marais Boutique (4 Noches)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Hotel París: Le Marais Boutique (4 Noches)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'París',
+    'serviceDate' => date('Y-m-d', strtotime($startMulti) + (7 * 86400)) . ' 16:00:00',
+    'confirmationCode' => 'HTL-PAR-5541',
+    'costPrice' => 1280.00,
     'sellingPrice' => 1620.00,
-    'grossProfit' => 420.00
+    'grossProfit' => 340.00,
+    'status' => 'Confirmado'
 ]);
 
-echo "   ✔ Caso 2 generado (En Negociación, Margen 1,200 USD proyectado).\n";
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Segmento 4: Vuelo Retorno CDG-LIM (Air France AF-474)', 'itinerarioId' => $itinerario4->getId()], [
+    'name' => '[DEMO] Segmento 4: Vuelo Retorno CDG-LIM (Air France AF-474)',
+    'itinerarioId' => $itinerario4->getId(),
+    'supplierId' => $supplierAirFrance->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'París',
+    'originIata' => 'CDG',
+    'destination' => 'Lima',
+    'destinationIata' => 'LIM',
+    'carrier' => 'Air France',
+    'flightNumber' => 'AF-474',
+    'cabin' => 'Economy',
+    'serviceDate' => $endMulti . ' 13:30:00',
+    'confirmationCode' => 'AF-PAR-22',
+    'costPrice' => 1600.00,
+    'sellingPrice' => 2100.00,
+    'grossProfit' => 500.00,
+    'status' => 'Emitido'
+]);
 
 // -----------------------------------------------------------------------------
-// 6. CASO 3: CONFIRMADO CON PAGO PARCIAL (RIVIERA MAYA)
+// 8. CASO 5: VUELO + HOTEL ALL-INCLUSIVE (RIVIERA MAYA, PAGO PARCIAL 50%)
 // -----------------------------------------------------------------------------
-echo "▶ [6/8] Generando Caso 3: Confirmado con Pago Parcial 50% 'Riviera Maya'...\n";
+echo "▶ [8/9] Generando Caso 5: Vuelo + Hotel All-Inclusive 'Cancún & Riviera Maya'...\n";
 
 $startCancun = date('Y-m-d', $now + (20 * 86400));
 $endCancun = date('Y-m-d', $now + (27 * 86400));
 
-$opp3 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Caribe All Inclusive: Riviera Maya & Xcaret VIP'], [
+$opp5 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Caribe All Inclusive: Riviera Maya & Xcaret VIP'], [
     'name' => '[DEMO] Caribe All Inclusive: Riviera Maya & Xcaret VIP',
     'stage' => 'Closed Won',
     'contactId' => $contactAndres->getId(),
@@ -519,15 +902,16 @@ $opp3 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Caribe All
     'pendingBalance' => 1800.00,
     'financialStatus' => 'PartiallyPaid',
     'projectedGrossProfit' => 800.00,
-    'clientType' => 'B2C_Direct',
-    'description' => '[DEMO_DATA] Seña recibida. Falta cobro del saldo 15 días antes del vuelo.'
+    'clientType' => 'B2C_Direct'
 ]);
 
-$itinerario3 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Riviera Maya & Parque Xcaret Todo Incluido'], [
+$itinerario5 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Riviera Maya & Parque Xcaret Todo Incluido'], [
     'name' => '[DEMO] Riviera Maya & Parque Xcaret Todo Incluido',
-    'destination' => 'Riviera Maya, México',
+    'tripType' => 'Vuelo + Hotel',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'Riviera Maya & Cancún (CUN)',
     'status' => 'Confirmado',
-    'opportunityId' => $opp3->getId(),
+    'opportunityId' => $opp5->getId(),
     'startDate' => $startCancun,
     'endDate' => $endCancun,
     'quoteValidUntil' => date('Y-m-d H:i:s', $now + (60 * 86400)),
@@ -535,22 +919,95 @@ $itinerario3 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Rivi
     'totalCost' => 2800.00,
     'totalSelling' => 3600.00,
     'grossProfit' => 800.00,
-    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000003',
-    'description' => '[DEMO_DATA] Itinerario confirmado con cobros programados cuadrados.'
+    'grossMargin' => 22.22,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000006',
+    'description' => '[DEMO_DATA] Itinerario confirmado con pago parcial del 50% y saldo pendiente programado.'
 ]);
 
-$sched3A = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Seña 50% Reserva Riviera Maya', 'itinerarioId' => $itinerario3->getId()], [
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Andrés Bustamante', 'itinerarioId' => $itinerario5->getId()], [
+    'name' => '[DEMO] Andrés Bustamante',
+    'firstName' => 'Andrés',
+    'lastName' => 'Bustamante',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario5->getId(),
+    'contactId' => $contactAndres->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-PE-665544',
+    'nationality' => 'Peruana'
+]);
+
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Claudia Salas', 'itinerarioId' => $itinerario5->getId()], [
+    'name' => '[DEMO] Claudia Salas',
+    'firstName' => 'Claudia',
+    'lastName' => 'Salas',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario5->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-PE-665545',
+    'nationality' => 'Peruana'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo LIM-CUN-LIM (LATAM LA-2480)', 'itinerarioId' => $itinerario5->getId()], [
+    'name' => '[DEMO] Vuelo LIM-CUN-LIM (LATAM LA-2480)',
+    'itinerarioId' => $itinerario5->getId(),
+    'supplierId' => $supplierLatam->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'Cancún',
+    'destinationIata' => 'CUN',
+    'carrier' => 'LATAM Airlines',
+    'flightNumber' => 'LA-2480',
+    'cabin' => 'Economy',
+    'serviceDate' => $startCancun . ' 10:15:00',
+    'confirmationCode' => 'LA-CUN-88',
+    'costPrice' => 900.00,
+    'sellingPrice' => 1100.00,
+    'grossProfit' => 200.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel Riu Palace Riviera Maya All Inclusive (7N)', 'itinerarioId' => $itinerario5->getId()], [
+    'name' => '[DEMO] Hotel Riu Palace Riviera Maya All Inclusive (7N)',
+    'itinerarioId' => $itinerario5->getId(),
+    'supplierId' => $supplierRiu->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'Riviera Maya',
+    'serviceDate' => $startCancun . ' 15:00:00',
+    'confirmationCode' => 'RIU-CUN-9923',
+    'costPrice' => 1500.00,
+    'sellingPrice' => 1950.00,
+    'grossProfit' => 450.00,
+    'status' => 'Confirmado'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Tour Parque Xcaret Plus & Show México Espectacular', 'itinerarioId' => $itinerario5->getId()], [
+    'name' => '[DEMO] Tour Parque Xcaret Plus & Show México Espectacular',
+    'itinerarioId' => $itinerario5->getId(),
+    'supplierId' => $supplierRiu->getId(),
+    'serviceType' => 'Tour',
+    'destination' => 'Riviera Maya',
+    'serviceDate' => date('Y-m-d', strtotime($startCancun) + (2 * 86400)) . ' 08:00:00',
+    'confirmationCode' => 'XCA-VIP-1102',
+    'costPrice' => 400.00,
+    'sellingPrice' => 550.00,
+    'grossProfit' => 150.00,
+    'status' => 'Confirmado'
+]);
+
+// Pagos y Cronogramas Cancún
+$sched5A = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Seña 50% Reserva Riviera Maya', 'itinerarioId' => $itinerario5->getId()], [
     'name' => '[DEMO] Seña 50% Reserva Riviera Maya',
-    'itinerarioId' => $itinerario3->getId(),
+    'itinerarioId' => $itinerario5->getId(),
     'dueDate' => date('Y-m-d', $now - (3 * 86400)),
     'amount' => 1800.00,
     'status' => 'Pagado',
     'paymentMethod' => 'Transferencia'
 ]);
 
-$sched3B = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Saldo 50% Previo al Viaje Riviera Maya', 'itinerarioId' => $itinerario3->getId()], [
+$sched5B = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Saldo 50% Previo al Viaje Riviera Maya', 'itinerarioId' => $itinerario5->getId()], [
     'name' => '[DEMO] Saldo 50% Previo al Viaje Riviera Maya',
-    'itinerarioId' => $itinerario3->getId(),
+    'itinerarioId' => $itinerario5->getId(),
     'dueDate' => date('Y-m-d', $now + (10 * 86400)),
     'amount' => 1800.00,
     'status' => 'Pendiente',
@@ -560,8 +1017,8 @@ $sched3B = getOrCreate($entityManager, 'PaymentSchedule', ['name' => '[DEMO] Sal
 getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO03'], [
     'name' => 'PAY-DEMO03',
     'paymentReference' => 'PAY-DEMO03',
-    'opportunityId' => $opp3->getId(),
-    'paymentScheduleId' => $sched3A->getId(),
+    'opportunityId' => $opp5->getId(),
+    'paymentScheduleId' => $sched5A->getId(),
     'amount' => 1800.00,
     'currency' => 'USD',
     'status' => 'Confirmed',
@@ -570,35 +1027,125 @@ getOrCreate($entityManager, 'Payment', ['paymentReference' => 'PAY-DEMO03'], [
     'clientDeclaredAmount' => 1800.00,
     'clientOperationNumber' => 'BCP-CANCUN-01',
     'clientDeclaredDate' => date('Y-m-d', $now - (3 * 86400)),
-    'verifiedAt' => date('Y-m-d H:i:s', $now - (2 * 86400)),
-    'verificationNotes' => '[DEMO_DATA] Seña del 50% confirmada en banco.'
+    'verifiedAt' => date('Y-m-d H:i:s', $now - (2 * 86400))
 ]);
 
-echo "   ✔ Caso 3 generado (Confirmado, saldo pendiente de 1,800 USD en seguimiento).\n";
-
 // -----------------------------------------------------------------------------
-// 7. CASOS DE POST-VENTA & CALIDAD: PROMOTOR NPS 10 vs DETRACTOR NPS 4 (SLA URGENTE)
+// 9. CASOS DE POST-VENTA, CALIDAD Y DESCARTE
 // -----------------------------------------------------------------------------
-echo "▶ [7/8] Generando Casos de Calidad: Promotor NPS 10 vs Detractor NPS 4 con Tarea SLA...\n";
+echo "▶ [9/9] Generando Casos de Calidad, NPS y Embudo Comercial...\n";
 
-// Caso 4: Promotor París
-$opp4 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Escapada Romántica: París, Museos & Niza'], [
+// Caso 7: Promotor París NPS 10
+$opp7 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Escapada Romántica: París, Museos & Niza'], [
     'name' => '[DEMO] Escapada Romántica: París, Museos & Niza',
     'stage' => 'Closed Won',
     'contactId' => $contactMarcela->getId(),
     'destination' => 'París, Francia',
     'leadSource' => 'Instagram',
+    'travelStartDate' => date('Y-m-d', $now - (20 * 86400)),
+    'travelEndDate' => date('Y-m-d', $now - (12 * 86400)),
     'amount' => 6500.00,
     'amountPaid' => 6500.00,
     'financialStatus' => 'PaidInFull',
-    'projectedGrossProfit' => 1500.00,
-    'description' => '[DEMO_DATA] Viaje finalizado con éxito total.'
+    'projectedGrossProfit' => 1500.00
+]);
+
+$itinerario7 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] París Romántico, Museos & Costa Azul'], [
+    'name' => '[DEMO] París Romántico, Museos & Costa Azul',
+    'tripType' => 'Paquete Turístico',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'París & Niza (Francia)',
+    'status' => 'Finalizado',
+    'opportunityId' => $opp7->getId(),
+    'startDate' => date('Y-m-d', $now - (20 * 86400)),
+    'endDate' => date('Y-m-d', $now - (12 * 86400)),
+    'totalCost' => 5000.00,
+    'totalSelling' => 6500.00,
+    'grossProfit' => 1500.00,
+    'grossMargin' => 23.08,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000007'
+]);
+
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Marcela Peña S.', 'itinerarioId' => $itinerario7->getId()], [
+    'name' => '[DEMO] Marcela Peña S.',
+    'firstName' => 'Marcela',
+    'lastName' => 'Peña',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario7->getId(),
+    'contactId' => $contactMarcela->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-CL-554433',
+    'nationality' => 'Chilena'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Vuelo LIM-CDG (Air France AF-475)', 'itinerarioId' => $itinerario7->getId()], [
+    'name' => '[DEMO] Vuelo LIM-CDG (Air France AF-475)',
+    'itinerarioId' => $itinerario7->getId(),
+    'supplierId' => $supplierAirFrance->getId(),
+    'serviceType' => 'Vuelo',
+    'origin' => 'Lima',
+    'originIata' => 'LIM',
+    'destination' => 'París',
+    'destinationIata' => 'CDG',
+    'carrier' => 'Air France',
+    'flightNumber' => 'AF-475',
+    'cabin' => 'Premium Economy',
+    'serviceDate' => date('Y-m-d', $now - (20 * 86400)) . ' 18:30:00',
+    'confirmationCode' => 'AF-PARIS-88',
+    'costPrice' => 1800.00,
+    'sellingPrice' => 2300.00,
+    'grossProfit' => 500.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel Le Marais París 4* (4 Noches)', 'itinerarioId' => $itinerario7->getId()], [
+    'name' => '[DEMO] Hotel Le Marais París 4* (4 Noches)',
+    'itinerarioId' => $itinerario7->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'París',
+    'serviceDate' => date('Y-m-d', $now - (19 * 86400)) . ' 15:00:00',
+    'confirmationCode' => 'HTL-PAR-9012',
+    'costPrice' => 1200.00,
+    'sellingPrice' => 1600.00,
+    'grossProfit' => 400.00,
+    'status' => 'Confirmado',
+    'notes' => 'Habitación Deluxe con vistas a la Torre Eiffel'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Tren TGV Alta Velocidad París ➔ Niza', 'itinerarioId' => $itinerario7->getId()], [
+    'name' => '[DEMO] Tren TGV Alta Velocidad París ➔ Niza',
+    'itinerarioId' => $itinerario7->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Tren',
+    'origin' => 'París Gare de Lyon',
+    'destination' => 'Niza Ville',
+    'serviceDate' => date('Y-m-d', $now - (15 * 86400)) . ' 09:15:00',
+    'confirmationCode' => 'SNCF-TGV-331',
+    'costPrice' => 300.00,
+    'sellingPrice' => 450.00,
+    'grossProfit' => 150.00,
+    'status' => 'Emitido'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel Le Negresco Niza 5* (3 Noches)', 'itinerarioId' => $itinerario7->getId()], [
+    'name' => '[DEMO] Hotel Le Negresco Niza 5* (3 Noches)',
+    'itinerarioId' => $itinerario7->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'Niza (Costa Azul)',
+    'serviceDate' => date('Y-m-d', $now - (15 * 86400)) . ' 16:00:00',
+    'confirmationCode' => 'HTL-NCE-4412',
+    'costPrice' => 900.00,
+    'sellingPrice' => 1200.00,
+    'grossProfit' => 300.00,
+    'status' => 'Confirmado'
 ]);
 
 $feedbackPromoter = getOrCreate($entityManager, 'Feedback', ['name' => '[DEMO] Encuesta WhatsApp: Marcela Peña (París)'], [
     'name' => '[DEMO] Encuesta WhatsApp: Marcela Peña (París)',
     'contactId' => $contactMarcela->getId(),
-    'opportunityId' => $opp4->getId(),
+    'opportunityId' => $opp7->getId(),
     'npsScore' => 10,
     'sentiment' => 'Promoter',
     'channel' => 'WhatsApp',
@@ -607,35 +1154,95 @@ $feedbackPromoter = getOrCreate($entityManager, 'Feedback', ['name' => '[DEMO] E
     'followUpStatus' => 'NotNeeded'
 ]);
 
-// Caso 5: Detractor Egipto (Genera Tarea Urgente SLA < 2h)
-$opp5 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Misterios del Antiguo Egipto & Crucero Nilo'], [
+// Caso 8: Detractor Egipto NPS 4 con Tarea SLA Urgente
+$opp8 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Misterios del Antiguo Egipto & Crucero Nilo'], [
     'name' => '[DEMO] Misterios del Antiguo Egipto & Crucero Nilo',
     'stage' => 'Closed Won',
     'contactId' => $contactRoberto->getId(),
     'destination' => 'El Cairo & Luxor, Egipto',
     'leadSource' => 'Referido',
+    'travelStartDate' => date('Y-m-d', $now - (10 * 86400)),
+    'travelEndDate' => date('Y-m-d', $now - (3 * 86400)),
     'amount' => 4800.00,
     'amountPaid' => 4800.00,
     'financialStatus' => 'PaidInFull',
-    'projectedGrossProfit' => 900.00,
-    'description' => '[DEMO_DATA] Pasajero experimentó overbooking en camarote de barco en Luxor.'
+    'projectedGrossProfit' => 900.00
 ]);
 
-$incidentEgypt = getOrCreate($entityManager, 'Incident', ['name' => '[DEMO] Overbooking de Cabina en Crucero Nilo (Luxor)', 'opportunityId' => $opp5->getId()], [
+$itinerario8 = getOrCreate($entityManager, 'Itinerario', ['name' => '[DEMO] Antiguo Egipto & Crucero Nilo 5*'], [
+    'name' => '[DEMO] Antiguo Egipto & Crucero Nilo 5*',
+    'tripType' => 'Paquete Turístico',
+    'origin' => 'Lima (LIM)',
+    'destination' => 'El Cairo & Luxor, Egipto',
+    'status' => 'Finalizado',
+    'opportunityId' => $opp8->getId(),
+    'startDate' => date('Y-m-d', $now - (10 * 86400)),
+    'endDate' => date('Y-m-d', $now - (3 * 86400)),
+    'totalCost' => 3900.00,
+    'totalSelling' => 4800.00,
+    'grossProfit' => 900.00,
+    'grossMargin' => 18.75,
+    'publicAccessToken' => 'c0a80101-0000-4000-8000-000000000008'
+]);
+
+getOrCreate($entityManager, 'Passenger', ['name' => '[DEMO] Roberto Benavides T.', 'itinerarioId' => $itinerario8->getId()], [
+    'name' => '[DEMO] Roberto Benavides T.',
+    'firstName' => 'Roberto',
+    'lastName' => 'Benavides',
+    'passengerType' => 'Adult',
+    'itinerarioId' => $itinerario8->getId(),
+    'contactId' => $contactRoberto->getId(),
+    'documentType' => 'Passport',
+    'documentNumber' => 'PAS-PE-332211',
+    'nationality' => 'Peruana'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Hotel Marriott Mena House Pirámides 5* (3N)', 'itinerarioId' => $itinerario8->getId()], [
+    'name' => '[DEMO] Hotel Marriott Mena House Pirámides 5* (3N)',
+    'itinerarioId' => $itinerario8->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Hotel',
+    'destination' => 'El Cairo',
+    'serviceDate' => date('Y-m-d', $now - (10 * 86400)) . ' 14:00:00',
+    'confirmationCode' => 'HTL-CAI-1102',
+    'costPrice' => 1100.00,
+    'sellingPrice' => 1350.00,
+    'grossProfit' => 250.00,
+    'status' => 'Confirmado',
+    'notes' => 'Vista directa a las Pirámides de Guiza'
+]);
+
+getOrCreate($entityManager, 'ItineraryItem', ['name' => '[DEMO] Crucero Río Nilo 5* Luxor ➔ Aswan (4 Noches)', 'itinerarioId' => $itinerario8->getId()], [
+    'name' => '[DEMO] Crucero Río Nilo 5* Luxor ➔ Aswan (4 Noches)',
+    'itinerarioId' => $itinerario8->getId(),
+    'supplierId' => $supplierInca->getId(),
+    'serviceType' => 'Crucero',
+    'destination' => 'Luxor - Aswan',
+    'serviceDate' => date('Y-m-d', $now - (7 * 86400)) . ' 12:00:00',
+    'confirmationCode' => 'CRU-NILO-771',
+    'costPrice' => 1600.00,
+    'sellingPrice' => 1950.00,
+    'grossProfit' => 350.00,
+    'status' => 'Confirmado',
+    'notes' => 'Pensión completa a bordo con guía egiptólogo en español'
+]);
+
+getOrCreate($entityManager, 'Incident', ['name' => '[DEMO] Overbooking de Cabina en Crucero Nilo (Luxor)', 'opportunityId' => $opp8->getId()], [
     'name' => '[DEMO] Overbooking de Cabina en Crucero Nilo (Luxor)',
-    'opportunityId' => $opp5->getId(),
+    'opportunityId' => $opp8->getId(),
+    'itinerarioId' => $itinerario8->getId(),
     'severity' => 'High',
     'category' => 'SupplierFailure',
     'status' => 'Resolved',
     'costImpact' => 350.00,
-    'resolutionPlan' => 'Se pagó directamente upgrade a Suite Presidencial y cena de cortesía para mitigar malestar.',
+    'resolutionPlan' => 'Se gestionó upgrade a Suite Presidencial y cena de cortesía.',
     'resolvedAt' => date('Y-m-d H:i:s', $now - (4 * 86400))
 ]);
 
 $feedbackDetractor = getOrCreate($entityManager, 'Feedback', ['name' => '[DEMO] Encuesta WhatsApp: Roberto Benavides (Egipto)'], [
     'name' => '[DEMO] Encuesta WhatsApp: Roberto Benavides (Egipto)',
     'contactId' => $contactRoberto->getId(),
-    'opportunityId' => $opp5->getId(),
+    'opportunityId' => $opp8->getId(),
     'npsScore' => 4,
     'sentiment' => 'Detractor',
     'channel' => 'WhatsApp',
@@ -644,119 +1251,44 @@ $feedbackDetractor = getOrCreate($entityManager, 'Feedback', ['name' => '[DEMO] 
     'followUpStatus' => 'Pending'
 ]);
 
-// Tarea urgente para protocolo de retención de detractores
 getOrCreate($entityManager, 'Task', ['name' => '[DEMO] Atención Urgente Detractor: Roberto Benavides (Egipto)'], [
     'name' => '[DEMO] Atención Urgente Detractor: Roberto Benavides (Egipto)',
     'priority' => 'Urgent',
     'status' => 'In Progress',
     'parentType' => 'Feedback',
     'parentId' => $feedbackDetractor->getId(),
-    'dateDue' => date('Y-m-d H:i:s', $now + (7200)), // SLA < 2 horas
-    'description' => "[DEMO_DATA] Protocolo Heurística 9: Llamar al cliente en < 2 horas para ofrecer voucher de compensación de $200 para próximo viaje."
+    'dateDue' => date('Y-m-d H:i:s', $now + (7200)),
+    'description' => "[DEMO_DATA] Llamar al cliente en < 2 horas para ofrecer voucher de compensación de $200 para su próximo viaje."
 ]);
 
-// Caso 6: Venta Perdida (Closed Lost) para Embudo de Conversión
-$opp6 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Safari Privado: Serengeti & Playas Zanzíbar'], [
+// Caso 9: Descarte Closed Lost
+$opp9 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Safari Privado: Serengeti & Playas Zanzíbar'], [
     'name' => '[DEMO] Safari Privado: Serengeti & Playas Zanzíbar',
     'stage' => 'Closed Lost',
     'contactId' => $contactJavier->getId(),
     'destination' => 'Tanzania & Zanzíbar',
     'leadSource' => 'Facebook',
     'lostReason' => 'Precio / Presupuesto Alto',
-    'lostReasonDetails' => 'El pasajero contaba con $2,000 para viaje de luna de miel. Cotización base de safari rondaba los $4,800.',
-    'amount' => 4800.00,
-    'description' => '[DEMO_DATA] Registrado para alimentar estadísticas de caída de embudo por precio.'
+    'lostReasonDetails' => 'El pasajero contaba con $2,000. Cotización base de safari rondaba los $4,800.',
+    'amount' => 4800.00
 ]);
 
-// Caso 7: Lead Nuevo en WhatsApp (Prospecting)
-$opp7 = getOrCreate($entityManager, 'Opportunity', ['name' => '[DEMO] Consulta WhatsApp: Luna de Miel en Bora Bora'], [
-    'name' => '[DEMO] Consulta WhatsApp: Luna de Miel en Bora Bora',
-    'stage' => 'Prospecting',
-    'leadSource' => 'WhatsApp',
-    'whatsappChatId' => 'demo-cw-1007',
-    'chatwootConversationId' => '1007',
-    'destination' => 'Bora Bora, Polinesia Francesa',
-    'description' => '[DEMO_DATA] Lead recién ingresado en cola de asignación Round-Robin.'
-]);
-
-echo "   ✔ Casos de Calidad y Post-Venta listos (1 Promotor, 1 Detractor con SLA urgente, 1 LostReason).\n";
-
-// -----------------------------------------------------------------------------
-// 8. HISTORIAL DE ETAPAS PARA EMBUDO Y DASHBOARDS (OpportunityStageHistory)
-// -----------------------------------------------------------------------------
-echo "▶ [8/8] Poblando Historial de Transiciones para Dashboards ECharts...\n";
-
-$stagesSequence = [
-    ['stage' => 'Prospecting', 'entered' => -30, 'exited' => -28, 'duration' => 172800],
-    ['stage' => 'Qualification', 'entered' => -28, 'exited' => -25, 'duration' => 259200],
-    ['stage' => 'Proposal', 'entered' => -25, 'exited' => -21, 'duration' => 345600],
-    ['stage' => 'Negotiation', 'entered' => -21, 'exited' => -18, 'duration' => 259200],
-    ['stage' => 'PaymentPending', 'entered' => -18, 'exited' => -16, 'duration' => 172800],
-    ['stage' => 'Closed Won', 'entered' => -16, 'exited' => null, 'duration' => null],
-];
-
-foreach ($stagesSequence as $step) {
-    $enteredAt = date('Y-m-d H:i:s', $now + ($step['entered'] * 86400));
-    $exitedAt = $step['exited'] ? date('Y-m-d H:i:s', $now + ($step['exited'] * 86400)) : null;
-
-    getOrCreate($entityManager, 'OpportunityStageHistory', [
-        'name' => "[DEMO] Cusco VIP - {$step['stage']}",
-        'opportunityId' => $opp1->getId()
-    ], [
-        'name' => "[DEMO] Cusco VIP - {$step['stage']}",
-        'opportunityId' => $opp1->getId(),
-        'stage' => $step['stage'],
-        'enteredAt' => $enteredAt,
-        'exitedAt' => $exitedAt,
-        'durationSeconds' => $step['duration'],
-        'leadSource' => 'WhatsApp'
-    ]);
-}
-
-// Historial para Opp 6 (Closed Lost)
-getOrCreate($entityManager, 'OpportunityStageHistory', [
-    'name' => "[DEMO] Safari Tanzania - Prospecting",
-    'opportunityId' => $opp6->getId()
-], [
-    'name' => "[DEMO] Safari Tanzania - Prospecting",
-    'opportunityId' => $opp6->getId(),
-    'stage' => 'Prospecting',
-    'enteredAt' => date('Y-m-d H:i:s', $now - (15 * 86400)),
-    'exitedAt' => date('Y-m-d H:i:s', $now - (12 * 86400)),
-    'durationSeconds' => 259200,
-    'leadSource' => 'Facebook'
-]);
-
-getOrCreate($entityManager, 'OpportunityStageHistory', [
-    'name' => "[DEMO] Safari Tanzania - Proposal",
-    'opportunityId' => $opp6->getId()
-], [
-    'name' => "[DEMO] Safari Tanzania - Proposal",
-    'opportunityId' => $opp6->getId(),
-    'stage' => 'Proposal',
-    'enteredAt' => date('Y-m-d H:i:s', $now - (12 * 86400)),
-    'exitedAt' => date('Y-m-d H:i:s', $now - (9 * 86400)),
-    'durationSeconds' => 259200,
-    'leadSource' => 'Facebook'
-]);
-
-echo "   ✔ Historial de transiciones comercial cargado.\n\n";
-
+echo "\n====================================================================\n";
+echo "  ✅ POBLADO COMPLETADO CON ÉXITO (COBERTURA TOTAL DE CASUÍSTICAS)\n";
 echo "====================================================================\n";
-echo "  ✅ DATOS DE PRUEBA CARGADOS EXITOSAMENTE (100% LISTO PARA PRESENTAR)\n";
-echo "====================================================================\n";
-echo "  Resumen de Casos Disponibles en el CRM:\n";
+echo "  Casos y Portales Web del Viajero disponibles:\n";
 echo "  1. [En Viaje] Cusco Mágico VIP (ID: {$itinerario1->getId()})\n";
-echo "     - Ver Consola Operativa en: /#Itinerario/view/{$itinerario1->getId()}\n";
-echo "     - Ver Expediente Web Público: http://localhost:8085/p/demo (o con token c0a80101-0000-4000-8000-000000000001)\n";
-echo "  2. [Cotización] Aventura en Patagonia (ID: {$itinerario2->getId()})\n";
-echo "     - Vigencia de 7 días, márgenes calculados automáticamente\n";
-echo "  3. [Confirmado / Pago 50%] Riviera Maya (ID: {$itinerario3->getId()})\n";
-echo "     - Cobro parcial de 1,800 USD y saldo pendiente de 1,800 USD\n";
-echo "  4. [Calidad Promotor] París & Niza (NPS 10 Promotor)\n";
-echo "  5. [Alerta Detractor] Egipto (NPS 4 Detractor) -> Tarea Urgente creada (SLA < 2h)\n";
-echo "  6. [Embudo / Descarte] Safari Tanzania (Closed Lost por Precio Alto)\n";
-echo "  7. [Dashboards]: Embudo de conversión, Rentabilidad Real y Calidad en Destino activos\n\n";
-echo "  ℹ Para limpiar estos datos en cualquier momento, ejecute:\n";
-echo "    php custom/Espo/Custom/Scripts/CleanDemoData.php\n";
+echo "     - Web: http://localhost:8085/p/demo o /p/c0a80101-0000-4000-8000-000000000001\n";
+echo "  2. [Cotización] Vuelo Solo Ida LIM-AQP (ID: {$itinerario2->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000002\n";
+echo "  3. [Confirmado] Vuelo Ida y Vuelta LIM-TPP-LIM (ID: {$itinerario3->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000003\n";
+echo "  4. [Confirmado] Eurotrip Multidestino Madrid-Roma-París (ID: {$itinerario4->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000005\n";
+echo "  5. [Confirmado 50%] Riviera Maya All-Inclusive (ID: {$itinerario5->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000006\n";
+echo "  6. [Promotor NPS 10] París Romántico (ID: {$itinerario7->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000007\n";
+echo "  7. [Alerta Detractor NPS 4] Antiguo Egipto (ID: {$itinerario8->getId()})\n";
+echo "     - Web: http://localhost:8085/p/c0a80101-0000-4000-8000-000000000008\n";
 echo "====================================================================\n";

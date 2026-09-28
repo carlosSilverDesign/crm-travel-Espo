@@ -9,5 +9,7 @@
   "customizable": true,
   "importable": true,
   "exportable": true,
-  "acl": true
+  "acl": true,
+  "globalSearch": true,
+  "searchable": true
 }

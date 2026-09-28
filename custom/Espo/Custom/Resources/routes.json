@@ -13,6 +13,20 @@
     "auth": false
   },
   {
+    "route": "/Itinerario/public/:publicAccessToken",
+    "method": "get",
+    "params": {
+      "controller": "Itinerario",
+      "action": "publicDetails",
+      "publicAccessToken": ":publicAccessToken"
+    },
+    "noAuth": true,
+    "conditions": {
+      "auth": false
+    },
+    "auth": false
+  },
+  {
     "route": "/Itinerario/action/generatePdf",
     "method": "post",
     "params": {

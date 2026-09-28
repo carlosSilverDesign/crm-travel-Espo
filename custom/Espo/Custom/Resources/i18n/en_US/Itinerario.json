@@ -1,5 +1,58 @@
 {
+  "fields": {
+    "name": "Itinerary Name",
+    "status": "Status",
+    "tripType": "Trip Type",
+    "origin": "Origin / Departure City",
+    "destination": "Main Destination",
+    "description": "General Description",
+    "startDate": "Departure Date",
+    "endDate": "Return Date",
+    "quoteValidUntil": "Quote Valid Until",
+    "whatsappStatus": "WhatsApp Notification Status",
+    "totalCost": "Total Net Cost ($)",
+    "totalSelling": "Total Selling Price ($)",
+    "grossProfit": "Gross Profit ($)",
+    "grossMargin": "Gross Margin (%)",
+    "notes": "Notes and Remarks",
+    "publicAccessToken": "Secure Public Token",
+    "webAccessCount": "Traveler Web Accesses",
+    "lastWebAccessAt": "Last Web Access",
+    "pdfCacheFileId": "Cached PDF Attachment",
+    "opportunity": "Opportunity"
+  },
+  "links": {
+    "opportunity": "Opportunity",
+    "passengers": "Passengers & Lead Traveler",
+    "items": "Travel Services & Segments",
+    "budgetLines": "Finances, Costs & Margins",
+    "paymentSchedules": "Payment Schedule"
+  },
+  "options": {
+    "status": {
+      "Cotización": "Quote",
+      "Confirmado": "Confirmed",
+      "En Viaje": "In Destination",
+      "Finalizado": "Completed",
+      "Cancelado": "Cancelled",
+      "Plantilla": "Template"
+    },
+    "tripType": {
+      "Paquete Turístico": "Tour Package",
+      "Solo Vuelo": "Flight Only",
+      "Vuelo + Hotel": "Flight + Hotel",
+      "Personalizado": "Custom"
+    }
+  },
   "boolFilters": {
+    "onlyMy": "My Itineraries",
     "currentInDestination": "In Destination (Currently Traveling)"
+  },
+  "labels": {
+    "Create Itinerario": "Create Itinerary",
+    "General": "General Information",
+    "Información Comercial y Resumen de Viaje": "Commercial Info & Trip Summary",
+    "Resumen Financiero y Rentabilidad": "Financial Summary & Profitability",
+    "Portal Web del Viajero y Notificaciones": "Traveler Portal & Notifications"
   }
 }

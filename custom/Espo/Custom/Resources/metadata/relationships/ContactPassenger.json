@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Contact",
+  "link": "passengers",
+  "foreignEntity": "Passenger",
+  "foreignLink": "contact"
+}

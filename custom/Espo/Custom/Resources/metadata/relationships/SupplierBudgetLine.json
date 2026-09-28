@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Supplier",
+  "link": "budgetLines",
+  "foreignEntity": "BudgetLine",
+  "foreignLink": "supplier"
+}

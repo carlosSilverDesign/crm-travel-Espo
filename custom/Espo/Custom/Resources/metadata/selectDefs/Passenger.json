@@ -1,0 +1,9 @@
+{
+  "textFilterFields": [
+    "name",
+    "firstName",
+    "lastName",
+    "documentNumber",
+    "nationality"
+  ]
+}

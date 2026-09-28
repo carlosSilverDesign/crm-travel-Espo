@@ -177,3 +177,94 @@ body {
     padding: 12px 16px;
     font-weight: 700;
 }
+
+/* ==========================================================================
+   7. Form Inputs, Selects y Controles de Edición
+   ========================================================================== */
+.form-control,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+select.form-control,
+textarea.form-control {
+    border-radius: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    color: #0f172a !important;
+    background-color: #ffffff !important;
+    transition: all 0.2s ease-in-out !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.form-control:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #0284c7 !important;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
+    outline: none !important;
+}
+
+.input-group-addon {
+    border-radius: 8px !important;
+    background-color: #f1f5f9 !important;
+    border: 1.5px solid #cbd5e1 !important;
+    color: #475569 !important;
+}
+
+/* ==========================================================================
+   8. Ventanas Modales y Diálogos
+   ========================================================================== */
+.modal-content {
+    border-radius: 14px !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    padding: 16px 22px !important;
+}
+
+.modal-header .modal-title {
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    color: #0f172a !important;
+}
+
+.modal-footer {
+    background: #f8fafc !important;
+    border-top: 1px solid #e2e8f0 !important;
+    padding: 14px 22px !important;
+}
+
+/* ==========================================================================
+   9. Tablas de Sub-paneles y Relaciones (Pasajeros, Items, etc.)
+   ========================================================================== */
+.table > thead > tr > th {
+    background: #f8fafc !important;
+    color: #475569 !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding: 10px 14px !important;
+}
+
+.table > tbody > tr > td {
+    padding: 11px 14px !important;
+    vertical-align: middle !important;
+    color: #1e293b !important;
+    font-size: 13px !important;
+    border-top: 1px solid #f1f5f9 !important;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: #f0f9ff !important;
+}
+

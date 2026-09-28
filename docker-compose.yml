@@ -56,6 +56,9 @@ services:
     container_name: crm_travel_web
     environment:
       PORT: 8080
+      ESPOCRM_INTERNAL_URL: http://espocrm:80
+    volumes:
+      - ./docker/travel-web:/usr/src/app
     ports:
       - "8085:8080"
     restart: always

@@ -1,0 +1,11 @@
+[
+  {
+    "rows": [
+      [{"name": "name"}, {"name": "passengerType"}],
+      [{"name": "documentType"}, {"name": "documentNumber"}],
+      [{"name": "nationality"}, {"name": "itinerario"}]
+    ],
+    "style": "default",
+    "label": "Datos del Pasajero"
+  }
+]

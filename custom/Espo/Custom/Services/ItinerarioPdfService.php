@@ -237,6 +237,8 @@ class ItinerarioPdfService
             'type' => 'application/pdf',
             'size' => strlen($pdfBinary),
             'role' => 'Attachment',
+            'storage' => 'EspoUploadDir',
+            'contents' => $pdfBinary,
             'relatedType' => 'Itinerario',
             'relatedId' => $itinerario->getId(),
             'field' => 'pdfCacheFile',
@@ -244,7 +246,7 @@ class ItinerarioPdfService
 
         $this->getEntityManager()->saveEntity($attachment);
 
-        // Guardar binario en data/upload/{attachmentId}
+        // Guardar binario en data/upload/{attachmentId} con permisos universales de lectura
         $this->saveAttachmentFile($attachment, $pdfBinary);
 
         return $attachment;
@@ -257,16 +259,17 @@ class ItinerarioPdfService
     {
         $id = $attachment->getId();
         $candidates = [
-            'data/upload/' . $id,
             '/var/www/html/data/upload/' . $id,
+            'data/upload/' . $id,
         ];
 
         foreach ($candidates as $targetPath) {
             $dir = dirname($targetPath);
             if (!is_dir($dir)) {
-                @mkdir($dir, 0775, true);
+                @mkdir($dir, 0777, true);
             }
             @file_put_contents($targetPath, $content);
+            @chmod($targetPath, 0666);
         }
     }
 

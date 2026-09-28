@@ -21,6 +21,21 @@
       ],
       "audited": true
     },
+    "tripType": {
+      "type": "enum",
+      "default": "Paquete Turístico",
+      "options": [
+        "Paquete Turístico",
+        "Solo Vuelo",
+        "Vuelo + Hotel",
+        "Personalizado"
+      ]
+    },
+    "origin": {
+      "type": "varchar",
+      "maxLength": 100,
+      "pattern": "$noBadCharacters"
+    },
     "destination": {
       "type": "varchar",
       "required": true,
@@ -64,6 +79,10 @@
     "grossProfit": {
       "type": "currency"
     },
+    "grossMargin": {
+      "type": "float",
+      "readOnly": true
+    },
     "notes": {
       "type": "text"
     },
@@ -87,6 +106,11 @@
       "type": "varchar",
       "maxLength": 100,
       "readOnly": true
+    },
+    "opportunity": {
+      "type": "link",
+      "entity": "Opportunity",
+      "index": true
     },
     "createdAt": {
       "type": "datetime",

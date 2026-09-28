@@ -1,0 +1,7 @@
+{
+  "type": "oneToMany",
+  "entity": "Supplier",
+  "link": "itineraryItems",
+  "foreignEntity": "ItineraryItem",
+  "foreignLink": "supplier"
+}

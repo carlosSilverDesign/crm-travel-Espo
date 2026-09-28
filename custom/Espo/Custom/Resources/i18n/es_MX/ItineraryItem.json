@@ -2,8 +2,20 @@
   "fields": {
     "name": "Nombre del Servicio Turístico",
     "serviceType": "Tipo de Servicio",
-    "serviceDate": "Fecha y Hora del Servicio",
-    "confirmationCode": "Código de Confirmación / Ticket",
+    "serviceDate": "Fecha y Hora de Inicio / Salida",
+    "serviceEndDate": "Fecha y Hora de Fin / Check-Out",
+    "origin": "Origen / Ciudad de Salida",
+    "originIata": "Código IATA Origen",
+    "destination": "Destino / Ciudad de Llegada",
+    "destinationIata": "Código IATA Destino",
+    "carrier": "Aerolínea / Compañía Operadora",
+    "flightNumber": "Nº Vuelo / Identificador",
+    "cabin": "Cabina / Tipo de Habitación / Clase",
+    "confirmationCode": "Código de Confirmación / PNR / Voucher",
+    "costPrice": "Costo Neto Proveedor ($)",
+    "sellingPrice": "Precio de Venta ($)",
+    "grossProfit": "Margen Bruto ($)",
+    "orderIndex": "Orden en Itinerario",
     "status": "Estado de la Reserva",
     "notes": "Notas y Requisitos Especiales",
     "itinerario": "Itinerario",
@@ -21,6 +33,7 @@
       "Tour": "Excursión / Tour Guiado",
       "Seguro": "Asistencia / Seguro de Viaje",
       "Crucero": "Crucero / Barco",
+      "Alquiler": "Alquiler de Auto / Vehículo",
       "Otro": "Otro Servicio"
     },
     "status": {
@@ -31,6 +44,9 @@
     }
   },
   "labels": {
-    "Create ItineraryItem": "Agregar Servicio Turístico"
+    "Create ItineraryItem": "Agregar Servicio Turístico",
+    "Información General del Servicio": "Información General del Servicio",
+    "Detalles de Ruta, Tramo y Operador": "Detalles de Ruta, Tramo y Operador",
+    "Finanzas y Observaciones del Servicio": "Finanzas y Observaciones del Servicio"
   }
 }

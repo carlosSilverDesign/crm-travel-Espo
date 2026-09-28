@@ -6,14 +6,17 @@
     "passengerType": "Tipo de Pasajero",
     "documentType": "Tipo de Documento",
     "documentNumber": "Número de Documento / Pasaporte",
-    "documentExpiryDate": "Vencimiento del Documento",
+    "documentExpiration": "Vencimiento del Documento",
     "birthDate": "Fecha de Nacimiento",
     "nationality": "Nacionalidad",
-    "medicalNotes": "Observaciones Médicas / Dietéticas",
-    "itinerario": "Itinerario"
+    "dietaryRestrictions": "Restricciones Dietéticas / Alergias",
+    "notes": "Notas y Requisitos Especiales",
+    "itinerario": "Itinerario",
+    "contact": "Contacto en CRM"
   },
   "links": {
-    "itinerario": "Itinerario"
+    "itinerario": "Itinerario",
+    "contact": "Contacto en CRM"
   },
   "options": {
     "passengerType": {
@@ -24,10 +27,12 @@
     "documentType": {
       "Passport": "Pasaporte",
       "DNI": "DNI / Cédula",
+      "IdentityCard": "Cédula de Identidad",
       "Other": "Otro"
     }
   },
   "labels": {
-    "Create Passenger": "Registrar Pasajero"
+    "Create Passenger": "Registrar Pasajero",
+    "Datos del Pasajero": "Datos del Pasajero"
   }
 }

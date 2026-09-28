@@ -2,15 +2,18 @@
   "fields": {
     "name": "Nombre del Itinerario",
     "status": "Estado",
+    "tripType": "Tipo de Viaje",
+    "origin": "Origen / Ciudad de Salida",
     "destination": "Destino Principal",
     "description": "Descripción General",
-    "startDate": "Fecha de Inicio",
-    "endDate": "Fecha de Retorno",
+    "startDate": "Fecha de Inicio / Salida",
+    "endDate": "Fecha de Retorno / Fin",
     "quoteValidUntil": "Cotización Válida Hasta",
     "whatsappStatus": "Estado de Notificación WhatsApp",
     "totalCost": "Costo Neto Total ($)",
     "totalSelling": "Precio Total de Venta ($)",
-    "grossProfit": "Margen / Utilidad Bruta ($)",
+    "grossProfit": "Utilidad Bruta ($)",
+    "grossMargin": "Margen Comercial (%)",
     "notes": "Notas y Observaciones",
     "publicAccessToken": "Token de Acceso Seguro",
     "webAccessCount": "Accesos Web del Viajero",
@@ -21,7 +24,7 @@
   "links": {
     "opportunity": "Oportunidad Comercial",
     "passengers": "Pasajeros y Titular",
-    "items": "Servicios Turísticos y Actividades",
+    "items": "Servicios Turísticos y Tramos",
     "budgetLines": "Finanzas, Costos y Márgenes",
     "paymentSchedules": "Cronograma de Pagos"
   },
@@ -33,6 +36,12 @@
       "Finalizado": "Finalizado",
       "Cancelado": "Cancelado",
       "Plantilla": "Plantilla"
+    },
+    "tripType": {
+      "Paquete Turístico": "Paquete Turístico",
+      "Solo Vuelo": "Solo Vuelo",
+      "Vuelo + Hotel": "Vuelo + Hotel",
+      "Personalizado": "Personalizado"
     },
     "whatsappStatus": {
       "NotSent": "No enviado",
@@ -50,7 +59,8 @@
   "labels": {
     "Create Itinerario": "Crear Itinerario",
     "General": "Información General",
-    "Expediente Digital y Portal Web del Viajero": "Expediente Digital y Portal Web del Viajero",
-    "Resumen Financiero y Notas": "Resumen Financiero y Notas"
+    "Información Comercial y Resumen de Viaje": "Información Comercial y Resumen de Viaje",
+    "Resumen Financiero y Rentabilidad": "Resumen Financiero y Rentabilidad",
+    "Portal Web del Viajero y Notificaciones": "Portal Web del Viajero y Notificaciones"
   }
 }

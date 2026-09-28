@@ -1,4 +1,10 @@
 {
+  "textFilterFields": [
+    "name",
+    "origin",
+    "destination",
+    "description"
+  ],
   "boolFilterClassNameMap": {
     "currentInDestination": "Espo\\Custom\\Classes\\Select\\Itinerario\\BoolFilters\\CurrentInDestination"
   },

@@ -1,9 +1,33 @@
 /**
  * TravelOps - Módulo de Experiencia de Usuario y Visualización de Itinerarios (EspoCRM v8)
- * Monta: Stepper Visual de Estado, Hero Bar Financiero, Portal Web del Viajero y Consola Operativa en Destino.
+ * Monta: Stepper Visual de Estado, Hero Bar Financiero con Ruta/Tipo, Portal Web del Viajero y Consola Operativa en Destino.
  */
 (function () {
     'use strict';
+
+    function getSafeTravelBaseUrl(viewInstance) {
+        try {
+            if (viewInstance && typeof viewInstance.getConfig === 'function') {
+                var c = viewInstance.getConfig();
+                if (c && typeof c.get === 'function') {
+                    var val = c.get('travelWebExternalUrl');
+                    if (val) return String(val).replace(/\/$/, '');
+                }
+            }
+        } catch (e) {}
+        try {
+            if (viewInstance && viewInstance.config && typeof viewInstance.config.get === 'function') {
+                var val2 = viewInstance.config.get('travelWebExternalUrl');
+                if (val2) return String(val2).replace(/\/$/, '');
+            }
+        } catch (e) {}
+        try {
+            if (window.Espo && window.Espo.settings && window.Espo.settings.travelWebExternalUrl) {
+                return String(window.Espo.settings.travelWebExternalUrl).replace(/\/$/, '');
+            }
+        } catch (e) {}
+        return 'http://localhost:8085';
+    }
 
     function createItinerarioDetailView(DetailRecordViewModule) {
         var BaseDetail = (DetailRecordViewModule && DetailRecordViewModule.default)
@@ -12,21 +36,68 @@
 
         class ItinerarioDetailRecordView extends BaseDetail {
 
+            events() {
+                var events = super.events ? (typeof super.events === 'function' ? super.events() : Object.assign({}, super.events)) : {};
+                events['click [data-action="generatePdf"]'] = function (e) {
+                    if (e) e.preventDefault();
+                    this.actionGeneratePdf();
+                };
+                events['click [data-action="openPublicWeb"]'] = function (e) {
+                    if (e) e.preventDefault();
+                    this.actionOpenPublicWeb();
+                };
+                return events;
+            }
+
             setup() {
                 super.setup();
                 var self = this;
                 this.listenTo(this.model, 'sync', function () { self.renderAllPanels(); });
                 this.listenTo(this.model, 'change:status', function () { self.renderAllPanels(); });
-                this.listenTo(this.model, 'change:totalCost change:totalSelling change:grossProfit', function () { self.renderHeroFinancialBar(); });
+                this.listenTo(this.model, 'change:totalCost change:totalSelling change:grossProfit change:origin change:destination change:tripType', function () {
+                    self.renderHeroFinancialBar();
+                });
+
+                this.listenTo(this, 'action:generatePdf', function () { self.actionGeneratePdf(); });
+                this.listenTo(this, 'action:openPublicWeb', function () { self.actionOpenPublicWeb(); });
             }
 
             afterRender() {
                 super.afterRender();
                 var self = this;
                 this.renderAllPanels();
-                setTimeout(function () { self.renderAllPanels(); }, 50);
-                setTimeout(function () { self.renderAllPanels(); }, 150);
-                setTimeout(function () { self.renderAllPanels(); }, 350);
+                this.bindHeaderActionButtons();
+
+                setTimeout(function () {
+                    self.renderAllPanels();
+                    self.bindHeaderActionButtons();
+                }, 50);
+
+                setTimeout(function () {
+                    self.renderAllPanels();
+                    self.bindHeaderActionButtons();
+                }, 200);
+
+                setTimeout(function () {
+                    self.renderAllPanels();
+                    self.bindHeaderActionButtons();
+                }, 500);
+            }
+
+            bindHeaderActionButtons() {
+                var self = this;
+                var $targets = $('[data-action="generatePdf"], [data-action="openPublicWeb"]');
+                $targets.filter('[data-action="generatePdf"]').off('click.itinPdf').on('click.itinPdf', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    self.actionGeneratePdf();
+                });
+
+                $targets.filter('[data-action="openPublicWeb"]').off('click.itinWeb').on('click.itinWeb', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    self.actionOpenPublicWeb();
+                });
             }
 
             renderAllPanels() {
@@ -99,59 +170,71 @@
                     stepsHtml +=
                         '<div class="stepper-step ' + stateClass + '" style="flex: 1; text-align: center; position: relative; padding: 4px 2px;">' +
                             '<div style="background:' + bg + '; color:' + color + '; border: 1px solid ' + border + '; border-radius: 6px; padding: 10px 8px; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: ' + (isActive ? '0 2px 6px rgba(2,132,199,0.3)' : 'none') + ';">' +
-                                '<i class="' + st.icon + '"></i> ' + st.label +
+                                '<i class="' + st.icon + '"></i> ' +
+                                '<span>' + st.label + '</span>' +
                             '</div>' +
                         '</div>';
                 });
 
-                var stepperContainer = $(
-                    '<div class="itinerario-status-stepper" style="margin: 0 0 16px 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);">' +
-                        '<div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">' +
+                var stepperWrapper = $(
+                    '<div class="itinerario-status-stepper" style="margin: 0 0 16px 0; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">' +
+                        '<div style="display: flex; gap: 8px; align-items: stretch;">' +
                             stepsHtml +
                         '</div>' +
                     '</div>'
                 );
 
-                this.insertCustomPanel(stepperContainer);
+                this.insertCustomPanel(stepperWrapper);
             }
 
             renderHeroFinancialBar() {
                 this.$el.find('.itinerario-hero-financial-bar').remove();
 
-                var totalCost = parseFloat(this.model.get('totalCost') || 0);
-                var totalSelling = parseFloat(this.model.get('totalSelling') || 0);
-                var grossProfit = parseFloat(this.model.get('grossProfit') || (totalSelling - totalCost));
-                var marginPct = totalSelling > 0 ? ((grossProfit / totalSelling) * 100).toFixed(1) : 0;
-                var destination = this.model.get('destination') || 'Destino por definir';
-                var startDate = this.model.get('startDate') || '---';
-                var endDate = this.model.get('endDate') || '---';
-
+                var totalCost = parseFloat(this.model.get('totalCost')) || 0;
+                var totalSelling = parseFloat(this.model.get('totalSelling')) || 0;
+                var grossProfit = parseFloat(this.model.get('grossProfit')) || (totalSelling - totalCost);
+                var marginPct = totalSelling > 0 ? ((grossProfit / totalSelling) * 100).toFixed(1) : '0.0';
                 var isProfitable = grossProfit >= 0;
 
+                var origin = this.model.get('origin') || '';
+                var destination = this.model.get('destination') || this.model.get('name') || 'Destino por definir';
+                var tripType = this.model.get('tripType') || 'Paquete Turístico';
+                var startDate = this.model.get('startDate') || 'Por definir';
+                var endDate = this.model.get('endDate') || 'Por definir';
+
+                var routeText = origin ? (origin + ' &rarr; ' + destination) : destination;
+
                 var heroHtml = $(
-                    '<div class="itinerario-hero-financial-bar" style="margin-bottom: 16px; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 10px; padding: 18px 22px; color: #ffffff; box-shadow: 0 4px 14px rgba(15,23,42,0.18);">' +
-                        '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">' +
+                    '<div class="itinerario-hero-financial-bar" style="margin: 0 0 16px 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #ffffff; border-radius: 8px; padding: 16px 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border-left: 5px solid #0284c7;">' +
+                        '<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">' +
                             '<div>' +
-                                '<div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; font-weight: 700;">Resumen del Itinerario</div>' +
-                                '<h3 style="margin: 3px 0 6px 0; font-size: 20px; font-weight: 800; color: #f8fafc;">' +
-                                    '<i class="fas fa-map-marker-alt text-danger" style="margin-right: 8px;"></i> ' + destination +
-                                '</h3>' +
-                                '<div style="font-size: 13px; color: #cbd5e1;">' +
+                                '<div style="margin-bottom: 4px;">' +
+                                    '<span class="badge" style="background:#0284c7; color:#fff; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; padding:4px 8px; font-weight:700; border-radius:4px; margin-right:8px;">' + tripType + '</span>' +
+                                    '<span style="font-size: 13px; color: #cbd5e1; font-weight:600;">' + (this.model.get('name') || '') + '</span>' +
+                                '</div>' +
+                                '<div style="font-size: 18px; font-weight: 800; color: #f8fafc; display:flex; align-items:center; gap:8px;">' +
+                                    '<i class="fas fa-map-marked-alt text-info" style="color:#38bdf8;"></i> ' + routeText +
+                                '</div>' +
+                                '<div style="font-size: 12px; color: #94a3b8; margin-top: 4px;">' +
                                     '<i class="fas fa-calendar-alt" style="margin-right: 6px;"></i> ' + startDate + ' al ' + endDate +
                                 '</div>' +
                             '</div>' +
-                            '<div style="display: grid; grid-template-columns: repeat(3, auto); gap: 14px; align-items: center;">' +
-                                '<div style="background: rgba(255,255,255,0.08); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); text-align: right;">' +
-                                    '<div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Costo Neto</div>' +
-                                    '<div style="font-size: 16px; font-weight: 700; color: #f8fafc;">$' + totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
+                            '<div style="display: grid; grid-template-columns: repeat(4, auto); gap: 12px; align-items: center;">' +
+                                '<div style="background: rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); text-align: right;">' +
+                                    '<div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Costo Total</div>' +
+                                    '<div style="font-size: 15px; font-weight: 700; color: #f8fafc;">$' + totalCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
                                 '</div>' +
-                                '<div style="background: rgba(255,255,255,0.08); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); text-align: right;">' +
+                                '<div style="background: rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); text-align: right;">' +
                                     '<div style="font-size: 10px; text-transform: uppercase; color: #94a3b8; font-weight: 700;">Precio Venta</div>' +
-                                    '<div style="font-size: 16px; font-weight: 700; color: #38bdf8;">$' + totalSelling.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
+                                    '<div style="font-size: 15px; font-weight: 700; color: #38bdf8;">$' + totalSelling.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
                                 '</div>' +
-                                '<div style="background: rgba(255,255,255,0.12); padding: 10px 16px; border-radius: 8px; border: 1px solid ' + (isProfitable ? '#22c55e' : '#ef4444') + '; text-align: right;">' +
-                                    '<div style="font-size: 10px; text-transform: uppercase; color: #e2e8f0; font-weight: 700;">Utilidad (' + marginPct + '%)</div>' +
-                                    '<div style="font-size: 17px; font-weight: 800; color: ' + (isProfitable ? '#4ade80' : '#f87171') + ';">$' + grossProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
+                                '<div style="background: rgba(255,255,255,0.12); padding: 10px 14px; border-radius: 8px; border: 1px solid ' + (isProfitable ? '#22c55e' : '#ef4444') + '; text-align: right;">' +
+                                    '<div style="font-size: 10px; text-transform: uppercase; color: #e2e8f0; font-weight: 700;">Utilidad</div>' +
+                                    '<div style="font-size: 16px; font-weight: 800; color: ' + (isProfitable ? '#4ade80' : '#f87171') + ';">$' + grossProfit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>' +
+                                '</div>' +
+                                '<div style="background: rgba(255,255,255,0.12); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.18); text-align: right;">' +
+                                    '<div style="font-size: 10px; text-transform: uppercase; color: #e2e8f0; font-weight: 700;">Margen</div>' +
+                                    '<div style="font-size: 16px; font-weight: 800; color: #fbbf24;">' + marginPct + '%</div>' +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
@@ -185,7 +268,7 @@
                     return;
                 }
 
-                var baseUrl = (this.getConfig().get('travelWebExternalUrl') || 'http://localhost:8085').replace(/\/$/, '');
+                var baseUrl = getSafeTravelBaseUrl(this);
                 var publicUrl = baseUrl + '/p/' + token;
                 var accessCount = this.model.get('webAccessCount') || 0;
                 var lastAccess = this.model.get('lastWebAccessAt') || 'Sin visitas aún';
@@ -217,12 +300,10 @@
                 );
 
                 portalHtml.find('.btn-copy-portal-link').on('click', function () {
-                    var btn = $(this);
                     navigator.clipboard.writeText(publicUrl).then(function () {
-                        btn.html('<i class="fas fa-check text-success"></i> ¡Copiado!');
-                        setTimeout(function () {
-                            btn.html('<i class="fas fa-copy"></i> Copiar Link');
-                        }, 2000);
+                        Espo.Ui.success('Enlace copiado al portapapeles');
+                    }).catch(function () {
+                        Espo.Ui.warning('No se pudo copiar automáticamente.');
                     });
                 });
 
@@ -233,56 +314,73 @@
                 this.$el.find('.itinerario-operational-board-card').remove();
 
                 var status = this.model.get('status');
-                if (status !== 'Confirmado' && status !== 'En Viaje') {
+                if (status !== 'En Viaje' && status !== 'Confirmado') {
                     return;
                 }
 
+                var destination = this.model.get('destination') || 'Destino';
                 var self = this;
-                Espo.Ajax.getRequest('Itinerario/action/operationalSummary', {
-                    id: this.model.id
-                }).then(function (summary) {
-                    var phoneBtn = summary.emergencyPhone
-                        ? '<a href="tel:' + encodeURIComponent(summary.emergencyPhone) + '" class="btn btn-warning btn-sm" style="font-weight:700; color:#3e2723;"><i class="fas fa-phone-alt"></i> ' + summary.emergencyPhone + '</a>'
-                        : '<span class="text-muted small" style="background:rgba(0,0,0,0.05); padding:4px 8px; border-radius:4px;">Sin teléfono</span>';
+                var id = this.model.id;
 
-                    var chatBtn = summary.chatwootChatUrl
-                        ? '<a href="' + summary.chatwootChatUrl + '" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm" style="font-weight:600;"><i class="fab fa-whatsapp"></i> WhatsApp Pasajero</a>'
-                        : '<button type="button" class="btn btn-default btn-sm" disabled><i class="fab fa-whatsapp"></i> Sin chat</button>';
+                Espo.Ajax.getRequest('Itinerario/action/getOperationalCard', { id: id })
+                    .then(function (data) {
+                        if (!data) return;
 
-                    var cardHtml = $(
-                        '<div class="itinerario-operational-board-card alert alert-info" style="margin: 0 0 16px 0; border-left: 5px solid #00838f; background: #e0f7fa; color: #006064; border-radius: 8px; padding: 14px 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.06);">' +
-                            '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">' +
-                                '<div>' +
-                                    '<h4 style="margin:0 0 6px 0; color:#006064; font-weight:700; font-size:15px;">' +
-                                        '<i class="fas fa-plane-departure" style="margin-right:6px;"></i> Consola Operativa en Destino: ' + (summary.destination || 'Destino') +
-                                    '</h4>' +
-                                    '<div style="font-size:13px; line-height:1.6;">' +
-                                        '<strong>Titular:</strong> ' + summary.leadPassengerName + ' ' +
-                                        '<span class="badge" style="background:#00838f; margin-left:4px;">' + summary.paxCount + ' Pax</span> &nbsp;|&nbsp; ' +
-                                        '<strong>Servicio Hoy:</strong> <span class="label label-primary" style="background:#0277bd;">' + summary.serviceType + '</span> ' + summary.todaysActiveService + ' &nbsp;|&nbsp; ' +
-                                        '<strong>Operador:</strong> ' + summary.assignedSupplierName +
+                        var leadPax = data.leadPassengerName || 'Por asignar';
+                        var paxCount = data.paxCount || 1;
+                        var activeService = data.todaysActiveService || 'Sin servicio programado para hoy';
+                        var activeSupplier = data.assignedSupplierName || 'Operador local no asignado';
+                        var emergencyPhone = data.emergencyPhone || '+51 1 999 999 999';
+                        var chatUrl = data.chatwootChatUrl || null;
+
+                        var cardHtml = $(
+                            '<div class="itinerario-operational-board-card alert alert-info" style="margin: 0 0 16px 0; border-left: 5px solid #00838f; background: #e0f2fe; color: #075985; border-radius: 8px; padding: 14px 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.04);">' +
+                                '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">' +
+                                    '<div>' +
+                                        '<h5 style="margin:0 0 6px 0; color:#0369a1; font-weight:700; font-size:14px;">' +
+                                            '<i class="fas fa-plane-arrival" style="margin-right:6px;"></i> Consola Operativa en Destino: ' + destination +
+                                        '</h5>' +
+                                        '<div style="font-size:12px; line-height: 1.6;">' +
+                                            '<strong>Titular:</strong> ' + leadPax + ' &nbsp;<span class="badge" style="background:#0284c7;">' + paxCount + ' Pax</span> &nbsp;|&nbsp; ' +
+                                            '<strong>Servicio Hoy:</strong> <span class="badge" style="background:#0369a1;">' + activeService + '</span> &nbsp;|&nbsp; ' +
+                                            '<strong>Operador:</strong> ' + activeSupplier +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div style="display:flex; gap:6px; align-items:center;">' +
+                                        '<a href="tel:' + emergencyPhone + '" class="btn btn-warning btn-xs" style="font-weight:600; color:#78350f; background:#fef3c7; border-color:#fde68a;">' +
+                                            '<i class="fas fa-phone-alt"></i> ' + emergencyPhone +
+                                        '</a>' +
+                                        (chatUrl ? (
+                                            '<a href="' + chatUrl + '" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-xs" style="font-weight:600;">' +
+                                                '<i class="fab fa-whatsapp"></i> WhatsApp Pasajero' +
+                                            '</a>'
+                                        ) : '') +
+                                        '<button type="button" class="btn btn-primary btn-xs btn-action-pdf" style="font-weight:600;">' +
+                                            '<i class="fas fa-file-pdf"></i> Generar PDF' +
+                                        '</button>' +
                                     '</div>' +
                                 '</div>' +
-                                '<div style="display:flex; gap:8px; align-items:center;">' +
-                                    phoneBtn +
-                                    chatBtn +
-                                    '<button type="button" class="btn btn-primary btn-sm btn-action-pdf" style="font-weight:600;"><i class="fas fa-file-pdf"></i> Generar PDF</button>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>'
-                    );
+                            '</div>'
+                        );
 
-                    cardHtml.find('.btn-action-pdf').on('click', function () {
-                        self.actionGeneratePdf();
-                    });
+                        cardHtml.find('.btn-action-pdf').on('click', function () {
+                            self.actionGeneratePdf();
+                        });
 
-                    self.insertCustomPanelAfterHero(cardHtml);
-                }).catch(function () {});
+                        self.insertCustomPanelAfterHero(cardHtml);
+                    }).catch(function () {});
             }
 
             actionGeneratePdf() {
                 var self = this;
                 var id = this.model.id;
+                var status = this.model.get('status');
+
+                if (status === 'Cancelado') {
+                    Espo.Ui.warning('Este itinerario está Cancelado.');
+                    return;
+                }
+
                 Espo.Ui.notifyWait('Generando expediente PDF...');
 
                 Espo.Ajax.postRequest('Itinerario/action/generatePdf', { id: id })
@@ -304,7 +402,7 @@
                     })
                     .catch(function (xhr) {
                         Espo.Ui.notify(false);
-                        var errorMsg = (xhr.responseJSON && xhr.responseJSON.message)
+                        var errorMsg = (xhr && xhr.responseJSON && xhr.responseJSON.message)
                             ? xhr.responseJSON.message
                             : 'Error al generar el PDF del itinerario.';
                         Espo.Ui.error(errorMsg);
@@ -317,7 +415,7 @@
                     Espo.Ui.warning('El itinerario aún no tiene un token público asignado. Guarde el registro para generarlo.');
                     return;
                 }
-                var baseUrl = (this.getConfig().get('travelWebExternalUrl') || 'http://localhost:8085').replace(/\/$/, '');
+                var baseUrl = getSafeTravelBaseUrl(this);
                 var url = baseUrl + '/p/' + token;
                 window.open(url, '_blank');
             }
@@ -343,6 +441,12 @@
             var ViewClass = createItinerarioDetailView(DetailRecordViewModule);
             exports.default = ViewClass;
             return ViewClass;
+        });
+    }
+
+    if (typeof Espo !== 'undefined' && Espo.loader) {
+        Espo.loader.require('views/record/detail', function (DetailRecordViewModule) {
+            createItinerarioDetailView(DetailRecordViewModule);
         });
     }
 })();

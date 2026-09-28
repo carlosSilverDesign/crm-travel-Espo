@@ -2,12 +2,30 @@
   {
     "rows": [
       [{"name": "name"}, {"name": "status"}],
-      [{"name": "serviceType"}, {"name": "serviceDate"}],
-      [{"name": "itinerario"}, {"name": "supplier"}],
-      [{"name": "confirmationCode"}, false],
+      [{"name": "serviceType"}, {"name": "supplier"}],
+      [{"name": "serviceDate"}, {"name": "serviceEndDate"}],
+      [{"name": "itinerario"}, {"name": "confirmationCode"}]
+    ],
+    "style": "default",
+    "label": "Información General del Servicio"
+  },
+  {
+    "rows": [
+      [{"name": "origin"}, {"name": "destination"}],
+      [{"name": "originIata"}, {"name": "destinationIata"}],
+      [{"name": "carrier"}, {"name": "flightNumber"}],
+      [{"name": "cabin"}, {"name": "orderIndex"}]
+    ],
+    "style": "default",
+    "label": "Detalles de Ruta, Tramo y Operador"
+  },
+  {
+    "rows": [
+      [{"name": "costPrice"}, {"name": "sellingPrice"}],
+      [{"name": "grossProfit"}, false],
       [{"name": "notes"}, false]
     ],
     "style": "default",
-    "label": "Información del Servicio Turístico"
+    "label": "Finanzas y Observaciones del Servicio"
   }
 ]

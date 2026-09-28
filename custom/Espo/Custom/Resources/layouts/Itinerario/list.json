@@ -1,5 +1,7 @@
 [
   {"name": "name", "link": true},
+  {"name": "tripType"},
+  {"name": "origin"},
   {"name": "destination"},
   {"name": "status"},
   {"name": "startDate"},

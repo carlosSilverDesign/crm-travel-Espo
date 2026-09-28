@@ -1,6 +1,27 @@
 /**
  * Extensiones Client-Side para Integración WhatsApp / Chatwoot en Opportunity (TASK-023).
  */
+function getSafeChatwootParams(view) {
+    var baseUrl = 'https://chat.agencia.com';
+    var accountId = 1;
+    try {
+        if (view && typeof view.getConfig === 'function') {
+            var cfg = view.getConfig();
+            if (cfg && typeof cfg.get === 'function') {
+                baseUrl = cfg.get('chatwootBaseUrl') || baseUrl;
+                accountId = cfg.get('chatwootAccountId') || accountId;
+            }
+        }
+    } catch (e) {}
+    try {
+        if (view && view.config && typeof view.config.get === 'function') {
+            baseUrl = view.config.get('chatwootBaseUrl') || baseUrl;
+            accountId = view.config.get('chatwootAccountId') || accountId;
+        }
+    } catch (e) {}
+    return { baseUrl: baseUrl.replace(/\/$/, ''), accountId: accountId };
+}
+
 define('custom:views/fields/chatwoot-conversation', ['exports', 'views/fields/varchar'], function (exports, VarcharFieldModule) {
     'use strict';
 
@@ -14,9 +35,8 @@ define('custom:views/fields/chatwoot-conversation', ['exports', 'views/fields/va
             if (!conversationId) {
                 return null;
             }
-            var baseUrl = (this.getConfig().get('chatwootBaseUrl') || 'https://chat.agencia.com').replace(/\/$/, '');
-            var accountId = this.getConfig().get('chatwootAccountId') || 1;
-            return baseUrl + '/app/accounts/' + accountId + '/conversations/' + conversationId;
+            var params = getSafeChatwootParams(this);
+            return params.baseUrl + '/app/accounts/' + params.accountId + '/conversations/' + conversationId;
         }
 
         afterRender() {
@@ -88,9 +108,8 @@ define('custom:views/opportunity/record/detail', ['exports', 'views/record/detai
                 Espo.Ui.warning('No hay identificador de conversación de Chatwoot asociado.');
                 return;
             }
-            var baseUrl = (this.getConfig().get('chatwootBaseUrl') || 'https://chat.agencia.com').replace(/\/$/, '');
-            var accountId = this.getConfig().get('chatwootAccountId') || 1;
-            var url = baseUrl + '/app/accounts/' + accountId + '/conversations/' + conversationId;
+            var params = getSafeChatwootParams(this);
+            var url = params.baseUrl + '/app/accounts/' + params.accountId + '/conversations/' + conversationId;
             window.open(url, '_blank');
         }
 
@@ -101,9 +120,8 @@ define('custom:views/opportunity/record/detail', ['exports', 'views/record/detai
             if (conversationId) {
                 var $cell = this.$el.find('[data-name="chatwootConversationId"]');
                 if ($cell.length && !$cell.find('.chatwoot-direct-link').length) {
-                    var baseUrl = (this.getConfig().get('chatwootBaseUrl') || 'https://chat.agencia.com').replace(/\/$/, '');
-                    var accountId = this.getConfig().get('chatwootAccountId') || 1;
-                    var url = baseUrl + '/app/accounts/' + accountId + '/conversations/' + conversationId;
+                    var params = getSafeChatwootParams(this);
+                    var url = params.baseUrl + '/app/accounts/' + params.accountId + '/conversations/' + conversationId;
                     var $btn = $(
                         '<a href="' + url + '" target="_blank" rel="noopener noreferrer" ' +
                         'class="btn btn-default btn-xs chatwoot-direct-link" ' +

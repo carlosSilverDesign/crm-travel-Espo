@@ -6,6 +6,33 @@
       "maxLength": 150,
       "pattern": "$noBadCharacters"
     },
+    "firstName": {
+      "type": "varchar",
+      "maxLength": 80
+    },
+    "lastName": {
+      "type": "varchar",
+      "maxLength": 80
+    },
+    "passengerType": {
+      "type": "enum",
+      "default": "Adult",
+      "options": [
+        "Adult",
+        "Child",
+        "Infant"
+      ]
+    },
+    "itinerario": {
+      "type": "link",
+      "entity": "Itinerario",
+      "index": true
+    },
+    "contact": {
+      "type": "link",
+      "entity": "Contact",
+      "index": true
+    },
     "documentType": {
       "type": "enum",
       "required": true,
@@ -19,7 +46,6 @@
     },
     "documentNumber": {
       "type": "varchar",
-      "required": true,
       "maxLength": 50,
       "pattern": "$noBadCharacters"
     },

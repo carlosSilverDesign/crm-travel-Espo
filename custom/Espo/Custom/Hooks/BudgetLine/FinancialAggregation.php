@@ -91,11 +91,13 @@ class FinancialAggregation
         }
 
         $grossProfit = $totalSelling - $totalCost;
+        $grossMargin = $totalSelling > 0 ? round(($grossProfit / $totalSelling) * 100, 2) : 0.0;
 
         $itinerario->set([
             'totalCost' => round($totalCost, 2),
             'totalSelling' => round($totalSelling, 2),
-            'grossProfit' => round($grossProfit, 2)
+            'grossProfit' => round($grossProfit, 2),
+            'grossMargin' => $grossMargin
         ]);
 
         $this->getEntityManager()->saveEntity($itinerario);
